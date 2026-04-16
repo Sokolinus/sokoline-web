@@ -20,7 +20,8 @@ export default function TestPage() {
       });
 
       // 2. Send it to your Django "Ride Operator" (Backend)
-      const res = await fetch('https://sokoline-h9g7w.ondigitalocean.app/api/users/me/', {
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.sokoline.app';
+      const res = await fetch(`${baseUrl}/api/users/me/`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
