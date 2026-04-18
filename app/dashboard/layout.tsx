@@ -15,40 +15,42 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   ];
 
   return (
-    <div className="flex min-h-screen bg-[#FBFBFB] dark:bg-[#0A0A0A]">
+    <div className="flex min-h-screen bg-zinc-100 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50">
       {/* Sidebar */}
-      <aside className="w-72 bg-white dark:bg-[#0A0A0A] border-r border-zinc-100 dark:border-zinc-800 hidden lg:flex flex-col sticky top-0 h-screen transition-colors duration-300">
-        <div className="p-10">
-          <Link href="/" className="text-2xl font-black tracking-tighter text-[#1A1A1A] dark:text-[#FBFBFB] uppercase">
+      <aside className="hidden h-screen w-72 shrink-0 flex-col border-r border-zinc-200 bg-white lg:sticky lg:top-0 lg:flex dark:border-zinc-800 dark:bg-zinc-950">
+        <div className="px-8 pb-6 pt-8">
+          <Link href="/" className="text-2xl font-black tracking-tight">
             Sokoline
           </Link>
-          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#7C3AED] mt-1">Vendor Portal</p>
+          <p className="mt-1 text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500 dark:text-zinc-400">
+            Seller Dashboard
+          </p>
         </div>
 
-        <nav className="flex-1 px-6 space-y-2">
+        <nav className="flex-1 space-y-1 px-4">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-4 px-6 py-4 rounded-2xl text-sm font-bold transition-all duration-300 ${
+                className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition ${
                   isActive
-                    ? "bg-[#7C3AED] text-white shadow-xl shadow-purple-100 dark:shadow-none translate-x-2"
-                    : "text-zinc-400 hover:text-[#1A1A1A] dark:hover:text-[#FBFBFB] hover:bg-zinc-50 dark:hover:bg-zinc-900"
+                    ? "bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100"
+                    : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-900 dark:hover:text-zinc-50"
                 }`}
               >
-                <item.icon size={20} strokeWidth={isActive ? 3 : 2} />
+                <item.icon size={18} strokeWidth={isActive ? 2.5 : 2} />
                 {item.name}
               </Link>
             );
           })}
         </nav>
 
-        <div className="p-8 mt-auto">
+        <div className="mt-auto p-4">
           <Link 
             href="/" 
-            className="flex items-center gap-3 px-6 py-4 text-xs font-black uppercase tracking-widest text-zinc-400 hover:text-[#7C3AED] transition-colors"
+            className="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-200"
           >
             <ArrowLeft size={16} />
             Exit Dashboard
@@ -58,14 +60,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
-        {/* Mobile Header (Simplified) */}
-        <header className="lg:hidden h-16 bg-white dark:bg-[#0A0A0A] border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between px-6">
-           <span className="font-black tracking-tighter uppercase text-[#1A1A1A] dark:text-[#FBFBFB]">Sokoline</span>
-           <PlusCircle size={24} className="text-[#7C3AED]" />
+        {/* Mobile Header */}
+        <header className="flex h-16 items-center justify-between border-b border-zinc-200 bg-white px-5 lg:hidden dark:border-zinc-800 dark:bg-zinc-950">
+           <span className="text-base font-bold tracking-tight">Sokoline</span>
+           <Link
+             href="/dashboard/products"
+             aria-label="Add product"
+             className="rounded-lg bg-zinc-900 p-2 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2 dark:bg-zinc-100 dark:text-zinc-900"
+           >
+             <PlusCircle size={18} />
+           </Link>
         </header>
 
-        <main className="flex-1 p-6 md:p-12 lg:p-20 overflow-y-auto">
-          <div className="max-w-6xl mx-auto">
+        <main className="flex-1 overflow-y-auto p-5 md:p-8 lg:p-10">
+          <div className="mx-auto max-w-7xl">
             {children}
           </div>
         </main>
