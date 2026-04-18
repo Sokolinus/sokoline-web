@@ -4,8 +4,10 @@
   --background: #FFFFFF;
   --foreground: #1A1A1A;
   --accent: #7C3AED;
+  --accent-rgb: 124, 58, 237;
   --accent-hover: #6D28D9;
   --accent-light: #F5F3FF;
+  --line-height-base: 1.5;
 }
 
 @theme inline {
@@ -14,7 +16,7 @@
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-accent-light: var(--accent-light);
-  --font-sans: "Space Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,6 +24,7 @@
     --background: #0A0A0A;
     --foreground: #FBFBFB;
     --accent: #A855F7;
+    --accent-rgb: 168, 85, 247;
     --accent-hover: #9333EA;
     --accent-light: #1E1B4B;
   }
@@ -31,8 +34,34 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  line-height: var(--line-height-base);
+  min-height: 100vh;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  background-image:
+    radial-gradient(circle at 12% -10%, rgba(var(--accent-rgb), 0.11), transparent 36%),
+    radial-gradient(circle at 100% 0%, rgba(var(--accent-rgb), 0.06), transparent 30%);
+}
+
+@supports (background: color-mix(in oklab, white 50%, black)) {
+  body {
+    background-image:
+      radial-gradient(circle at 12% -10%, color-mix(in oklab, var(--accent) 11%, transparent), transparent 36%),
+      radial-gradient(circle at 100% 0%, color-mix(in oklab, var(--accent) 6%, transparent), transparent 30%);
+  }
 }
 
 h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.02em;
+}
+
+::selection {
+  background: rgba(var(--accent-rgb), 0.28);
+  color: var(--foreground);
+}
+
+@supports (background: color-mix(in oklab, white 50%, black)) {
+  ::selection {
+    background: color-mix(in oklab, var(--accent) 28%, transparent);
+  }
 }
