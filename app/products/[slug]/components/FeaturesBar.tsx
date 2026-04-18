@@ -14,11 +14,11 @@ const FeaturesBar = ({
   isSafetyCertified = true
 }: FeaturesBarProps) => {
   const features = [
-    { title: "Secure Payments" },
+    { title: "Secure Payments", enabled: true },
     { title: "Free Shipping", enabled: hasFreeShipping },
     { title: "Free Returns", enabled: hasFreeReturns },
     { title: "Safety certified", enabled: isSafetyCertified }
-  ].filter((feature) => feature.enabled !== false);
+  ].filter((feature) => feature.enabled);
 
   return (
     <div className={`grid gap-y-4 gap-x-4 py-6 ${className}`}>
