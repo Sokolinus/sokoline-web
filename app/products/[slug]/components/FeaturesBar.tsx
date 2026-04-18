@@ -18,7 +18,7 @@ const FeaturesBar = ({
     { title: "Free Shipping", enabled: hasFreeShipping },
     { title: "Free Returns", enabled: hasFreeReturns },
     { title: "Safety certified", enabled: isSafetyCertified }
-  ].filter((feature) => feature.enabled ?? true);
+  ].filter((feature) => feature.enabled !== false);
 
   return (
     <div className={`grid gap-y-4 gap-x-4 py-6 ${className}`}>
