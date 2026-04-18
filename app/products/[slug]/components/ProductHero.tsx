@@ -11,9 +11,24 @@ interface ProductHeroProps {
   product: Product;
 }
 
+const OPTION_KEY_DELIMITER = "|";
+const TRUNCATE_MIN_WORD_BOUNDARY_RATIO = 0.6;
+
+const getOptionKey = (variant: ProductVariant) => `${variant.name}${OPTION_KEY_DELIMITER}${variant.size || ""}`;
+
+const truncateAtWord = (text: string, maxLength: number) => {
+  if (text.length <= maxLength) return text;
+  const sliced = text.slice(0, maxLength + 1);
+  const wordBoundary = sliced.lastIndexOf(" ");
+  const trimmed = (
+    wordBoundary > Math.floor(maxLength * TRUNCATE_MIN_WORD_BOUNDARY_RATIO)
+      ? sliced.slice(0, wordBoundary)
+      : text.slice(0, maxLength)
+  ).trimEnd();
+  return `${trimmed}...`;
+};
+
 export default function ProductHero({ product }: ProductHeroProps) {
-  const OPTION_KEY_DELIMITER = "|";
-  const MIN_WORD_BOUNDARY_RATIO = 0.6;
   const { addItem } = useCart();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
     product.variants.length > 0 ? product.variants[0] : null
@@ -49,7 +64,6 @@ export default function ProductHero({ product }: ProductHeroProps) {
       return acc;
     }, []);
 
-  const getOptionKey = (variant: ProductVariant) => `${variant.name}${OPTION_KEY_DELIMITER}${variant.size || ""}`;
   const uniqueOptions = product.variants.reduce<ProductVariant[]>((acc, variant) => {
     if (!acc.some((item) => getOptionKey(item) === getOptionKey(variant))) {
       acc.push(variant);
@@ -66,14 +80,6 @@ export default function ProductHero({ product }: ProductHeroProps) {
     allImages[activeImg]?.image ||
     "/placeholder-product.png";
   const imageAlt = selectedVariantImage?.alt_text || allImages[activeImg]?.alt_text || product.name;
-
-  const truncateAtWord = (text: string, maxLength: number) => {
-    if (text.length <= maxLength) return text;
-    const sliced = text.slice(0, maxLength + 1);
-    const wordBoundary = sliced.lastIndexOf(" ");
-    const trimmed = (wordBoundary > Math.floor(maxLength * MIN_WORD_BOUNDARY_RATIO) ? sliced.slice(0, wordBoundary) : text.slice(0, maxLength)).trimEnd();
-    return `${trimmed}...`;
-  };
 
   const shortDescription = truncateAtWord(product.description, 100);
   const productPath = product.category?.name || "Products";
