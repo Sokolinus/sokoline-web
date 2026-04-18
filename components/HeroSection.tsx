@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import AnimatedText from "./AnimatedText";
 import { motion } from "framer-motion";
@@ -55,14 +57,14 @@ export default function HeroSection() {
         </div>
 
         {/* Right Side: Image */}
-        <div className="relative aspect-square w-full max-w-lg justify-self-center lg:justify-self-end">
+        <div className="relative aspect-[4/3] w-full max-w-xl justify-self-center lg:justify-self-end">
           <div className="absolute -inset-4 rounded-3xl bg-blue-100/50 dark:bg-blue-900/20 blur-2xl" />
-          <div className="relative h-full w-full overflow-hidden rounded-2xl shadow-2xl">
+          <div className="relative h-full w-full overflow-hidden rounded-2xl">
             <Image
               src="/hero_image.png"
               alt="Sokoline Marketplace"
               fill
-              className="object-cover transition-transform duration-700 hover:scale-105"
+              className="object-contain"
               priority
             />
           </div>

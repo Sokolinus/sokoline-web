@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 
-const words = [
+const phrases = [
   "empowers student ventures",
   "provides business analytics",
   "enables credit card payments",
@@ -15,35 +15,35 @@ export default function AnimatedText() {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setIndex((prevIndex) => (prevIndex + 1) % words.length);
+      setIndex((prevIndex) => (prevIndex + 1) % phrases.length);
     }, 4000);
     return () => clearInterval(timer);
   }, []);
 
-  const currentText = words[index];
+  const currentPhrase = phrases[index];
 
   return (
-    <div className="relative inline-block h-[1.2em] overflow-hidden align-bottom">
+    <div className="relative inline-block h-[1.2em] w-full overflow-hidden align-bottom">
       <AnimatePresence mode="wait">
         <motion.div
-          key={currentText}
-          className="absolute left-0 top-0 flex whitespace-nowrap text-blue-600 dark:text-blue-400"
+          key={currentPhrase}
+          className="absolute left-0 top-0 flex flex-wrap gap-x-[0.3em] text-blue-600 dark:text-blue-400"
         >
-          {currentText.split("").map((char, i) => (
-            <motion.span
-              key={`${currentText}-${i}`}
-              initial={{ y: "100%", opacity: 0 }}
-              animate={{ y: "0%", opacity: 1 }}
-              exit={{ y: "-100%", opacity: 0 }}
-              transition={{
-                duration: 0.4,
-                delay: i * 0.02,
-                ease: [0.215, 0.61, 0.355, 1],
-              }}
-              style={{ display: "inline-block", minWidth: char === " " ? "0.3em" : "auto" }}
-            >
-              {char}
-            </motion.span>
+          {currentPhrase.split(" ").map((word, i) => (
+            <span key={i} className="relative inline-flex overflow-hidden pb-[0.1em]">
+              <motion.span
+                initial={{ y: "100%" }}
+                animate={{ y: "0%" }}
+                exit={{ y: "-100%" }}
+                transition={{
+                  duration: 0.6,
+                  delay: i * 0.1,
+                  ease: [0.33, 1, 0.68, 1],
+                }}
+              >
+                {word}
+              </motion.span>
+            </span>
           ))}
         </motion.div>
       </AnimatePresence>
