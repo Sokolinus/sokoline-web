@@ -32,8 +32,8 @@ export default function RootLayout({
             <nav>
               <Show when="signed-out">
                 <div className="flex gap-4">
-                  <SignInButton mode="modal" />
-                  <SignUpButton mode="modal" />
+                  <SignInButton />
+                  <SignUpButton />
                 </div>
               </Show>
               <Show when="signed-in">
