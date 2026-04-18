@@ -1,51 +1,63 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Product } from '@/lib/types';
+import { Product } from "@/lib/types";
 
-type TabName = 'Details' | 'Shipping' | 'Returns';
+interface ProductInfoTabsProps {
+  product: Product;
+}
 
-const ProductTabs = ({ product }: { product: Product }) => {
-  const [activeTab, setActiveTab] = useState<TabName>('Details');
+export default function ProductInfoTabs({ product }: ProductInfoTabsProps) {
+  const [activeTab, setActiveTab] = useState('details');
 
-  const tabs: TabName[] = ['Details', 'Shipping', 'Returns'];
-
-  const tabContent: Record<TabName, React.ReactNode> = {
-    Details: (
-      <div className="space-y-6 text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed">
-        <p>{product.description || "No detailed description available."}</p>
-      </div>
-    ),
-    Shipping: <div className="text-zinc-600 dark:text-zinc-400 text-sm py-4">Ships from student shop "{typeof product.shop === 'object' ? (product.shop as any).name : product.shop}". Local and campus delivery available.</div>,
-    Returns: <div className="text-zinc-600 dark:text-zinc-400 text-sm py-4">Standard 7-day campus return policy for unused items.</div>,
-  };
+  const tabs = [
+    { id: 'details', label: 'Details' },
+    { id: 'shipping', label: 'Shipping' },
+    { id: 'returns', label: 'Returns' },
+  ];
 
   return (
-    <div className="max-w-4xl mx-auto p-6 font-sans">
-      {/* Tab Headers */}
-      <div className="flex border-b border-zinc-200 dark:border-zinc-800 relative overflow-x-auto no-scrollbar">
+    <div className="max-w-7xl mx-auto px-6 md:px-10 py-20">
+      <div className="flex gap-12 border-b border-zinc-100 dark:border-zinc-800 mb-12">
         {tabs.map((tab) => (
           <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`
-              pb-4 px-6 text-sm font-bold tracking-widest uppercase transition-all duration-200 relative whitespace-nowrap
-              ${activeTab === tab 
-                ? 'text-[#7C3AED] dark:text-[#A855F7] border-b-[4px] border-[#7C3AED] dark:border-[#A855F7] -mb-[2px]' 
-                : 'text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200'}
-            `}
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`pb-6 text-sm font-black uppercase tracking-[0.2em] transition-all relative ${
+              activeTab === tab.id 
+                ? "text-[#7C3AED]" 
+                : "text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
+            }`}
           >
-            {tab}
+            {tab.label}
+            {activeTab === tab.id && (
+              <div className="absolute bottom-0 left-0 w-full h-1 bg-[#7C3AED] rounded-t-full" />
+            )}
           </button>
         ))}
       </div>
 
-      {/* Tab Content */}
-      <div className="mt-8">
-        {tabContent[activeTab]}
+      <div className="max-w-3xl animate-in fade-in slide-in-from-bottom-4 duration-500">
+        {activeTab === 'details' && (
+          <div className="prose dark:prose-invert max-w-none">
+            <p className="text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium">
+              {product.description}
+            </p>
+          </div>
+        )}
+        
+        {activeTab === 'shipping' && (
+          <div className="text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium">
+            {product.shipping_info || "Standard shipping applied by the student vendor. Contact the shop for more specific delivery timelines."}
+          </div>
+        )}
+
+        {activeTab === 'returns' && (
+          <div className="text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium">
+            {product.return_policy || "Returns are subject to the vendor's policy. Most student ventures offer exchanges within 7 days of purchase."}
+          </div>
+        )}
       </div>
     </div>
   );
-};
-
-export default ProductTabs;
+}

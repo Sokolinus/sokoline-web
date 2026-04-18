@@ -1,6 +1,21 @@
-import { Product, Review } from "./types";
+import { Product, Review, Cart, Order } from "./types";
 
 const API_BASE_URL = "https://api.sokoline.app/api";
+
+async function authenticatedFetch(endpoint: string, token?: string | null, options: RequestInit = {}) {
+  const headers = {
+    "Content-Type": "application/json",
+    ...options.headers,
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+
+  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    ...options,
+    headers,
+  });
+
+  return response;
+}
 
 export async function getProduct(slug: string): Promise<Product | null> {
   try {
@@ -34,6 +49,82 @@ export async function getReviews(productId: number, limit = 10, offset = 0): Pro
     return data.results || data; // Handle paginated response
   } catch (error) {
     console.error(`Error fetching reviews for ${productId}:`, error);
+    return [];
+  }
+}
+
+// --- Authenticated Cart & Order Services ---
+
+export async function fetchCart(token: string): Promise<Cart | null> {
+  try {
+    const response = await authenticatedFetch("/cart/my_cart/", token);
+    if (!response.ok) return null;
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching cart:", error);
+    return null;
+  }
+}
+
+export async function addToCart(token: string, productId: number, quantity: number = 1): Promise<boolean> {
+  try {
+    const response = await authenticatedFetch("/cart-items/", token, {
+      method: "POST",
+      body: JSON.stringify({ product: productId, quantity }),
+    });
+    return response.ok;
+  } catch (error) {
+    console.error("Error adding to cart:", error);
+    return false;
+  }
+}
+
+export async function updateCartItem(token: string, itemId: number, quantity: number): Promise<boolean> {
+  try {
+    const response = await authenticatedFetch(`/cart-items/${itemId}/`, token, {
+      method: "PATCH",
+      body: JSON.stringify({ quantity }),
+    });
+    return response.ok;
+  } catch (error) {
+    console.error("Error updating cart item:", error);
+    return false;
+  }
+}
+
+export async function removeFromCart(token: string, itemId: number): Promise<boolean> {
+  try {
+    const response = await authenticatedFetch(`/cart-items/${itemId}/`, token, {
+      method: "DELETE",
+    });
+    return response.ok;
+  } catch (error) {
+    console.error("Error removing from cart:", error);
+    return false;
+  }
+}
+
+export async function checkoutCart(token: string): Promise<Order | null> {
+  try {
+    const response = await authenticatedFetch("/cart/checkout/", token, {
+      method: "POST",
+    });
+    if (!response.ok) return null;
+    return response.json();
+  } catch (error) {
+    console.error("Error during checkout:", error);
+    return null;
+  }
+}
+
+export async function fetchOrders(token: string): Promise<Order[]> {
+  try {
+    const response = await authenticatedFetch("/orders/", token);
+    if (!response.ok) return [];
+    const data = await response.json();
+    return data.results || data;
+  } catch (error) {
+    console.error("Error fetching orders:", error);
     return [];
   }
 }

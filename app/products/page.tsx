@@ -1,9 +1,8 @@
-import { Product } from "@/lib/types";
 import Image from "next/image";
 import Link from "next/link";
-import { Star, Filter } from "lucide-react";
+import { ShoppingBag, Star, Filter, ArrowUpDown } from "lucide-react";
 
-async function getProducts(): Promise<Product[]> {
+async function getProducts() {
   const res = await fetch("https://api.sokoline.app/api/products/", { next: { revalidate: 3600 } });
   if (!res.ok) return [];
   const data = await res.json();
@@ -14,71 +13,94 @@ export default async function ProductsPage() {
   const products = await getProducts();
 
   return (
-    <div className="bg-white dark:bg-[#0A0A0A] min-h-screen transition-colors duration-300">
+    <main className="bg-white dark:bg-[#0A0A0A] min-h-screen transition-colors duration-300 pb-20">
       <div className="max-w-7xl mx-auto px-6 py-12 md:px-10">
         
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-          <div>
-            <h1 className="text-5xl font-black tracking-tighter text-zinc-900 dark:text-zinc-50 mb-4">SHOP ALL</h1>
-            <p className="text-zinc-500 dark:text-zinc-400 max-w-md">
-              Discover unique products created and sold by student entrepreneurs from your campus and beyond.
+        <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-16">
+          <div className="max-w-2xl">
+            <h1 className="text-6xl font-black tracking-tighter text-[#1A1A1A] dark:text-[#FBFBFB] uppercase mb-4 leading-none">
+              Explore <br /> <span className="text-[#7C3AED]">Ventures</span>
+            </h1>
+            <p className="text-zinc-500 dark:text-zinc-400 text-lg font-medium">
+              Curated items from student entrepreneurs across the campus. Unique, reliable, and strictly built for you.
             </p>
           </div>
-          <button className="flex items-center gap-2 px-6 py-3 border border-zinc-200 dark:border-zinc-800 rounded-full text-sm font-bold hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all">
-            <Filter size={18} /> Filters
-          </button>
+          <div className="flex gap-4">
+             <button className="flex items-center gap-2 px-6 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-2xl text-xs font-black uppercase tracking-widest text-[#1A1A1A] dark:text-[#FBFBFB] hover:border-[#7C3AED] transition-colors">
+               <Filter size={14} /> Filter
+             </button>
+             <button className="flex items-center gap-2 px-6 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-2xl text-xs font-black uppercase tracking-widest text-[#1A1A1A] dark:text-[#FBFBFB] hover:border-[#7C3AED] transition-colors">
+               <ArrowUpDown size={14} /> Sort
+             </button>
+          </div>
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12">
-          {products.map((product) => (
-            <Link 
-              key={product.id} 
-              href={`/products/${product.slug}`}
-              className="group flex flex-col gap-4"
-            >
-              <div className="relative aspect-square w-full overflow-hidden rounded-3xl bg-zinc-50 dark:bg-zinc-900 shadow-sm transition-all group-hover:shadow-xl group-hover:shadow-purple-100 dark:group-hover:shadow-none">
-                <Image 
-                  src={product.images[0]?.image || "/file.svg"} 
-                  alt={product.name}
-                  fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
-                  className="object-contain p-4 transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute top-4 right-4 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-black shadow-sm flex items-center gap-1">
-                  <Star size={12} fill="#F59E0B" className="text-[#F59E0B]" />
-                  {(product.avg_rating || 0).toFixed(1)}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
+          {products.map((product: any) => (
+            <Link key={product.id} href={`/products/${product.slug}`} className="group">
+              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[32px] bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 mb-6 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-purple-100 dark:group-hover:shadow-none">
+                {product.images?.[0] ? (
+                  <Image 
+                    src={product.images[0].image} 
+                    alt={product.name} 
+                    fill 
+                    className="object-cover group-hover:scale-105 transition-transform duration-700" 
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full text-zinc-300">
+                    <ShoppingBag size={64} className="group-hover:scale-110 transition-transform" />
+                  </div>
+                )}
+                
+                {product.is_on_sale && (
+                  <div className="absolute top-4 left-4 bg-[#7C3AED] text-white text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-tighter shadow-xl">
+                    Sale
+                  </div>
+                )}
+
+                <div className="absolute bottom-4 right-4 h-10 w-10 bg-white dark:bg-[#1A1A1A] rounded-2xl flex items-center justify-center text-[#1A1A1A] dark:text-[#FBFBFB] opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all shadow-xl">
+                   <ShoppingBag size={18} />
                 </div>
               </div>
-              
-              <div className="flex flex-col gap-1 px-1">
-                <div className="flex justify-between items-start gap-4">
-                  <h3 className="font-bold text-lg text-zinc-900 dark:text-zinc-50 leading-tight group-hover:text-[#7C3AED] transition-colors">
+
+              <div className="flex justify-between items-start gap-4">
+                <div>
+                  <h3 className="text-lg font-bold text-[#1A1A1A] dark:text-[#FBFBFB] group-hover:text-[#7C3AED] transition-colors line-clamp-1 uppercase tracking-tight">
                     {product.name}
                   </h3>
-                  <p className="font-black text-lg text-[#7C3AED] dark:text-[#A855F7]">
-                    ${product.price}
-                  </p>
+                  <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest mt-0.5">{product.shop_name}</p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-medium text-zinc-400 uppercase tracking-widest">{typeof product.shop === 'object' ? (product.shop as any).name : product.shop}</span>
-                  <span className="h-1 w-1 rounded-full bg-zinc-300" />
-                  <span className="text-xs font-medium text-zinc-400 uppercase tracking-widest">{typeof product.category === 'object' ? (product.category as any).name : product.category}</span>
+                <div className="flex flex-col items-end">
+                   <span className="text-xl font-black text-[#1A1A1A] dark:text-[#FBFBFB]">
+                     ${product.discount_price || product.price}
+                   </span>
+                   {product.is_on_sale && (
+                     <span className="text-[10px] text-zinc-400 line-through decoration-zinc-400/40 font-bold uppercase">
+                       ${product.price}
+                     </span>
+                   )}
                 </div>
+              </div>
+
+              <div className="flex items-center gap-1 mt-4">
+                 <Star size={10} className="fill-[#7C3AED] text-[#7C3AED]" />
+                 <span className="text-[10px] font-black text-[#7C3AED] uppercase tracking-tighter">{product.average_rating.toFixed(1)}</span>
+                 <span className="text-[10px] font-bold text-zinc-300 uppercase tracking-tighter ml-1">({product.review_count} Reviews)</span>
               </div>
             </Link>
           ))}
         </div>
 
         {products.length === 0 && (
-          <div className="py-40 text-center">
-            <h2 className="text-2xl font-bold text-zinc-400">No products found.</h2>
-            <p className="text-zinc-500">Check back later for new student ventures!</p>
+          <div className="py-40 text-center border-2 border-dashed border-zinc-100 dark:border-zinc-800 rounded-[48px]">
+            <h2 className="text-2xl font-bold text-zinc-300 uppercase">No products found</h2>
+            <p className="text-zinc-500 font-medium">The marketplace is currently resting. Check back soon!</p>
           </div>
         )}
 
       </div>
-    </div>
+    </main>
   );
 }

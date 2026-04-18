@@ -1,8 +1,15 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
+import { Space_Grotesque } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { CartProvider } from "@/components/providers/CartProvider";
+
+const spaceGrotesque = Space_Grotesque({
+  variable: "--font-space-grotesque",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "Sokoline",
@@ -16,15 +23,17 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en" className="antialiased">
-        <body className="font-sans">
-          <Navbar />
-          <Breadcrumbs />
-          <main>
-            {children}
-          </main>
-        </body>
-      </html>
+      <CartProvider>
+        <html lang="en" className={`${spaceGrotesque.variable} antialiased`}>
+          <body className={spaceGrotesque.className}>
+            <Navbar />
+            <Breadcrumbs />
+            <main>
+              {children}
+            </main>
+          </body>
+        </html>
+      </CartProvider>
     </ClerkProvider>
   );
 }

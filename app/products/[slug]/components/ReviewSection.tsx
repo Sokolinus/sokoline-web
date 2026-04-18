@@ -1,88 +1,109 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { Review } from '@/lib/types';
-import { getReviews } from '@/lib/api';
-import { Star } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Product, Review } from "@/lib/types";
+import { getReviews } from "@/lib/api";
+import { Star, ChevronDown, User } from "lucide-react";
 
-export default function ReviewSection({ productId, initialCount }: { productId: number; initialCount: number }) {
+interface ReviewSectionProps {
+  product: Product;
+}
+
+export default function ReviewSection({ product }: ReviewSectionProps) {
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [loading, setLoading] = useState(true);
   const [offset, setOffset] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const limit = 5;
+  const [hasMore, setHasMore] = useState(true);
+  const LIMIT = 5;
 
-  useEffect(() => {
-    const fetchInitialReviews = async () => {
-      setLoading(true);
-      const data = await getReviews(productId, limit, 0);
-      setReviews(data);
-      setOffset(limit);
-      setLoading(false);
-    };
-    fetchInitialReviews();
-  }, [productId]);
-
-  const handleSeeMore = async () => {
+  const loadReviews = async (newOffset: number) => {
     setLoading(true);
-    const newData = await getReviews(productId, limit, offset);
-    setReviews((prev) => [...prev, ...newData]);
-    setOffset((prev) => prev + limit);
+    const data = await getReviews(product.id, LIMIT, newOffset);
+    if (data.length < LIMIT) {
+      setHasMore(false);
+    }
+    setReviews(prev => [...prev, ...data]);
     setLoading(false);
   };
 
-  const isAllLoaded = reviews.length >= initialCount;
+  useEffect(() => {
+    loadReviews(0);
+  }, [product.id]);
+
+  const handleSeeMore = () => {
+    const nextOffset = offset + LIMIT;
+    setOffset(nextOffset);
+    loadReviews(nextOffset);
+  };
 
   return (
-    <section className="max-w-4xl mx-auto py-20 px-4 text-center font-sans transition-colors duration-300">
-      <h2 className="text-4xl font-black tracking-tighter mb-4 text-zinc-900 dark:text-zinc-50">REVIEWS</h2>
-      <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-12">Total reviews ({initialCount})</p>
-      
-      <div className="flex flex-col gap-6">
+    <section className="max-w-7xl mx-auto px-6 md:px-10 py-20 bg-zinc-50 dark:bg-zinc-900/30 rounded-[48px]">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-16">
+        <div>
+           <h2 className="text-4xl font-black tracking-tighter text-[#1A1A1A] dark:text-[#FBFBFB] uppercase">Community Feedback</h2>
+           <p className="text-zinc-500 dark:text-zinc-400 mt-2 font-medium">Real reviews from students who bought this.</p>
+        </div>
+        <div className="flex items-center gap-6">
+           <div className="text-center">
+              <div className="text-3xl font-black text-[#1A1A1A] dark:text-[#FBFBFB]">{product.average_rating.toFixed(1)}</div>
+              <div className="flex gap-0.5 mt-1">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={12} className={i < Math.round(product.average_rating) ? "fill-[#7C3AED] text-[#7C3AED]" : "text-zinc-200"} />
+                ))}
+              </div>
+           </div>
+           <div className="h-12 w-px bg-zinc-200 dark:bg-zinc-800" />
+           <div className="text-center">
+              <div className="text-3xl font-black text-[#1A1A1A] dark:text-[#FBFBFB]">{product.review_count}</div>
+              <div className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mt-1">Total Reviews</div>
+           </div>
+        </div>
+      </div>
+
+      <div className="space-y-6">
         {reviews.map((review) => (
-          <div 
-            key={review.id} 
-            className="border border-zinc-100 dark:border-zinc-800 p-8 text-left bg-white dark:bg-zinc-900/50 rounded-2xl shadow-sm"
-          >
-            <div className="flex justify-between items-start mb-4">
-              <div>
-                <h3 className="font-bold text-zinc-900 dark:text-zinc-50 mb-1">
-                  {review.user_name}
-                </h3>
-                <div className="flex text-orange-500">
-                  {[...Array(5)].map((_, i) => (
-                    <Star 
-                      key={i} 
-                      size={14} 
-                      fill={i < review.rating ? "currentColor" : "none"} 
-                      className={i < review.rating ? "" : "text-zinc-300 dark:text-zinc-700"}
-                    />
-                  ))}
+          <div key={review.id} className="bg-white dark:bg-[#0A0A0A] p-8 rounded-3xl border border-zinc-100 dark:border-zinc-800 shadow-sm">
+            <div className="flex justify-between items-start mb-6">
+              <div className="flex items-center gap-4">
+                <div className="h-10 w-10 rounded-full bg-[#F5F3FF] dark:bg-[#1E1B4B] flex items-center justify-center text-[#7C3AED]">
+                   <User size={20} />
+                </div>
+                <div>
+                  <div className="font-bold text-[#1A1A1A] dark:text-[#FBFBFB]">{review.user.first_name} {review.user.last_name[0]}.</div>
+                  <div className="text-xs font-medium text-zinc-400 uppercase tracking-widest">{new Date(review.created_at).toLocaleDateString()}</div>
                 </div>
               </div>
-              <span className="text-xs text-zinc-400">
-                {new Date(review.created_at).toLocaleDateString()}
-              </span>
+              <div className="flex gap-0.5">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={12} className={i < review.rating ? "fill-[#7C3AED] text-[#7C3AED]" : "text-zinc-200"} />
+                ))}
+              </div>
             </div>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed italic">
-              "{review.comment}"
+            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium">
+              {review.comment}
             </p>
           </div>
         ))}
 
         {reviews.length === 0 && !loading && (
-          <p className="text-zinc-400 py-10">No reviews yet for this product.</p>
+          <div className="py-12 text-center text-zinc-400 font-medium italic">
+            No reviews yet. Be the first student to review this product!
+          </div>
+        )}
+
+        {hasMore && reviews.length > 0 && (
+          <div className="flex justify-center mt-12">
+            <button 
+              onClick={handleSeeMore}
+              disabled={loading}
+              className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-[#7C3AED] hover:opacity-70 transition-opacity disabled:opacity-50"
+            >
+              {loading ? "Loading..." : "See More Reviews"}
+              {!loading && <ChevronDown size={16} />}
+            </button>
+          </div>
         )}
       </div>
-
-      {!isAllLoaded && reviews.length > 0 && (
-        <button 
-          onClick={handleSeeMore}
-          disabled={loading}
-          className="mt-10 px-10 py-4 bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-50 font-bold rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-all disabled:opacity-50"
-        >
-          {loading ? "Loading..." : "See more reviews"}
-        </button>
-      )}
     </section>
   );
 }
