@@ -105,3 +105,13 @@ export interface Order {
   status: 'PENDING' | 'COMPLETED' | 'CANCELLED';
   created_at: string;
 }
+
+export interface Shop {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  category: string;
+  logo?: string;
+  owner: number;
+}

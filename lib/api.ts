@@ -1,6 +1,6 @@
 import { Product, Review, Cart, Order, Shop } from "./types";
 
-const API_BASE_URL = "https://api.sokoline.app/api";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.sokoline.app/api";
 
 async function authenticatedFetch(endpoint: string, token?: string | null, options: RequestInit = {}) {
   const headers = {
