@@ -36,8 +36,16 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   background-image:
-    radial-gradient(circle at 12% -10%, color-mix(in oklab, var(--accent) 11%, transparent), transparent 36%),
-    radial-gradient(circle at 100% 0%, color-mix(in oklab, var(--accent) 6%, transparent), transparent 30%);
+    radial-gradient(circle at 12% -10%, rgb(124 58 237 / 0.11), transparent 36%),
+    radial-gradient(circle at 100% 0%, rgb(124 58 237 / 0.06), transparent 30%);
+}
+
+@supports (background: color-mix(in oklab, white 50%, black)) {
+  body {
+    background-image:
+      radial-gradient(circle at 12% -10%, color-mix(in oklab, var(--accent) 11%, transparent), transparent 36%),
+      radial-gradient(circle at 100% 0%, color-mix(in oklab, var(--accent) 6%, transparent), transparent 30%);
+  }
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -45,5 +53,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::selection {
-  background: color-mix(in oklab, var(--accent) 28%, transparent);
+  background: rgb(124 58 237 / 0.28);
+  color: var(--foreground);
+}
+
+@supports (background: color-mix(in oklab, white 50%, black)) {
+  ::selection {
+    background: color-mix(in oklab, var(--accent) 28%, transparent);
+  }
 }

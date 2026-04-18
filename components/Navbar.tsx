@@ -44,7 +44,7 @@ const Navbar = () => {
           
           <Show when="signed-out">
             <SignInButton mode="modal">
-              <button className="text-xs font-bold uppercase tracking-widest text-zinc-500 hover:text-[#7C3AED] transition-colors cursor-pointer">
+              <button className="text-xs font-bold uppercase tracking-widest text-zinc-500 hover:text-[#7C3AED] transition-colors">
                 Sign in
               </button>
             </SignInButton>
@@ -82,7 +82,7 @@ const Navbar = () => {
           <Show when="signed-out">
             <div className="hidden md:block">
               <SignUpButton mode="modal">
-                <button className="rounded-full bg-[#7C3AED] dark:bg-[#A855F7] px-6 py-2.5 text-xs font-black uppercase tracking-widest text-white hover:bg-[#6D28D9] dark:hover:bg-[#9333EA] transition-all active:scale-95 cursor-pointer shadow-lg shadow-purple-100/60 dark:shadow-none">
+                <button className="rounded-full bg-[#7C3AED] dark:bg-[#A855F7] px-6 py-2.5 text-xs font-black uppercase tracking-widest text-white hover:bg-[#6D28D9] dark:hover:bg-[#9333EA] transition-all active:scale-95 shadow-lg shadow-purple-100/60 dark:shadow-none">
                   Sign up
                 </button>
               </SignUpButton>
