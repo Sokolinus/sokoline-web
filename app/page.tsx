@@ -8,129 +8,147 @@ export default async function Home() {
   const featuredProducts = await getProducts({ limit: "4" });
 
   return (
-    <main className="flex min-h-screen flex-col items-center bg-white dark:bg-[#0A0A0A] transition-colors duration-300">
+    <main className="flex min-h-screen flex-col items-center bg-background transition-colors duration-300">
       <HeroSection />
       
-      {/* Featured Products Section */}
-      <section className="w-full max-w-7xl px-6 py-24 sm:px-12 lg:px-24">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-           <div className="max-w-2xl">
-              <h2 className="text-4xl font-black tracking-tighter text-[#1A1A1A] dark:text-[#FBFBFB] uppercase leading-none mb-4">
-                 Featured <br /> <span className="text-[#7C3AED]">Student Ventures</span>
-              </h2>
-              <p className="text-zinc-500 dark:text-zinc-400 font-medium text-lg">
-                 The latest and greatest items curated from across the campus entrepreneur community.
-              </p>
-           </div>
-           <Link href="/products" className="group flex items-center gap-2 text-sm font-black uppercase tracking-widest text-[#7C3AED] hover:opacity-70 transition-opacity">
-              See All Products <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-           </Link>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-           {featuredProducts.map((product) => (
-             <Link key={product.id} href={`/products/${product.slug}`} className="group">
-                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[32px] bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 mb-6 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-purple-100 dark:group-hover:shadow-none">
-                  {product.images?.[0] ? (
-                    <Image 
-                      src={product.images[0].image} 
-                      alt={product.name} 
-                      fill 
-                      className="object-cover group-hover:scale-105 transition-transform duration-700" 
-                    />
-                  ) : (
-                    <div className="flex items-center justify-center h-full text-zinc-300">
-                      <ShoppingBag size={48} className="group-hover:scale-110 transition-transform" />
-                    </div>
-                  )}
-                  {product.is_on_sale && (
-                    <div className="absolute top-4 left-4 bg-[#7C3AED] text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter shadow-lg">
-                      Sale
-                    </div>
-                  )}
-                </div>
-                <h3 className="text-lg font-bold text-[#1A1A1A] dark:text-[#FBFBFB] group-hover:text-[#7C3AED] transition-colors line-clamp-1 uppercase tracking-tight">
-                   {product.name}
-                </h3>
-                <div className="flex items-center gap-3 mt-1">
-                   <span className="text-xl font-black text-[#1A1A1A] dark:text-[#FBFBFB]">
-                      ${product.discount_price || product.price}
-                   </span>
-                </div>
+      {/* Featured Drop: Minimal Grid */}
+      <section className="w-full max-w-7xl px-6 py-40 sm:px-12 lg:px-24">
+        <div className="flex flex-col gap-24">
+          <div className="flex flex-col items-start justify-between gap-10 border-b border-border pb-16 md:flex-row md:items-end">
+             <div className="space-y-4">
+                <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-muted-foreground/60">curated selection</p>
+                <h2 className="text-5xl font-semibold tracking-tight text-foreground md:text-6xl">
+                   featured drop
+                </h2>
+             </div>
+             <Link href="/products" className="group flex items-center gap-4 text-xs font-semibold text-foreground transition-all hover:text-sokoline-accent">
+                view all <ArrowRight size={14} strokeWidth={1.5} className="transition-transform group-hover:translate-x-1" />
              </Link>
-           ))}
-        </div>
+          </div>
 
-        {featuredProducts.length === 0 && (
-           <div className="py-20 text-center border-2 border-dashed border-zinc-100 dark:border-zinc-800 rounded-[48px] text-zinc-400 italic">
-              No products featured yet. Stay tuned!
+          <div className="grid grid-cols-1 gap-x-10 gap-y-20 sm:grid-cols-2 lg:grid-cols-4">
+             {featuredProducts.map((product) => (
+               <Link key={product.id} href={`/products/${product.slug}`} className="group block space-y-6">
+                  <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl border border-border bg-card transition-all duration-700 group-hover:border-border/80 group-hover:shadow-lg">
+                    {product.images?.[0] ? (
+                      <Image 
+                        src={product.images[0].image} 
+                        alt={product.name} 
+                        fill 
+                        className="object-cover opacity-90 transition-transform duration-[2s] group-hover:scale-105 group-hover:opacity-100" 
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center text-muted-foreground/20">
+                        <ShoppingBag size={40} strokeWidth={1} />
+                      </div>
+                    )}
+                    {product.is_on_sale && (
+                      <div className="absolute top-4 left-4 rounded-full border border-border bg-background/80 px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-foreground backdrop-blur-md">
+                        limited
+                      </div>
+                    )}
+                  </div>
+                  <div className="space-y-2 px-2 text-center">
+                    <p className="text-[10px] font-medium text-muted-foreground/60 uppercase tracking-wider">{product.shop_name}</p>
+                    <h3 className="text-lg font-semibold tracking-tight text-foreground transition-colors group-hover:text-sokoline-accent">
+                       {product.name}
+                    </h3>
+                    <p className="text-sm font-medium text-muted-foreground tracking-tight">${product.discount_price || product.price}</p>
+                  </div>
+               </Link>
+             ))}
+          </div>
+
+          {featuredProducts.length === 0 && (
+             <div className="py-20 text-center text-muted-foreground/40 font-medium italic text-sm">
+                awaiting next synchronization
+             </div>
+          )}
+        </div>
+      </section>
+
+      {/* Narrative Section: Deep Focus */}
+      <section className="relative w-full border-y border-border bg-muted/30 py-40">
+        <div className="mx-auto max-w-4xl px-6 text-center space-y-10">
+           <h2 className="text-4xl font-semibold leading-[1.2] tracking-tight text-foreground md:text-5xl">
+             We are building the technical bridge between student ambition and professional commerce.
+           </h2>
+           <p className="mx-auto max-w-2xl text-lg font-normal leading-relaxed text-muted-foreground">
+             a unified engine for student founders to launch, scale, and manage their ventures without the friction of modern infrastructure.
+           </p>
+           <div className="flex justify-center gap-12 pt-6">
+              <div className="flex flex-col items-center gap-2">
+                 <span className="text-3xl font-semibold tracking-tighter text-foreground">15k+</span>
+                 <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">active users</span>
+              </div>
+              <div className="flex flex-col items-center gap-2">
+                 <span className="text-3xl font-semibold tracking-tighter text-foreground">240+</span>
+                 <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">student ventures</span>
+              </div>
            </div>
-        )}
+        </div>
       </section>
 
-      {/* Value Proposition Section */}
-      <section className="w-full bg-[#F5F3FF]/50 dark:bg-[#1E1B4B]/20 py-32 px-6 sm:px-12 lg:px-24 border-y border-[#7C3AED]/10">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 gap-16 lg:grid-cols-3">
-          <div className="flex flex-col gap-6">
-            <div className="h-14 w-14 rounded-3xl bg-white dark:bg-[#0A0A0A] border border-zinc-100 dark:border-zinc-800 shadow-sm flex items-center justify-center text-[#7C3AED]">
-               <BarChart3 size={28} />
+      {/* Feature Grid: Clean Functionalism */}
+      <section className="w-full max-w-7xl px-6 py-40 sm:px-12 lg:px-24">
+        <div className="grid grid-cols-1 gap-24 lg:grid-cols-3">
+          <div className="space-y-6">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card text-muted-foreground">
+               <BarChart3 size={20} strokeWidth={1.5} />
             </div>
-            <div>
-              <h3 className="text-2xl font-bold tracking-tight text-[#1A1A1A] dark:text-[#FBFBFB] uppercase mb-3">Data Driven</h3>
-              <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium">
-                Track sales trends, customer behavior, and inventory metrics through our comprehensive vendor portal.
-              </p>
-            </div>
+            <h3 className="text-xl font-semibold tracking-tight text-foreground">venture analytics</h3>
+            <p className="text-sm font-normal leading-relaxed text-muted-foreground">
+              full visibility into your unit economics and inventory flow through a unified portal.
+            </p>
           </div>
-          <div className="flex flex-col gap-6">
-            <div className="h-14 w-14 rounded-3xl bg-white dark:bg-[#0A0A0A] border border-zinc-100 dark:border-zinc-800 shadow-sm flex items-center justify-center text-[#7C3AED]">
-               <Zap size={28} />
+          <div className="space-y-6">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card text-muted-foreground">
+               <Zap size={20} strokeWidth={1.5} />
             </div>
-            <div>
-              <h3 className="text-2xl font-bold tracking-tight text-[#1A1A1A] dark:text-[#FBFBFB] uppercase mb-3">M-Pesa Ready</h3>
-              <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium">
-                Accept payments via credit card or Daraja. Secure, student-to-student transactions built for local needs.
-              </p>
-            </div>
+            <h3 className="text-xl font-semibold tracking-tight text-foreground">instant settlement</h3>
+            <p className="text-sm font-normal leading-relaxed text-muted-foreground">
+              synchronized m-pesa (daraja) processing with zero-friction checkout logic.
+            </p>
           </div>
-          <div className="flex flex-col gap-6">
-            <div className="h-14 w-14 rounded-3xl bg-white dark:bg-[#0A0A0A] border border-zinc-100 dark:border-zinc-800 shadow-sm flex items-center justify-center text-[#7C3AED]">
-               <ShieldCheck size={28} />
+          <div className="space-y-6">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card text-muted-foreground">
+               <ShieldCheck size={20} strokeWidth={1.5} />
             </div>
-            <div>
-              <h3 className="text-2xl font-bold tracking-tight text-[#1A1A1A] dark:text-[#FBFBFB] uppercase mb-3">Safety First</h3>
-              <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium">
-                Every shop is campus-verified. We bridge the gap between student creativity and professional reliability.
-              </p>
-            </div>
+            <h3 className="text-xl font-semibold tracking-tight text-foreground">campus verified</h3>
+            <p className="text-sm font-normal leading-relaxed text-muted-foreground">
+              a trusted intermediary layer protecting both student founders and campus shoppers.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="w-full max-w-7xl px-6 py-32 sm:px-12 lg:px-24">
-         <div className="relative rounded-[64px] bg-[#1A1A1A] overflow-hidden p-12 md:p-24 text-center">
-            <div className="relative z-10 flex flex-col items-center">
-               <h2 className="text-5xl md:text-7xl font-black tracking-tighter text-white uppercase leading-none mb-8">
-                  Ready to launch?
-               </h2>
-               <p className="text-zinc-400 text-lg md:text-xl font-medium max-w-2xl mb-12">
-                  Join hundreds of students turning their passions into professional ventures on Sokoline.
-               </p>
-               <div className="flex flex-wrap justify-center gap-6">
-                  <Link href="/sign-up" className="bg-[#7C3AED] text-white px-12 py-5 rounded-[24px] font-black uppercase tracking-widest text-sm hover:bg-[#6D28D9] transition-all shadow-2xl">
-                     Get Started
-                  </Link>
-                  <Link href="/shops" className="bg-white text-[#1A1A1A] px-12 py-5 rounded-[24px] font-black uppercase tracking-widest text-sm hover:bg-zinc-100 transition-all">
-                     Explore Shops
-                  </Link>
-               </div>
-            </div>
-            {/* Background Decoration */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-[#7C3AED]/20 rounded-full blur-[120px]" />
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-[80px]" />
+      {/* Statement CTA: Final Minimal Focus */}
+      <section className="flex w-full flex-col items-center justify-center px-6 py-80 text-center">
+         <h2 className="mb-20 max-w-4xl text-5xl font-semibold leading-[1] tracking-tighter text-foreground md:text-8xl">
+           start your venture today.
+         </h2>
+         <div className="flex flex-col items-center gap-12 sm:flex-row">
+            <Link href="/sign-up" className="text-sm font-semibold text-sokoline-accent underline underline-offset-8 transition-all hover:text-sokoline-accent-hover">
+               join the ecosystem
+            </Link>
+            <span className="hidden h-8 w-px bg-border sm:block" />
+            <Link href="/shops" className="text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground">
+               explore all shops
+            </Link>
          </div>
       </section>
+
+      <footer className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-10 border-t border-border px-6 py-20 md:flex-row">
+         <div className="space-y-2 text-center md:text-left">
+            <p className="text-sm font-bold tracking-tight text-foreground">sokoline</p>
+            <p className="text-[10px] font-medium uppercase tracking-widest text-muted-foreground/60">© 2026 unified commerce infrastructure</p>
+         </div>
+         <div className="flex gap-10 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">
+            {['instagram', 'twitter', 'support'].map((link) => (
+              <Link key={link} href="#" className="transition-colors hover:text-foreground">{link}</Link>
+            ))}
+         </div>
+      </footer>
     </main>
   );
 }

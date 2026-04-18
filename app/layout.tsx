@@ -1,9 +1,20 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { CartProvider } from "@/components/providers/CartProvider";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "Sokoline",
@@ -19,15 +30,7 @@ export default function RootLayout({
     <ClerkProvider>
       <CartProvider>
         <html lang="en" className="antialiased">
-          <head>
-            <link rel="preconnect" href="https://fonts.googleapis.com" />
-            <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-            <link
-              href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
-              rel="stylesheet"
-            />
-          </head>
-          <body>
+          <body className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
             <Navbar />
             <Breadcrumbs />
             <main>

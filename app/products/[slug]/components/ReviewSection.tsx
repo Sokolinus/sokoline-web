@@ -37,69 +37,69 @@ export default function ReviewSection({ product }: ReviewSectionProps) {
   };
 
   return (
-    <section className="max-w-7xl mx-auto px-6 md:px-10 py-20 bg-zinc-50 dark:bg-zinc-900/30 rounded-[48px]">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-16">
+    <section className="max-w-7xl mx-auto px-6 md:px-10 py-32 bg-background">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-12 mb-20">
         <div>
-           <h2 className="text-4xl font-black tracking-tighter text-[#1A1A1A] dark:text-[#FBFBFB] uppercase">Community Feedback</h2>
-           <p className="text-zinc-500 dark:text-zinc-400 mt-2 font-medium">Real reviews from students who bought this.</p>
+           <h2 className="text-5xl font-black tracking-tighter text-foreground uppercase leading-none mb-4">Community <br /> Feedback</h2>
+           <p className="text-zinc-500 font-medium text-lg">Real reviews from students who bought this.</p>
         </div>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-10">
            <div className="text-center">
-              <div className="text-3xl font-black text-[#1A1A1A] dark:text-[#FBFBFB]">{product.average_rating.toFixed(1)}</div>
-              <div className="flex gap-0.5 mt-1">
+              <div className="text-5xl font-black text-foreground tracking-tighter">{product.average_rating.toFixed(1)}</div>
+              <div className="flex gap-1 mt-2 justify-center">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={12} className={i < Math.round(product.average_rating) ? "fill-[#7C3AED] text-[#7C3AED]" : "text-zinc-200"} />
+                  <Star key={i} size={14} className={i < Math.round(product.average_rating) ? "fill-sokoline-accent text-sokoline-accent" : "text-zinc-200"} />
                 ))}
               </div>
            </div>
-           <div className="h-12 w-px bg-zinc-200 dark:bg-zinc-800" />
+           <div className="h-16 w-px bg-zinc-200" />
            <div className="text-center">
-              <div className="text-3xl font-black text-[#1A1A1A] dark:text-[#FBFBFB]">{product.review_count}</div>
-              <div className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mt-1">Total Reviews</div>
+              <div className="text-5xl font-black text-foreground tracking-tighter">{product.review_count}</div>
+              <div className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mt-2">Total Reviews</div>
            </div>
         </div>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-8">
         {reviews.map((review) => (
-          <div key={review.id} className="bg-white dark:bg-[#0A0A0A] p-8 rounded-3xl border border-zinc-100 dark:border-zinc-800 shadow-sm">
-            <div className="flex justify-between items-start mb-6">
-              <div className="flex items-center gap-4">
-                <div className="h-10 w-10 rounded-full bg-[#F5F3FF] dark:bg-[#1E1B4B] flex items-center justify-center text-[#7C3AED]">
-                   <User size={20} />
+          <div key={review.id} className="bg-card p-10 rounded-[40px] border border-zinc-100 shadow-sm transition-all hover:shadow-xl hover:shadow-purple-100/20">
+            <div className="flex justify-between items-start mb-8">
+              <div className="flex items-center gap-5">
+                <div className="h-12 w-12 rounded-2xl bg-[#F5F3FF] border border-sokoline-accent/10 flex items-center justify-center text-sokoline-accent">
+                   <User size={24} />
                 </div>
                 <div>
-                  <div className="font-bold text-[#1A1A1A] dark:text-[#FBFBFB]">{review.user.first_name} {review.user.last_name[0]}.</div>
-                  <div className="text-xs font-medium text-zinc-400 uppercase tracking-widest">{new Date(review.created_at).toLocaleDateString()}</div>
+                  <div className="font-bold text-foreground uppercase tracking-tight text-lg">{review.user.first_name} {review.user.last_name[0]}.</div>
+                  <div className="text-xs font-bold text-zinc-400 uppercase tracking-[0.2em]">{new Date(review.created_at).toLocaleDateString()}</div>
                 </div>
               </div>
-              <div className="flex gap-0.5">
+              <div className="flex gap-1">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={12} className={i < review.rating ? "fill-[#7C3AED] text-[#7C3AED]" : "text-zinc-200"} />
+                  <Star key={i} size={14} className={i < review.rating ? "fill-sokoline-accent text-sokoline-accent" : "text-zinc-100"} />
                 ))}
               </div>
             </div>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium">
+            <p className="text-zinc-600 leading-relaxed font-medium text-lg max-w-2xl">
               {review.comment}
             </p>
           </div>
         ))}
 
         {reviews.length === 0 && !loading && (
-          <div className="py-12 text-center text-zinc-400 font-medium italic">
+          <div className="py-20 text-center text-zinc-400 font-medium italic border-2 border-dashed border-zinc-200 rounded-[40px]">
             No reviews yet. Be the first student to review this product!
           </div>
         )}
 
         {hasMore && reviews.length > 0 && (
-          <div className="flex justify-center mt-12">
+          <div className="flex justify-center mt-16">
             <button 
               onClick={handleSeeMore}
               disabled={loading}
-              className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-[#7C3AED] hover:opacity-70 transition-opacity disabled:opacity-50"
+              className="flex items-center gap-3 text-xs font-black uppercase tracking-[0.2em] text-sokoline-accent hover:opacity-70 transition-opacity disabled:opacity-50"
             >
-              {loading ? "Loading..." : "See More Reviews"}
-              {!loading && <ChevronDown size={16} />}
+              {loading ? "Loading..." : "Load More Experiences"}
+              {!loading && <ChevronDown size={18} />}
             </button>
           </div>
         )}

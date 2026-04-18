@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import React from "react";
+import { ChevronRight } from "lucide-react";
 
 const Breadcrumbs = () => {
   const pathname = usePathname();
@@ -13,31 +14,35 @@ const Breadcrumbs = () => {
   const pathSegments = pathname.split("/").filter((segment) => segment !== "");
   
   const breadcrumbs = [
-    { name: "Home", link: "/" },
+    { name: "home", link: "/" },
     ...pathSegments.map((segment, index) => {
       const link = `/${pathSegments.slice(0, index + 1).join("/")}`;
-      const name = segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, " ");
+      const name = segment.replace(/-/g, " ");
       return { name, link };
     }),
   ];
 
   return (
-    <nav className="flex px-4 md:px-10 py-4 text-[10px] md:text-xs uppercase tracking-widest text-gray-400 dark:text-zinc-500 font-sans max-w-7xl mx-auto transition-colors duration-300">
-      {breadcrumbs.map((path, index) => (
-        <div key={index} className="flex items-center">
-          <Link
-            href={path.link}
-            className={`hover:text-black dark:hover:text-white transition-colors ${
-              index === breadcrumbs.length - 1 ? "text-[#7C3AED] dark:text-[#A855F7] font-bold" : ""
-            }`}
-          >
-            {path.name}
-          </Link>
-          {index < breadcrumbs.length - 1 && (
-            <span className="mx-2 text-gray-300 dark:text-zinc-800">/</span>
-          )}
-        </div>
-      ))}
+    <nav className="mx-auto flex max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+      <ol className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest">
+        {breadcrumbs.map((path, index) => (
+          <li key={index} className="flex items-center gap-2">
+            {index > 0 && (
+              <ChevronRight className="h-3 w-3 text-muted-foreground/40" strokeWidth={3} />
+            )}
+            <Link
+              href={path.link}
+              className={`transition-colors hover:text-foreground ${
+                index === breadcrumbs.length - 1 
+                  ? "text-sokoline-accent" 
+                  : "text-muted-foreground/60"
+              }`}
+            >
+              {path.name}
+            </Link>
+          </li>
+        ))}
+      </ol>
     </nav>
   );
 };

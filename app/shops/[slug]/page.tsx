@@ -15,8 +15,8 @@ export default async function ShopPage({ params }: { params: Promise<{ slug: str
   if (!shop) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
-        <h1 className="text-4xl font-bold text-zinc-300">Shop Not Found</h1>
-        <Link href="/shops" className="text-[#7C3AED] hover:underline flex items-center gap-2">
+        <h1 className="text-4xl font-bold text-muted-foreground">Shop Not Found</h1>
+        <Link href="/shops" className="text-sokoline-accent hover:underline flex items-center gap-2">
           <ArrowLeft size={16} /> Back to Shops
         </Link>
       </div>
@@ -24,34 +24,34 @@ export default async function ShopPage({ params }: { params: Promise<{ slug: str
   }
 
   return (
-    <main className="bg-white dark:bg-[#0A0A0A] min-h-screen">
+    <main className="bg-background min-h-screen">
       {/* Shop Header */}
-      <section className="border-b border-zinc-100 dark:border-zinc-800">
+      <section className="border-b border-border">
         <div className="max-w-7xl mx-auto px-6 py-16 md:px-10">
-          <Link href="/shops" className="text-sm font-bold text-[#7C3AED] uppercase tracking-widest flex items-center gap-2 mb-8 hover:opacity-70 transition-opacity">
+          <Link href="/shops" className="text-sm font-bold text-sokoline-accent uppercase tracking-widest flex items-center gap-2 mb-8 hover:opacity-70 transition-opacity">
             <ArrowLeft size={14} /> Back to all shops
           </Link>
           
           <div className="flex flex-col md:flex-row gap-8 items-start md:items-center">
             {shop.logo ? (
-               <div className="relative h-24 w-24 rounded-3xl overflow-hidden border border-zinc-100">
+               <div className="relative h-24 w-24 rounded-3xl overflow-hidden border border-border">
                  <Image src={shop.logo} alt={shop.name} fill className="object-cover" />
                </div>
             ) : (
-              <div className="h-24 w-24 rounded-3xl bg-[#F5F3FF] flex items-center justify-center text-[#7C3AED]">
+              <div className="h-24 w-24 rounded-3xl bg-sokoline-accent/10 flex items-center justify-center text-sokoline-accent">
                 <ShoppingBag size={40} />
               </div>
             )}
             <div>
-              <h1 className="text-5xl font-black tracking-tighter text-[#1A1A1A] dark:text-[#FBFBFB] uppercase">{shop.name}</h1>
-              <p className="text-zinc-500 dark:text-zinc-400 mt-2 max-w-2xl text-lg leading-relaxed">
+              <h1 className="text-5xl font-black tracking-tighter text-foreground uppercase">{shop.name}</h1>
+              <p className="text-muted-foreground mt-2 max-w-2xl text-lg leading-relaxed">
                 {shop.description}
               </p>
               <div className="flex gap-4 mt-6">
-                 <span className="text-xs font-bold uppercase tracking-widest px-4 py-2 bg-zinc-100 dark:bg-zinc-800 rounded-full text-zinc-600 dark:text-zinc-400">
+                 <span className="text-xs font-bold uppercase tracking-widest px-4 py-2 bg-muted rounded-full text-muted-foreground">
                    Student Owned
                  </span>
-                 <span className="text-xs font-bold uppercase tracking-widest px-4 py-2 bg-[#F5F3FF] dark:bg-[#1E1B4B] rounded-full text-[#7C3AED] dark:text-[#A855F7]">
+                 <span className="text-xs font-bold uppercase tracking-widest px-4 py-2 bg-sokoline-accent/10 rounded-full text-sokoline-accent">
                    Verified Campus Vendor
                  </span>
               </div>
@@ -63,14 +63,14 @@ export default async function ShopPage({ params }: { params: Promise<{ slug: str
       {/* Products Grid */}
       <section className="max-w-7xl mx-auto px-6 py-20 md:px-10">
         <div className="flex justify-between items-end mb-12">
-           <h2 className="text-2xl font-bold tracking-tighter text-[#1A1A1A] dark:text-[#FBFBFB] uppercase">Inventory</h2>
-           <p className="text-sm text-zinc-400 font-medium">{shop.products?.length || 0} Products available</p>
+           <h2 className="text-2xl font-bold tracking-tighter text-foreground uppercase">Inventory</h2>
+           <p className="text-sm text-muted-foreground font-medium">{shop.products?.length || 0} Products available</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
           {shop.products?.map((product: any) => (
             <Link key={product.id} href={`/products/${product.slug}`} className="group">
-              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[24px] bg-zinc-50 dark:bg-zinc-900 mb-6">
+              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[24px] bg-muted mb-6">
                 {product.images?.[0] ? (
                   <Image 
                     src={product.images[0].image} 
@@ -79,23 +79,23 @@ export default async function ShopPage({ params }: { params: Promise<{ slug: str
                     className="object-cover group-hover:scale-105 transition-transform duration-500" 
                   />
                 ) : (
-                  <div className="flex items-center justify-center h-full text-zinc-300 group-hover:scale-110 transition-transform">
+                  <div className="flex items-center justify-center h-full text-muted-foreground group-hover:scale-110 transition-transform">
                     <ShoppingBag size={48} />
                   </div>
                 )}
                 {product.is_on_sale && (
-                  <div className="absolute top-4 left-4 bg-[#7C3AED] text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter shadow-lg">
+                  <div className="absolute top-4 left-4 bg-sokoline-accent text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter shadow-lg">
                     Sale
                   </div>
                 )}
               </div>
-              <h3 className="text-lg font-bold text-[#1A1A1A] dark:text-[#FBFBFB] group-hover:text-[#7C3AED] transition-colors line-clamp-1">{product.name}</h3>
+              <h3 className="text-lg font-bold text-foreground group-hover:text-sokoline-accent transition-colors line-clamp-1">{product.name}</h3>
               <div className="flex items-center gap-3 mt-1">
-                <span className="text-xl font-black text-[#1A1A1A] dark:text-[#FBFBFB]">
+                <span className="text-xl font-black text-foreground">
                   ${product.discount_price || product.price}
                 </span>
                 {product.is_on_sale && (
-                  <span className="text-sm text-zinc-400 line-through decoration-zinc-400/50">
+                  <span className="text-sm text-muted-foreground line-through decoration-muted-foreground/50">
                     ${product.price}
                   </span>
                 )}
@@ -105,8 +105,8 @@ export default async function ShopPage({ params }: { params: Promise<{ slug: str
         </div>
 
         {(!shop.products || shop.products.length === 0) && (
-          <div className="py-20 text-center border-2 border-dashed border-zinc-100 dark:border-zinc-800 rounded-[32px]">
-            <p className="text-zinc-400 font-medium">This vendor hasn't listed any products yet.</p>
+          <div className="py-20 text-center border-2 border-dashed border-border rounded-[32px]">
+            <p className="text-muted-foreground font-medium">This vendor hasn't listed any products yet.</p>
           </div>
         )}
       </section>

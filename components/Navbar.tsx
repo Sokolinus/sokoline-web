@@ -9,7 +9,7 @@ import {
   Show,
 } from "@clerk/nextjs";
 import { useCart } from "@/components/providers/CartProvider";
-import { ShoppingBag, Search, Menu } from "lucide-react";
+import { ShoppingBag, Search, Menu, Package, LayoutDashboard } from "lucide-react";
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -17,118 +17,114 @@ const Navbar = () => {
   const cartItemCount = cart?.items.reduce((acc, item) => acc + item.quantity, 0) || 0;
 
   return (
-    <nav className="w-full border-b border-zinc-200/70 bg-white/90 font-sans sticky top-0 z-50 transition-colors duration-300 backdrop-blur-md dark:bg-[#0A0A0A]/90 dark:border-zinc-800">
-      <div className="max-w-7xl mx-auto px-4 md:px-10 h-16 md:h-20 flex items-center justify-between">
+    <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md transition-all duration-300">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* LOGO */}
-        <Link href="/" className="text-xl md:text-2xl font-black tracking-tighter text-[#1A1A1A] dark:text-[#FBFBFB]">
-          SOKOLINE
+        <Link href="/" className="flex items-center gap-2">
+          <span className="text-xl font-bold tracking-tight text-foreground">
+            sokoline
+          </span>
         </Link>
 
         {/* DESKTOP NAV */}
-        <div className="hidden md:flex items-center gap-10">
-          <Link href="/products" className="text-xs font-bold uppercase tracking-widest text-zinc-400 hover:text-[#7C3AED] transition-colors">
-            Shop
+        <div className="hidden items-center gap-8 md:flex">
+          <Link href="/products" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground">
+            products
           </Link>
-          <Link href="/shops" className="text-xs font-bold uppercase tracking-widest text-zinc-400 hover:text-[#7C3AED] transition-colors">
-            Shops
+          <Link href="/shops" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground">
+            shops
           </Link>
           
           <Show when="signed-in">
-            <Link href="/orders" className="text-xs font-bold uppercase tracking-widest text-zinc-400 hover:text-[#7C3AED] transition-colors">
-              Orders
+            <Link href="/orders" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground">
+              <Package className="h-3 w-3" />
+              orders
             </Link>
-            <Link href="/dashboard" className="text-xs font-bold uppercase tracking-widest text-[#7C3AED] dark:text-[#A855F7] hover:text-[#6D28D9] dark:hover:text-[#9333EA] transition-colors">
-              Dashboard
-            </Link>
-          </Show>
-          
-          <Show when="signed-out">
-            <SignInButton mode="modal">
-              <button className="text-xs font-bold uppercase tracking-widest text-zinc-500 hover:text-[#7C3AED] transition-colors">
-                Sign in
-              </button>
-            </SignInButton>
           </Show>
         </div>
 
         {/* ICONS & ACTIONS */}
-        <div className="flex items-center gap-4 md:gap-6">
-          {/* Search Icon */}
-          <button className="p-2 text-zinc-400 hover:text-[#7C3AED] transition-colors">
-            <Search size={20} />
+        <div className="flex items-center gap-2 sm:gap-4">
+          <button className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
+            <Search size={18} strokeWidth={2.5} />
+            <span className="sr-only">Search</span>
           </button>
 
-          {/* Cart with Notification */}
-          <Link href="/cart" className="relative p-2 text-zinc-400 hover:text-[#7C3AED] transition-colors">
-            <ShoppingBag size={22} />
+          <Link href="/cart" className="relative rounded-full p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
+            <ShoppingBag size={18} strokeWidth={2.5} />
             {cartItemCount > 0 && (
-              <span className="absolute top-0 right-0 h-5 w-5 bg-[#7C3AED] dark:bg-[#A855F7] text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white dark:border-[#0A0A0A]">
+              <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-sokoline-accent text-[9px] font-black text-white">
                 {cartItemCount}
               </span>
             )}
+            <span className="sr-only">Cart</span>
           </Link>
 
-          {/* PROFILE / AUTH */}
           <Show when="signed-in">
-            <UserButton 
-              appearance={{
-                elements: {
-                  userButtonAvatarBox: "w-9 h-9 rounded-2xl border border-gray-200 dark:border-zinc-700 overflow-hidden"
-                }
-              }}
-            />
+            <Link 
+              href="/dashboard" 
+              className="hidden items-center gap-2 rounded-2xl bg-muted px-4 py-2 text-[10px] font-black uppercase tracking-widest text-foreground transition-colors hover:bg-muted/80 md:flex"
+            >
+              <LayoutDashboard className="h-3.5 w-3.5" />
+              dashboard
+            </Link>
+            <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border border-border">
+              <UserButton 
+                appearance={{
+                  elements: {
+                    userButtonAvatarBox: "w-full h-full",
+                    userButtonTrigger: "focus:shadow-none focus:ring-0"
+                  }
+                }}
+              />
+            </div>
           </Show>
           
           <Show when="signed-out">
-            <div className="hidden md:block">
-              <SignUpButton mode="modal">
-                <button className="rounded-lg bg-[#7C3AED] dark:bg-[#A855F7] px-6 py-2.5 text-xs font-black uppercase tracking-widest text-white hover:bg-[#6D28D9] dark:hover:bg-[#9333EA] transition-all active:scale-95 shadow-lg shadow-purple-100/60 dark:shadow-none">
-                  Sign up
-                </button>
-              </SignUpButton>
-            </div>
-            {/* Mobile Menu Icon */}
-            <button
-              className="md:hidden p-2 text-zinc-500 hover:text-[#7C3AED] transition-colors"
-              onClick={() => setMobileOpen((prev) => !prev)}
-              aria-label="Toggle navigation menu"
-              aria-expanded={mobileOpen}
-            >
-              <Menu size={24} />
-            </button>
-          </Show>
-        </div>
-      </div>
-      {mobileOpen && (
-        <div className="md:hidden border-t border-zinc-200/70 dark:border-zinc-800" role="navigation" aria-label="Mobile navigation">
-          <div className="px-4 py-4 flex flex-col gap-3 text-xs font-bold uppercase tracking-widest">
-            <Link href="/products" className="text-zinc-600 hover:text-[#7C3AED] transition-colors" onClick={() => setMobileOpen(false)}>
-              Shop
-            </Link>
-            <Link href="/shops" className="text-zinc-600 hover:text-[#7C3AED] transition-colors" onClick={() => setMobileOpen(false)}>
-              Shops
-            </Link>
-            <Show when="signed-in">
-              <Link href="/orders" className="text-zinc-600 hover:text-[#7C3AED] transition-colors" onClick={() => setMobileOpen(false)}>
-                Orders
-              </Link>
-              <Link href="/dashboard" className="text-[#7C3AED] dark:text-[#A855F7]" onClick={() => setMobileOpen(false)}>
-                Dashboard
-              </Link>
-            </Show>
-            <Show when="signed-out">
+            <div className="hidden items-center gap-2 md:flex">
               <SignInButton mode="modal">
-                <button className="w-fit text-zinc-600 hover:text-[#7C3AED] transition-colors">
-                  Sign in
+                <button className="rounded-2xl px-5 py-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
+                  login
                 </button>
               </SignInButton>
               <SignUpButton mode="modal">
-                <button className="w-fit rounded-lg bg-[#7C3AED] dark:bg-[#A855F7] px-5 py-2 text-white hover:bg-[#6D28D9] dark:hover:bg-[#9333EA] transition-colors">
-                  Sign up
+                <button className="rounded-2xl bg-sokoline-accent px-5 py-2 text-[10px] font-black uppercase tracking-widest text-white shadow-xl shadow-sokoline-accent/20 transition-all hover:bg-sokoline-accent-hover active:scale-95">
+                  join
                 </button>
               </SignUpButton>
+            </div>
+          </Show>
+
+          <button
+            className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground md:hidden"
+            onClick={() => setMobileOpen((prev) => !prev)}
+          >
+            <Menu size={20} strokeWidth={1.5} />
+          </button>
+        </div>
+      </div>
+      
+      {/* Mobile Nav */}
+      {mobileOpen && (
+        <div className="border-t border-border bg-background p-6 md:hidden">
+          <nav className="flex flex-col gap-4">
+            <Link href="/products" className="text-sm font-medium text-muted-foreground" onClick={() => setMobileOpen(false)}>products</Link>
+            <Link href="/shops" className="text-sm font-medium text-muted-foreground" onClick={() => setMobileOpen(false)}>shops</Link>
+            <Show when="signed-in">
+              <Link href="/orders" className="text-sm font-medium text-muted-foreground" onClick={() => setMobileOpen(false)}>orders</Link>
+              <Link href="/dashboard" className="text-sm font-semibold text-foreground" onClick={() => setMobileOpen(false)}>dashboard</Link>
             </Show>
-          </div>
+            <Show when="signed-out">
+              <div className="mt-4 flex flex-col gap-2">
+                <SignInButton mode="modal">
+                  <button className="w-full rounded-lg bg-accent py-2 text-sm font-medium text-accent-foreground">login</button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <button className="w-full rounded-lg bg-sokoline-accent py-2 text-sm font-semibold text-white">join</button>
+                </SignUpButton>
+              </div>
+            </Show>
+          </nav>
         </div>
       )}
     </nav>

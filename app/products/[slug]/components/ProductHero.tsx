@@ -39,12 +39,12 @@ export default function ProductHero({ product }: ProductHeroProps) {
   };
 
   return (
-    <section className="bg-white dark:bg-[#0A0A0A] font-sans">
+    <section className="bg-background dark:bg-background font-sans">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 py-10">
         
         {/* --- LEFT COLUMN: GALLERY --- */}
         <div className="flex flex-col gap-6">
-          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[32px] bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800">
+          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[32px] bg-muted dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800">
             <Image
               src={allImages[activeImg]?.image || "/placeholder-product.png"}
               alt={allImages[activeImg]?.alt_text || product.name}
@@ -53,7 +53,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
               priority
             />
             {product.is_on_sale && (
-              <div className="absolute top-6 left-6 bg-[#7C3AED] text-white text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-xl">
+              <div className="absolute top-6 left-6 bg-sokoline-accent text-white text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-xl">
                 Sale -{discountPercent}%
               </div>
             )}
@@ -67,7 +67,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
                   key={img.id}
                   onClick={() => setActiveImg(i)}
                   className={`relative h-24 w-20 flex-shrink-0 overflow-hidden rounded-2xl border-2 transition-all ${
-                    activeImg === i ? "border-[#7C3AED]" : "border-transparent opacity-60 hover:opacity-100"
+                    activeImg === i ? "border-sokoline-accent" : "border-transparent opacity-60 hover:opacity-100"
                   }`}
                 >
                   <Image src={img.image} alt={img.alt_text} fill className="object-cover" />
@@ -81,19 +81,19 @@ export default function ProductHero({ product }: ProductHeroProps) {
         <div className="flex flex-col pt-4">
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-4">
-               <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#7C3AED]">{product.shop_name}</span>
+               <span className="text-xs font-bold uppercase tracking-[0.2em] text-sokoline-accent">{product.shop_name}</span>
                <span className="h-1 w-1 rounded-full bg-zinc-300" />
                <span className="text-xs font-bold uppercase tracking-[0.2em] text-zinc-400">{product.category?.name || "General"}</span>
             </div>
-            <h1 className="text-4xl lg:text-5xl font-black tracking-tighter text-[#1A1A1A] dark:text-[#FBFBFB] uppercase leading-[0.9]">
+            <h1 className="text-4xl lg:text-5xl font-black tracking-tighter text-foreground dark:text-background uppercase leading-[0.9]">
               {product.name}
             </h1>
           </div>
 
           <div className="flex items-center gap-4 mb-8">
-            <div className="flex items-center gap-1 bg-[#F5F3FF] dark:bg-[#1E1B4B] px-3 py-1 rounded-full border border-[#7C3AED]/10">
-              <Star size={14} className="fill-[#7C3AED] text-[#7C3AED]" />
-              <span className="text-sm font-black text-[#7C3AED]">{product.average_rating.toFixed(1)}</span>
+            <div className="flex items-center gap-1 bg-[#F5F3FF] dark:bg-[#1E1B4B] px-3 py-1 rounded-full border border-sokoline-accent/10">
+              <Star size={14} className="fill-sokoline-accent text-sokoline-accent" />
+              <span className="text-sm font-black text-sokoline-accent">{product.average_rating.toFixed(1)}</span>
             </div>
             <span className="text-sm font-bold text-zinc-400 uppercase tracking-widest decoration-dotted underline underline-offset-4 cursor-pointer hover:text-zinc-600">
               {product.review_count} reviews
@@ -102,7 +102,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
 
           {/* Price Section */}
           <div className="flex items-baseline gap-4 mb-10">
-            <span className="text-4xl font-black text-[#1A1A1A] dark:text-[#FBFBFB]">
+            <span className="text-4xl font-black text-foreground dark:text-background">
               ${currentPrice}
             </span>
             {originalPrice && (
@@ -123,7 +123,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
                     onClick={() => setSelectedVariant(variant)}
                     className={`px-6 py-3 rounded-2xl border-2 font-bold transition-all text-sm ${
                       selectedVariant?.id === variant.id
-                        ? "border-[#7C3AED] bg-[#7C3AED] text-white shadow-lg shadow-purple-200 dark:shadow-none"
+                        ? "border-sokoline-accent bg-sokoline-accent text-white shadow-lg shadow-purple-200 dark:shadow-none"
                         : "border-zinc-100 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600"
                     }`}
                   >
@@ -141,7 +141,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
             className={`group relative w-full py-5 rounded-[24px] font-black uppercase tracking-widest flex items-center justify-center gap-3 transition-all duration-300 overflow-hidden ${
               isAdding 
                 ? "bg-zinc-100 text-zinc-400 cursor-not-allowed" 
-                : "bg-[#1A1A1A] dark:bg-[#FBFBFB] text-white dark:text-[#1A1A1A] hover:bg-[#7C3AED] dark:hover:bg-[#7C3AED] hover:text-white shadow-2xl active:scale-95"
+                : "bg-foreground dark:bg-background text-white dark:text-foreground hover:bg-sokoline-accent dark:hover:bg-sokoline-accent hover:text-white shadow-2xl active:scale-95"
             }`}
           >
             <ShoppingCart size={20} className={isAdding ? "animate-bounce" : "group-hover:translate-x-1 transition-transform"} />

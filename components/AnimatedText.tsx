@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 const phrases = [
   "empowers student ventures",
   "provides business analytics",
-  "offers marketing solutions",
   "enables credit card payments",
   "handles daraja payments",
 ];
@@ -24,7 +23,7 @@ export default function AnimatedText() {
   const currentPhrase = phrases[index];
 
   return (
-    <div className="relative inline-block h-[1.2em] w-[600px] overflow-hidden align-middle">
+    <div className="relative inline-block h-[1.2em] w-[800px] overflow-hidden align-middle text-zinc-400">
       <AnimatePresence mode="wait">
         <motion.div
           key={currentPhrase}
@@ -37,8 +36,8 @@ export default function AnimatedText() {
                 animate={{ y: "0%" }}
                 exit={{ y: "-100%" }}
                 transition={{
-                  duration: 0.6,
-                  delay: i * 0.08,
+                  duration: 0.8,
+                  delay: i * 0.1,
                   ease: [0.33, 1, 0.68, 1],
                 }}
               >

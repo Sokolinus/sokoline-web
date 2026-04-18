@@ -15,14 +15,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   ];
 
   return (
-    <div className="flex min-h-screen bg-zinc-100 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50">
+    <div className="flex min-h-screen bg-muted text-foreground dark:bg-background">
       {/* Sidebar */}
-      <aside className="hidden h-screen w-72 shrink-0 flex-col border-r border-zinc-200 bg-white lg:sticky lg:top-0 lg:flex dark:border-zinc-800 dark:bg-zinc-950">
+      <aside className="hidden h-screen w-72 shrink-0 flex-col border-r border-border bg-background lg:sticky lg:top-0 lg:flex">
         <div className="px-8 pb-6 pt-8">
           <Link href="/" className="text-2xl font-black tracking-tight">
             Sokoline
           </Link>
-          <p className="mt-1 text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500 dark:text-zinc-400">
+          <p className="mt-1 text-xs font-semibold uppercase tracking-[0.25em] text-muted-foreground">
             Seller Dashboard
           </p>
         </div>
@@ -36,8 +36,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 href={item.href}
                 className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition ${
                   isActive
-                    ? "bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100"
-                    : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-900 dark:hover:text-zinc-50"
+                    ? "bg-muted text-foreground"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 }`}
               >
                 <item.icon size={18} strokeWidth={isActive ? 2.5 : 2} />
@@ -50,7 +50,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="mt-auto p-4">
           <Link 
             href="/" 
-            className="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-200"
+            className="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground"
           >
             <ArrowLeft size={16} />
             Exit Dashboard
@@ -61,12 +61,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Mobile Header */}
-        <header className="flex h-16 items-center justify-between border-b border-zinc-200 bg-white px-5 lg:hidden dark:border-zinc-800 dark:bg-zinc-950">
+        <header className="flex h-16 items-center justify-between border-b border-border bg-background px-5 lg:hidden">
            <span className="text-base font-bold tracking-tight">Sokoline</span>
            <Link
              href="/dashboard/products"
              aria-label="Add product"
-             className="rounded-lg bg-zinc-900 p-2 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2 dark:bg-zinc-100 dark:text-zinc-900"
+             className="rounded-lg bg-foreground p-2 text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sokoline-accent focus-visible:ring-offset-2"
            >
              <PlusCircle size={18} />
            </Link>

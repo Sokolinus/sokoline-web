@@ -20,7 +20,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   return (
-    <main className="bg-white dark:bg-[#0A0A0A] min-h-screen transition-colors duration-300">
+    <main className="bg-background min-h-screen transition-colors duration-300">
       <div className="max-w-7xl mx-auto">
         
         {/* Top Section: Navigation and Product Purchase */}
@@ -29,12 +29,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
 
         {/* Middle Section: Technical Details */}
-        <div className="border-t border-zinc-100 dark:border-zinc-800 mt-10">
+        <div className="border-t border-zinc-100 mt-10">
           <ProductInfoTabs product={product} />
         </div>
 
         {/* Social Proof & Trust Sections */}
-        <div className="space-y-4">
+        <div className="space-y-4 bg-background border-y border-zinc-100">
           <ReviewSection product={product} />
           <FAQSection />
         </div>

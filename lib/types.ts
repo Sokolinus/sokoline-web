@@ -114,4 +114,5 @@ export interface Shop {
   category: string;
   logo?: string;
   owner: number;
+  products?: any[];
 }

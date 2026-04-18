@@ -55,7 +55,7 @@ export default function DashboardOverview() {
   if (!authLoaded || loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="animate-spin text-[#7C3AED]" size={40} />
+        <Loader2 className="animate-spin text-sokoline-accent" size={40} />
       </div>
     );
   }
@@ -81,11 +81,11 @@ export default function DashboardOverview() {
     <div className="space-y-8 animate-in fade-in duration-700">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-bold text-zinc-400 uppercase tracking-widest">Vendor Overview</p>
-          <h1 className="mt-1 text-4xl font-black tracking-tight uppercase text-[#1A1A1A] dark:text-[#FBFBFB]">
+          <p className="text-sm font-bold text-muted-foreground uppercase tracking-widest">Vendor Overview</p>
+          <h1 className="mt-1 text-4xl font-black tracking-tight uppercase text-foreground">
              Hi {user?.firstName || "Entrepreneur"}
           </h1>
-          <p className="mt-2 max-w-2xl text-sm text-zinc-500 font-medium">
+          <p className="mt-2 max-w-2xl text-sm text-muted-foreground font-medium">
             {shop ? `Managing ${shop.name}. ` : "Set up your shop to start selling to students."}
             Monitor your sales and inventory below.
           </p>
@@ -93,13 +93,13 @@ export default function DashboardOverview() {
         <div className="flex items-center gap-3">
           <Link
             href="/dashboard/products"
-            className="inline-flex items-center rounded-2xl border border-zinc-200 px-6 py-3 text-xs font-black uppercase tracking-widest text-zinc-600 transition hover:bg-zinc-50 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-900"
+            className="inline-flex items-center rounded-2xl border border-border px-6 py-3 text-xs font-black uppercase tracking-widest text-muted-foreground transition hover:bg-muted"
           >
             Inventory
           </Link>
           <Link
             href="/dashboard/products"
-            className="inline-flex items-center rounded-2xl bg-[#1A1A1A] dark:bg-[#FBFBFB] px-6 py-3 text-xs font-black uppercase tracking-widest text-white dark:text-[#1A1A1A] transition hover:bg-[#7C3AED] dark:hover:bg-[#7C3AED] dark:hover:text-white shadow-xl active:scale-95"
+            className="inline-flex items-center rounded-2xl bg-foreground px-6 py-3 text-xs font-black uppercase tracking-widest text-background transition hover:bg-sokoline-accent shadow-xl active:scale-95"
           >
             <Plus size={16} className="mr-2" />
             Add Product
@@ -112,52 +112,52 @@ export default function DashboardOverview() {
         {stats.map((stat) => (
           <article
             key={stat.name}
-            className="rounded-[32px] border border-zinc-100 bg-white p-8 dark:border-zinc-800 dark:bg-zinc-900/50 shadow-sm"
+            className="rounded-[32px] border border-border bg-card p-8 shadow-sm"
           >
             <div className="flex items-start justify-between gap-3">
-              <div className="rounded-2xl bg-[#F5F3FF] dark:bg-[#1E1B4B] p-3 text-[#7C3AED]">
+              <div className="rounded-2xl bg-sokoline-accent/10 p-3 text-sokoline-accent">
                 <stat.icon size={20} />
               </div>
             </div>
-            <p className="mt-6 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">{stat.name}</p>
-            <p className="mt-1 text-3xl font-black tracking-tighter text-[#1A1A1A] dark:text-[#FBFBFB]">{stat.value}</p>
-            <p className="mt-2 text-[10px] font-bold text-zinc-400 uppercase">{stat.change}</p>
+            <p className="mt-6 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">{stat.name}</p>
+            <p className="mt-1 text-3xl font-black tracking-tighter text-foreground">{stat.value}</p>
+            <p className="mt-2 text-[10px] font-bold text-muted-foreground uppercase">{stat.change}</p>
           </article>
         ))}
       </div>
 
       <div className="grid grid-cols-1 gap-8 xl:grid-cols-[2fr_1fr]">
         {/* Empty Sales Chart Placeholder */}
-        <section className="rounded-[40px] border border-zinc-100 bg-white p-8 dark:border-zinc-800 dark:bg-zinc-900/50">
+        <section className="rounded-[40px] border border-border bg-card p-8">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-xl font-black uppercase tracking-tight text-[#1A1A1A] dark:text-[#FBFBFB]">Sales performance</h2>
-              <p className="text-sm text-zinc-500 font-medium mt-1">Real-time revenue tracking</p>
+              <h2 className="text-xl font-black uppercase tracking-tight text-foreground">Sales performance</h2>
+              <p className="text-sm text-muted-foreground font-medium mt-1">Real-time revenue tracking</p>
             </div>
           </div>
-          <div className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-zinc-100 dark:border-zinc-800 rounded-[32px] text-zinc-400 italic text-sm">
+          <div className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-border rounded-[32px] text-muted-foreground italic text-sm">
              Analytics will populate after your first sale.
           </div>
         </section>
 
-        <section className="rounded-[40px] border border-zinc-100 bg-white p-8 dark:border-zinc-800 dark:bg-zinc-900/50">
-          <h2 className="text-xl font-black uppercase tracking-tight text-[#1A1A1A] dark:text-[#FBFBFB]">Next Steps</h2>
+        <section className="rounded-[40px] border border-border bg-card p-8">
+          <h2 className="text-xl font-black uppercase tracking-tight text-foreground">Next Steps</h2>
           <ul className="mt-6 space-y-4">
             {priorities.map((task) => (
-              <li key={task.label} className="rounded-2xl border border-zinc-50 bg-zinc-50/30 p-4 dark:border-zinc-800 dark:bg-zinc-900/30">
+              <li key={task.label} className="rounded-2xl border border-border bg-muted/30 p-4">
                 <div className="flex items-start gap-4">
                   <div
                     className={`mt-0.5 rounded-xl p-2 ${
                       task.level === "high"
-                        ? "bg-red-50 text-red-600"
-                        : "bg-zinc-100 text-zinc-400"
+                        ? "bg-destructive/10 text-destructive"
+                        : "bg-muted text-muted-foreground"
                     }`}
                   >
                     <task.icon size={16} />
                   </div>
                   <div>
-                    <p className="text-sm font-bold uppercase tracking-tight text-[#1A1A1A] dark:text-[#FBFBFB]">{task.label}</p>
-                    <p className="text-[10px] font-medium text-zinc-500 uppercase tracking-widest mt-0.5">{task.note}</p>
+                    <p className="text-sm font-bold uppercase tracking-tight text-foreground">{task.label}</p>
+                    <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-widest mt-0.5">{task.note}</p>
                   </div>
                 </div>
               </li>
@@ -167,22 +167,22 @@ export default function DashboardOverview() {
       </div>
 
       {/* Orders Table */}
-      <section className="rounded-[40px] border border-zinc-100 bg-white p-8 dark:border-zinc-800 dark:bg-zinc-900/50 pb-4">
+      <section className="rounded-[40px] border border-border bg-card p-8 pb-4">
         <div className="flex items-center justify-between gap-4 mb-8">
           <div>
-            <h2 className="text-xl font-black uppercase tracking-tight text-[#1A1A1A] dark:text-[#FBFBFB]">Recent Transactions</h2>
-            <p className="text-sm text-zinc-500 font-medium mt-1">Track your support from other students</p>
+            <h2 className="text-xl font-black uppercase tracking-tight text-foreground">Recent Transactions</h2>
+            <p className="text-sm text-muted-foreground font-medium mt-1">Track your support from other students</p>
           </div>
         </div>
 
         {orders.length === 0 ? (
-          <div className="py-20 text-center border-2 border-dashed border-zinc-100 dark:border-zinc-800 rounded-[32px] text-zinc-400 italic text-sm mb-4">
+          <div className="py-20 text-center border-2 border-dashed border-border rounded-[32px] text-muted-foreground italic text-sm mb-4">
              Your transaction history is empty.
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-zinc-100 dark:divide-zinc-800">
-              <thead className="text-left text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">
+            <table className="min-w-full divide-y divide-border">
+              <thead className="text-left text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
                 <tr>
                   <th className="pb-6 pr-4">Order ID</th>
                   <th className="pb-6 pr-4">Status</th>
@@ -190,19 +190,19 @@ export default function DashboardOverview() {
                   <th className="pb-6">Date</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
+              <tbody className="divide-y divide-border">
                 {orders.slice(0, 5).map((order) => (
                   <tr key={order.id} className="group">
-                    <td className="py-6 pr-4 font-bold text-sm text-[#1A1A1A] dark:text-[#FBFBFB]">#SKL-{order.id.toString().padStart(4, '0')}</td>
+                    <td className="py-6 pr-4 font-bold text-sm text-foreground">#SKL-{order.id.toString().padStart(4, '0')}</td>
                     <td className="py-6 pr-4">
                       <span className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-tighter ${
-                        order.status === 'COMPLETED' ? "bg-green-50 text-green-600" : "bg-zinc-100 text-zinc-600"
+                        order.status === 'COMPLETED' ? "bg-green-500/10 text-green-500" : "bg-muted text-muted-foreground"
                       }`}>
                         {order.status}
                       </span>
                     </td>
-                    <td className="py-6 pr-4 font-black text-sm text-[#1A1A1A] dark:text-[#FBFBFB]">${order.total_price}</td>
-                    <td className="py-6 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">{new Date(order.created_at).toLocaleDateString()}</td>
+                    <td className="py-6 pr-4 font-black text-sm text-foreground">${order.total_price}</td>
+                    <td className="py-6 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{new Date(order.created_at).toLocaleDateString()}</td>
                   </tr>
                 ))}
               </tbody>
