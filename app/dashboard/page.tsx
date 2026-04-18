@@ -65,7 +65,7 @@ export default function DashboardOverview() {
           </Link>
           <Link
             href="/dashboard/products"
-            className="inline-flex items-center rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-700"
+            className="inline-flex items-center rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2"
           >
             Add product
           </Link>
@@ -112,7 +112,11 @@ export default function DashboardOverview() {
           <div className="mt-5 grid h-44 grid-cols-7 items-end gap-2">
             {salesBars.map((day) => (
               <div key={day.label} className="space-y-2">
-                <div style={{ height: `${day.value}%` }} className="w-full rounded-md bg-violet-500/85 transition hover:bg-violet-500" />
+                <div
+                  aria-label={`${day.label}: ${day.value}% of max sales`}
+                  style={{ height: `${day.value}%` }}
+                  className="w-full rounded-md bg-violet-500/85 transition hover:bg-violet-500"
+                />
                 <p className="text-center text-xs text-zinc-500 dark:text-zinc-400">{day.label}</p>
               </div>
             ))}
@@ -159,7 +163,7 @@ export default function DashboardOverview() {
         </div>
 
         <div className="mt-4 overflow-x-auto">
-          <table className="min-w-full divide-y divide-zinc-200 text-sm dark:divide-zinc-800">
+          <table role="table" aria-label="Recent orders" className="min-w-full divide-y divide-zinc-200 text-sm dark:divide-zinc-800">
             <thead className="text-left text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
               <tr>
                 <th className="py-3 pr-4 font-medium">Order</th>
