@@ -1,6 +1,12 @@
 import { Product, Review, Cart, Order, Shop } from "./types";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.sokoline.app/api";
+const getApiUrl = () => {
+  const envUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.sokoline.app";
+  // Remove trailing slash if exists, then add /api
+  return `${envUrl.replace(/\/$/, "")}/api`;
+};
+
+const API_BASE_URL = getApiUrl();
 
 async function authenticatedFetch(endpoint: string, token?: string | null, options: RequestInit = {}) {
   const headers = {

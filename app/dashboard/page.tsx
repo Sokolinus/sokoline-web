@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { useUser } from "@clerk/nextjs";
+import React, { useEffect, useState } from "react";
+import { useUser, useAuth } from "@clerk/nextjs";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -11,138 +11,153 @@ import {
   ShoppingBag,
   TrendingUp,
   Users,
+  Plus,
+  Loader2,
 } from "lucide-react";
 import Link from "next/link";
-
-const stats = [
-  { name: "Revenue (30d)", value: "$18,420", icon: DollarSign, change: "+8.7% vs last month", status: "positive" },
-  { name: "Orders awaiting shipment", value: "14", icon: ShoppingBag, change: "3 are overdue", status: "warning" },
-  { name: "Store visitors (7d)", value: "5,284", icon: Users, change: "+12.2% vs last week", status: "positive" },
-  { name: "Conversion rate", value: "3.6%", icon: TrendingUp, change: "+0.4 pts", status: "positive" },
-];
-
-const salesBars = [
-  { value: 64, label: "Mon", amount: "$2.1k" },
-  { value: 42, label: "Tue", amount: "$1.4k" },
-  { value: 58, label: "Wed", amount: "$1.9k" },
-  { value: 74, label: "Thu", amount: "$2.5k" },
-  { value: 68, label: "Fri", amount: "$2.3k" },
-  { value: 82, label: "Sat", amount: "$2.8k" },
-  { value: 61, label: "Sun", amount: "$2.0k" },
-];
-
-const recentOrders = [
-  { id: "SKL-2198", customer: "Amelia Hart", items: 3, total: "$126.00", status: "Packed", receivedAt: "12m ago" },
-  { id: "SKL-2194", customer: "Noah Bell", items: 1, total: "$42.00", status: "Awaiting pickup", receivedAt: "38m ago" },
-  { id: "SKL-2189", customer: "Rina Alvarez", items: 2, total: "$84.00", status: "Payment confirmed", receivedAt: "1h ago" },
-];
-
-const priorities = [
-  { label: "Ship overdue orders", note: "3 orders are past SLA", icon: AlertTriangle, level: "high" },
-  { label: "Restock low inventory", note: "7 products below threshold", icon: Clock3, level: "medium" },
-  { label: "Complete trust verification", note: "Estimated impact: +15% conversion", icon: CheckCircle2, level: "low" },
-];
+import { fetchMyShop, fetchOrders } from "@/lib/api";
+import { Shop, Order } from "@/lib/types";
 
 export default function DashboardOverview() {
   const { user } = useUser();
+  const { getToken, isLoaded: authLoaded, isSignedIn } = useAuth();
+  
+  const [shop, setShop] = useState<Shop | null>(null);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadDashboardData = async () => {
+      if (!isSignedIn) return;
+      
+      try {
+        const token = await getToken();
+        if (token) {
+          const [shopData, orderData] = await Promise.all([
+            fetchMyShop(token),
+            fetchOrders(token)
+          ]);
+          setShop(shopData);
+          setOrders(orderData);
+        }
+      } catch (error) {
+        console.error("Failed to load dashboard data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (authLoaded) {
+      loadDashboardData();
+    }
+  }, [authLoaded, isSignedIn]);
+
+  if (!authLoaded || loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <Loader2 className="animate-spin text-[#7C3AED]" size={40} />
+      </div>
+    );
+  }
+
+  // Calculate real stats from orders
+  const totalRevenue = orders.reduce((acc, order) => acc + Number(order.total_price), 0);
+  const activeOrdersCount = orders.filter(o => o.status === 'PENDING').length;
+
+  const stats = [
+    { name: "Total Revenue", value: `$${totalRevenue.toFixed(2)}`, icon: DollarSign, change: "Lifetime sales", status: "positive" },
+    { name: "Active Orders", value: activeOrdersCount.toString(), icon: ShoppingBag, change: "Awaiting fulfillment", status: "warning" },
+    { name: "Inventory Items", value: shop?.products?.length?.toString() || "0", icon: TrendingUp, change: "Listed products", status: "positive" },
+    { name: "Store Visitors", value: "0", icon: Users, change: "Analytics coming soon", status: "neutral" },
+  ];
+
+  const priorities = [
+    { label: "Ship pending orders", note: `${activeOrdersCount} orders need attention`, icon: AlertTriangle, level: activeOrdersCount > 0 ? "high" : "low" },
+    { label: "Update inventory", note: "Keep your stock levels fresh", icon: Clock3, level: "medium" },
+    { label: "Complete trust verification", note: "Gain the safety certified badge", icon: CheckCircle2, level: "low" },
+  ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-in fade-in duration-700">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Welcome back</p>
-          <h1 className="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Hi {user?.firstName || "Seller"}</h1>
-          <p className="mt-2 max-w-2xl text-sm text-zinc-600 dark:text-zinc-300">
-            Your store health is improving. Focus on shipping overdue orders and finishing verification to keep momentum.
+          <p className="text-sm font-bold text-zinc-400 uppercase tracking-widest">Vendor Overview</p>
+          <h1 className="mt-1 text-4xl font-black tracking-tight uppercase text-[#1A1A1A] dark:text-[#FBFBFB]">
+             Hi {user?.firstName || "Entrepreneur"}
+          </h1>
+          <p className="mt-2 max-w-2xl text-sm text-zinc-500 font-medium">
+            {shop ? `Managing ${shop.name}. ` : "Set up your shop to start selling to students."}
+            Monitor your sales and inventory below.
           </p>
         </div>
         <div className="flex items-center gap-3">
           <Link
             href="/dashboard/products"
-            className="inline-flex items-center rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-900"
+            className="inline-flex items-center rounded-2xl border border-zinc-200 px-6 py-3 text-xs font-black uppercase tracking-widest text-zinc-600 transition hover:bg-zinc-50 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-900"
           >
-            Manage inventory
+            Inventory
           </Link>
           <Link
             href="/dashboard/products"
-            className="inline-flex items-center rounded-lg bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+            className="inline-flex items-center rounded-2xl bg-[#1A1A1A] dark:bg-[#FBFBFB] px-6 py-3 text-xs font-black uppercase tracking-widest text-white dark:text-[#1A1A1A] transition hover:bg-[#7C3AED] dark:hover:bg-[#7C3AED] dark:hover:text-white shadow-xl active:scale-95"
           >
-            Add product
+            <Plus size={16} className="mr-2" />
+            Add Product
           </Link>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
         {stats.map((stat) => (
           <article
             key={stat.name}
-            className="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900"
+            className="rounded-[32px] border border-zinc-100 bg-white p-8 dark:border-zinc-800 dark:bg-zinc-900/50 shadow-sm"
           >
             <div className="flex items-start justify-between gap-3">
-              <div className="rounded-lg bg-zinc-100 p-2 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
-                <stat.icon size={18} />
+              <div className="rounded-2xl bg-[#F5F3FF] dark:bg-[#1E1B4B] p-3 text-[#7C3AED]">
+                <stat.icon size={20} />
               </div>
-              <span
-                className={`rounded-full px-2.5 py-1 text-xs font-medium ${
-                  stat.status === "warning"
-                    ? "bg-zinc-200 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-200"
-                    : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
-                }`}
-              >
-                {stat.change}
-              </span>
             </div>
-            <p className="mt-4 text-sm font-medium text-zinc-500 dark:text-zinc-400">{stat.name}</p>
-            <p className="mt-1 text-2xl font-bold tracking-tight">{stat.value}</p>
+            <p className="mt-6 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">{stat.name}</p>
+            <p className="mt-1 text-3xl font-black tracking-tighter text-[#1A1A1A] dark:text-[#FBFBFB]">{stat.value}</p>
+            <p className="mt-2 text-[10px] font-bold text-zinc-400 uppercase">{stat.change}</p>
           </article>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-[2fr_1fr]">
-        <section className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
-          <div className="flex items-center justify-between">
+      <div className="grid grid-cols-1 gap-8 xl:grid-cols-[2fr_1fr]">
+        {/* Empty Sales Chart Placeholder */}
+        <section className="rounded-[40px] border border-zinc-100 bg-white p-8 dark:border-zinc-800 dark:bg-zinc-900/50">
+          <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-lg font-semibold">Sales trend (last 7 days)</h2>
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">Gross sales by day</p>
+              <h2 className="text-xl font-black uppercase tracking-tight text-[#1A1A1A] dark:text-[#FBFBFB]">Sales performance</h2>
+              <p className="text-sm text-zinc-500 font-medium mt-1">Real-time revenue tracking</p>
             </div>
-            <Link href="/dashboard/orders" className="inline-flex items-center gap-1 text-sm font-medium text-zinc-700 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-100">
-              View orders <ChevronRight size={16} />
-            </Link>
           </div>
-          <div className="mt-5 grid h-44 grid-cols-7 items-end gap-2">
-            {salesBars.map((day) => (
-              <div key={day.label} className="space-y-2">
-                <div
-                  aria-label={`${day.label}: ${day.amount} in gross sales, shown at ${day.value}% of weekly max`}
-                  style={{ height: `${day.value}%` }}
-                  className="w-full rounded-sm bg-zinc-700/85 transition hover:bg-zinc-700 dark:bg-zinc-300/85 dark:hover:bg-zinc-300"
-                />
-                <p className="text-center text-xs text-zinc-500 dark:text-zinc-400">{day.label}</p>
-              </div>
-            ))}
+          <div className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-zinc-100 dark:border-zinc-800 rounded-[32px] text-zinc-400 italic text-sm">
+             Analytics will populate after your first sale.
           </div>
         </section>
 
-        <section className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
-          <h2 className="text-lg font-semibold">Priority actions</h2>
-          <ul className="mt-4 space-y-3">
+        <section className="rounded-[40px] border border-zinc-100 bg-white p-8 dark:border-zinc-800 dark:bg-zinc-900/50">
+          <h2 className="text-xl font-black uppercase tracking-tight text-[#1A1A1A] dark:text-[#FBFBFB]">Next Steps</h2>
+          <ul className="mt-6 space-y-4">
             {priorities.map((task) => (
-              <li key={task.label} className="rounded-lg border border-zinc-200 p-3 dark:border-zinc-800">
-                <div className="flex items-start gap-3">
+              <li key={task.label} className="rounded-2xl border border-zinc-50 bg-zinc-50/30 p-4 dark:border-zinc-800 dark:bg-zinc-900/30">
+                <div className="flex items-start gap-4">
                   <div
-                    className={`mt-0.5 rounded-lg p-1.5 ${
+                    className={`mt-0.5 rounded-xl p-2 ${
                       task.level === "high"
-                        ? "bg-zinc-200 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-200"
-                        : task.level === "medium"
-                          ? "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
-                          : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
+                        ? "bg-red-50 text-red-600"
+                        : "bg-zinc-100 text-zinc-400"
                     }`}
                   >
-                    <task.icon size={14} />
+                    <task.icon size={16} />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold">{task.label}</p>
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400">{task.note}</p>
+                    <p className="text-sm font-bold uppercase tracking-tight text-[#1A1A1A] dark:text-[#FBFBFB]">{task.label}</p>
+                    <p className="text-[10px] font-medium text-zinc-500 uppercase tracking-widest mt-0.5">{task.note}</p>
                   </div>
                 </div>
               </li>
@@ -151,48 +166,49 @@ export default function DashboardOverview() {
         </section>
       </div>
 
-      <section className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
-        <div className="flex items-center justify-between gap-4">
+      {/* Orders Table */}
+      <section className="rounded-[40px] border border-zinc-100 bg-white p-8 dark:border-zinc-800 dark:bg-zinc-900/50 pb-4">
+        <div className="flex items-center justify-between gap-4 mb-8">
           <div>
-            <h2 className="text-lg font-semibold">Recent orders</h2>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">Track status and resolve bottlenecks fast</p>
+            <h2 className="text-xl font-black uppercase tracking-tight text-[#1A1A1A] dark:text-[#FBFBFB]">Recent Transactions</h2>
+            <p className="text-sm text-zinc-500 font-medium mt-1">Track your support from other students</p>
           </div>
-          <Link href="/dashboard/orders" className="inline-flex items-center gap-1 text-sm font-medium text-zinc-700 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-100">
-            Open order manager <ChevronRight size={16} />
-          </Link>
         </div>
 
-        <div className="mt-4 overflow-x-auto">
-          <table aria-label="Recent orders" className="min-w-full divide-y divide-zinc-200 text-sm dark:divide-zinc-800">
-            <caption className="sr-only">Latest order activity with status and received time</caption>
-            <thead className="text-left text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-              <tr>
-                <th scope="col" className="py-3 pr-4 font-medium">Order</th>
-                <th scope="col" className="py-3 pr-4 font-medium">Customer</th>
-                <th scope="col" className="py-3 pr-4 font-medium">Items</th>
-                <th scope="col" className="py-3 pr-4 font-medium">Status</th>
-                <th scope="col" className="py-3 pr-4 font-medium">Total</th>
-                <th scope="col" className="py-3 font-medium">Received</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
-              {recentOrders.map((order) => (
-                <tr key={order.id}>
-                  <td className="py-3 pr-4 font-semibold text-zinc-900 dark:text-zinc-100">#{order.id}</td>
-                  <td className="py-3 pr-4 text-zinc-700 dark:text-zinc-300">{order.customer}</td>
-                  <td className="py-3 pr-4 text-zinc-700 dark:text-zinc-300">{order.items}</td>
-                  <td className="py-3 pr-4">
-                    <span className="rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
-                      {order.status}
-                    </span>
-                  </td>
-                  <td className="py-3 pr-4 font-semibold text-zinc-900 dark:text-zinc-100">{order.total}</td>
-                  <td className="py-3 text-zinc-600 dark:text-zinc-400">{order.receivedAt}</td>
+        {orders.length === 0 ? (
+          <div className="py-20 text-center border-2 border-dashed border-zinc-100 dark:border-zinc-800 rounded-[32px] text-zinc-400 italic text-sm mb-4">
+             Your transaction history is empty.
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-zinc-100 dark:divide-zinc-800">
+              <thead className="text-left text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">
+                <tr>
+                  <th className="pb-6 pr-4">Order ID</th>
+                  <th className="pb-6 pr-4">Status</th>
+                  <th className="pb-6 pr-4">Total</th>
+                  <th className="pb-6">Date</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
+                {orders.slice(0, 5).map((order) => (
+                  <tr key={order.id} className="group">
+                    <td className="py-6 pr-4 font-bold text-sm text-[#1A1A1A] dark:text-[#FBFBFB]">#SKL-{order.id.toString().padStart(4, '0')}</td>
+                    <td className="py-6 pr-4">
+                      <span className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-tighter ${
+                        order.status === 'COMPLETED' ? "bg-green-50 text-green-600" : "bg-zinc-100 text-zinc-600"
+                      }`}>
+                        {order.status}
+                      </span>
+                    </td>
+                    <td className="py-6 pr-4 font-black text-sm text-[#1A1A1A] dark:text-[#FBFBFB]">${order.total_price}</td>
+                    <td className="py-6 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">{new Date(order.created_at).toLocaleDateString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </section>
     </div>
   );

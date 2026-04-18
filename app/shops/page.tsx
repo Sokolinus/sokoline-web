@@ -3,7 +3,8 @@ import Link from "next/link";
 import { Store, ArrowRight } from "lucide-react";
 
 async function getShops() {
-  const res = await fetch("https://api.sokoline.app/api/shops/", { next: { revalidate: 3600 } });
+  const envUrl = (process.env.NEXT_PUBLIC_API_URL || "https://api.sokoline.app").replace(/\/$/, "");
+  const res = await fetch(`${envUrl}/api/shops/`, { next: { revalidate: 3600 } });
   if (!res.ok) return [];
   const data = await res.json();
   return data.results || data;
