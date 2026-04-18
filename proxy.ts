@@ -1,6 +1,8 @@
 import { clerkMiddleware } from '@clerk/nextjs/server'
 
-export default clerkMiddleware()
+export default clerkMiddleware((auth, req) => {
+  console.log(`[Clerk Middleware] Path: ${req.nextUrl.pathname}, User: ${auth().userId || 'Guest'}`);
+})
 
 export const config = {
   matcher: [
