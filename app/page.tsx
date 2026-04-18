@@ -2,10 +2,12 @@ import HeroSection from "@/components/HeroSection";
 import Image from "next/image";
 import Link from "next/link";
 import { getProducts } from "@/lib/api";
+import { mockProducts } from "@/lib/mockProducts";
 import { ShoppingBag, ArrowRight, ShieldCheck, Zap, BarChart3 } from "lucide-react";
 
 export default async function Home() {
-  const featuredProducts = await getProducts({ limit: "4" });
+  const products = await getProducts({ limit: "4" });
+  const featuredProducts = products.length > 0 ? products : mockProducts.slice(0, 4);
 
   return (
     <main className="flex min-h-screen flex-col items-center bg-zinc-50 transition-colors duration-300">

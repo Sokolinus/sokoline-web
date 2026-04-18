@@ -27,7 +27,7 @@ export default function HeroSection() {
                 {title.split("").map((char, i) => (
                   <motion.span
                     key={i}
-                    initial={{ y: "100%" }}
+                    initial={false}
                     animate={{ y: 0 }}
                     transition={{
                       duration: 0.8,

@@ -1,13 +1,20 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ShoppingBag, Star, Filter, ArrowUpDown } from "lucide-react";
+import { Product } from "@/lib/types";
+import { mockProducts } from "@/lib/mockProducts";
 
 async function getProducts() {
-  const envUrl = (process.env.NEXT_PUBLIC_API_URL || "https://api.sokoline.app").replace(/\/$/, "");
-  const res = await fetch(`${envUrl}/api/products/`, { next: { revalidate: 3600 } });
-  if (!res.ok) return [];
-  const data = await res.json();
-  return data.results || data;
+  try {
+    const envUrl = (process.env.NEXT_PUBLIC_API_URL || "https://api.sokoline.app").replace(/\/$/, "");
+    const res = await fetch(`${envUrl}/api/products/`, { next: { revalidate: 3600 } });
+    if (!res.ok) return mockProducts;
+    const data = await res.json();
+    const products = data.results || data;
+    return products.length > 0 ? products : mockProducts;
+  } catch {
+    return mockProducts;
+  }
 }
 
 export default async function ProductsPage() {
@@ -39,7 +46,7 @@ export default async function ProductsPage() {
 
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
-          {products.map((product: any) => (
+          {products.map((product: Product) => (
             <Link key={product.id} href={`/products/${product.slug}`} className="group">
               <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[32px] bg-muted dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 mb-6 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-purple-100 dark:group-hover:shadow-none">
                 {product.images?.[0] ? (

@@ -32,7 +32,7 @@ export default function AnimatedText() {
           {currentPhrase.split(" ").map((word, i) => (
             <span key={i} className="relative inline-flex overflow-hidden">
               <motion.span
-                initial={{ y: "100%" }}
+                initial={false}
                 animate={{ y: "0%" }}
                 exit={{ y: "-100%" }}
                 transition={{
