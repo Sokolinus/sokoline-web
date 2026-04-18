@@ -12,7 +12,8 @@ async function getProducts() {
     const data = await res.json();
     const products = data.results || data;
     return products.length > 0 ? products : mockProducts;
-  } catch {
+  } catch (error) {
+    console.error("Error fetching products page data:", error);
     return mockProducts;
   }
 }

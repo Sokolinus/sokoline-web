@@ -1,6 +1,6 @@
 import { Product } from "./types";
 
-const nowIso = new Date().toISOString();
+const MOCK_CREATED_AT = "2026-01-01T08:00:00.000Z";
 
 export const mockProducts: Product[] = [
   {
@@ -53,7 +53,7 @@ export const mockProducts: Product[] = [
     is_safety_certified: true,
     average_rating: 4.7,
     review_count: 36,
-    created_at: nowIso,
+    created_at: MOCK_CREATED_AT,
   },
   {
     id: 9002,
@@ -78,7 +78,7 @@ export const mockProducts: Product[] = [
     is_safety_certified: true,
     average_rating: 4.4,
     review_count: 18,
-    created_at: nowIso,
+    created_at: MOCK_CREATED_AT,
   },
   {
     id: 9003,
@@ -103,7 +103,7 @@ export const mockProducts: Product[] = [
     is_safety_certified: true,
     average_rating: 4.8,
     review_count: 52,
-    created_at: nowIso,
+    created_at: MOCK_CREATED_AT,
   },
   {
     id: 9004,
@@ -128,6 +128,6 @@ export const mockProducts: Product[] = [
     is_safety_certified: true,
     average_rating: 4.5,
     review_count: 12,
-    created_at: nowIso,
+    created_at: MOCK_CREATED_AT,
   },
 ];
