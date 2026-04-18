@@ -73,7 +73,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         {/* Mobile Header */}
         <header className="flex h-16 items-center justify-between border-b border-zinc-200 bg-white/90 px-5 backdrop-blur lg:hidden dark:border-zinc-800 dark:bg-zinc-950/90">
            <span className="text-base font-bold tracking-tight">Sokoline</span>
-           <Link href="/dashboard/products" className="rounded-lg bg-violet-600 p-2 text-white">
+           <Link href="/dashboard/products" aria-label="Add product" className="rounded-lg bg-violet-600 p-2 text-white">
              <PlusCircle size={18} />
            </Link>
         </header>

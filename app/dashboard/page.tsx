@@ -21,12 +21,20 @@ const stats = [
   { name: "Conversion rate", value: "3.6%", icon: TrendingUp, change: "+0.4 pts", tone: "positive" },
 ];
 
-const salesBars = [64, 42, 58, 74, 68, 82, 61];
+const salesBars = [
+  { value: 64, label: "Mon" },
+  { value: 42, label: "Tue" },
+  { value: 58, label: "Wed" },
+  { value: 74, label: "Thu" },
+  { value: 68, label: "Fri" },
+  { value: 82, label: "Sat" },
+  { value: 61, label: "Sun" },
+];
 
 const recentOrders = [
-  { id: "SKL-2198", customer: "Amelia Hart", items: 3, total: "$126.00", status: "Packed", age: "12m ago" },
-  { id: "SKL-2194", customer: "Noah Bell", items: 1, total: "$42.00", status: "Awaiting pickup", age: "38m ago" },
-  { id: "SKL-2189", customer: "Rina Alvarez", items: 2, total: "$84.00", status: "Payment confirmed", age: "1h ago" },
+  { id: "SKL-2198", customer: "Amelia Hart", items: 3, total: "$126.00", status: "Packed", receivedAt: "12m ago" },
+  { id: "SKL-2194", customer: "Noah Bell", items: 1, total: "$42.00", status: "Awaiting pickup", receivedAt: "38m ago" },
+  { id: "SKL-2189", customer: "Rina Alvarez", items: 2, total: "$84.00", status: "Payment confirmed", receivedAt: "1h ago" },
 ];
 
 const priorities = [
@@ -102,10 +110,10 @@ export default function DashboardOverview() {
             </Link>
           </div>
           <div className="mt-5 grid h-44 grid-cols-7 items-end gap-2">
-            {salesBars.map((height, index) => (
-              <div key={index} className="space-y-2">
-                <div style={{ height: `${height}%` }} className="w-full rounded-md bg-violet-500/85 transition hover:bg-violet-500" />
-                <p className="text-center text-xs text-zinc-500 dark:text-zinc-400">D{index + 1}</p>
+            {salesBars.map((day) => (
+              <div key={day.label} className="space-y-2">
+                <div style={{ height: `${day.value}%` }} className="w-full rounded-md bg-violet-500/85 transition hover:bg-violet-500" />
+                <p className="text-center text-xs text-zinc-500 dark:text-zinc-400">{day.label}</p>
               </div>
             ))}
           </div>
@@ -174,7 +182,7 @@ export default function DashboardOverview() {
                     </span>
                   </td>
                   <td className="py-3 pr-4 font-semibold text-zinc-900 dark:text-zinc-100">{order.total}</td>
-                  <td className="py-3 text-zinc-600 dark:text-zinc-400">{order.age}</td>
+                  <td className="py-3 text-zinc-600 dark:text-zinc-400">{order.receivedAt}</td>
                 </tr>
               ))}
             </tbody>
