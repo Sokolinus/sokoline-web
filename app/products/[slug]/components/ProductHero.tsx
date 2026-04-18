@@ -12,7 +12,7 @@ interface ProductHeroProps {
 }
 
 // Prefer a word boundary when it appears after at least 60% of the max length.
-const TRUNCATE_MIN_WORD_BOUNDARY_RATIO = 0.6;
+const MIN_WORD_BOUNDARY_THRESHOLD = 0.6;
 
 const getOptionKey = (variant: ProductVariant) => JSON.stringify([variant.name, variant.size || ""]);
 
@@ -21,7 +21,7 @@ const truncateAtWord = (text: string, maxLength: number) => {
   const sliced = text.slice(0, maxLength + 1);
   const wordBoundary = sliced.lastIndexOf(" ");
   const trimmed = (
-    wordBoundary > Math.floor(maxLength * TRUNCATE_MIN_WORD_BOUNDARY_RATIO)
+    wordBoundary > Math.floor(maxLength * MIN_WORD_BOUNDARY_THRESHOLD)
       ? sliced.slice(0, wordBoundary)
       : text.slice(0, maxLength)
   ).trimEnd();
@@ -150,9 +150,10 @@ export default function ProductHero({ product }: ProductHeroProps) {
             <h1 className="text-2xl font-bold leading-snug text-zinc-900 md:text-3xl">
               {product.name}
             </h1>
-            <p className="mt-2 text-sm text-zinc-500">
-              Sold by {product.shop_name}. {shortDescription}
-            </p>
+            <div className="mt-2 text-sm text-zinc-500">
+              <p>Sold by <span className="font-medium text-zinc-700">{product.shop_name}</span>.</p>
+              <p>{shortDescription}</p>
+            </div>
 
             <div className="mt-4 flex items-center gap-2 text-sm">
               <Star size={16} className="fill-amber-400 text-amber-400" />
