@@ -152,7 +152,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
             className="grid-cols-2 mt-8 border-t border-zinc-100 dark:border-zinc-800 pt-8" 
             hasFreeShipping={product.has_free_shipping}
             hasFreeReturns={product.has_free_returns}
-            isSafetyCertified={product.is_safety_certified}
+            hasSafetyCertification={product.is_safety_certified}
           />
         </div>
       </div>

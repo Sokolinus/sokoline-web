@@ -1,12 +1,24 @@
 import React from 'react';
 
-const FeaturesBar = ({ className = "grid-cols-2" }) => {
+interface FeaturesBarProps {
+  className?: string;
+  hasFreeShipping?: boolean;
+  hasFreeReturns?: boolean;
+  hasSafetyCertification?: boolean;
+}
+
+const FeaturesBar = ({
+  className = "grid-cols-2",
+  hasFreeShipping = true,
+  hasFreeReturns = true,
+  hasSafetyCertification = true
+}: FeaturesBarProps) => {
   const features = [
-    { title: "Secure Payments" },
-    { title: "Free Shipping" },
-    { title: "Free Returns" },
-    { title: "Safety certified" }
-  ];
+    { title: "Secure Payments", enabled: true },
+    { title: "Free Shipping", enabled: hasFreeShipping },
+    { title: "Free Returns", enabled: hasFreeReturns },
+    { title: "Safety certified", enabled: hasSafetyCertification }
+  ].filter((feature) => feature.enabled);
 
   return (
     <div className={`grid gap-y-4 gap-x-4 py-6 ${className}`}>
