@@ -186,7 +186,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
                       onClick={() => handleOptionSelect(variant)}
                       type="button"
                       className={`rounded-md border px-3 py-1.5 text-sm ${
-                        selectedVariant ? getOptionKey(selectedVariant) === getOptionKey(variant) : false
+                        (selectedVariant ? getOptionKey(selectedVariant) === getOptionKey(variant) : false)
                           ? "border-sokoline-accent bg-sokoline-accent text-white"
                           : "border-zinc-200 text-zinc-700 hover:border-zinc-400"
                       }`}
