@@ -1,15 +1,10 @@
 import { ClerkProvider, SignInButton, SignUpButton, Show, UserButton } from "@clerk/nextjs";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Space_Grotesque } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const spaceGrotesque = Space_Grotesque({
+  variable: "--font-space-grotesque",
   subsets: ["latin"],
 });
 
@@ -25,15 +20,19 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en" className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <body>
-          <header className="flex justify-between items-center p-4 border-b">
-            <h1 className="text-xl font-bold">Sokoline</h1>
+      <html lang="en" className={`${spaceGrotesque.variable} antialiased`}>
+        <body className={spaceGrotesque.className}>
+          <header className="flex justify-between items-center px-6 py-4 border-b border-zinc-100 bg-white">
+            <h1 className="text-2xl font-bold tracking-tight text-[#1A1A1A]">Sokoline</h1>
             <nav>
               <Show when="signed-out">
                 <div className="flex gap-4">
-                  <SignInButton />
-                  <SignUpButton />
+                  <div className="text-sm font-medium hover:text-[#7C3AED] transition-colors cursor-pointer">
+                    <SignInButton />
+                  </div>
+                  <div className="rounded-full bg-[#7C3AED] px-4 py-2 text-sm font-semibold text-white hover:bg-[#6D28D9] transition-colors">
+                    <SignUpButton />
+                  </div>
                 </div>
               </Show>
               <Show when="signed-in">
