@@ -20,21 +20,21 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   return (
-    <main className="bg-background min-h-screen transition-colors duration-300">
-      <div className="max-w-7xl mx-auto">
+    <main className="min-h-screen bg-zinc-50">
+      <div className="mx-auto max-w-7xl">
         
         {/* Top Section: Navigation and Product Purchase */}
-        <div className="md:px-10">
+        <div className="px-4 md:px-10">
           <ProductHero product={product} />
         </div>
 
         {/* Middle Section: Technical Details */}
-        <div className="border-t border-zinc-100 mt-10">
+        <div className="mt-6 border-t border-zinc-200 bg-white">
           <ProductInfoTabs product={product} />
         </div>
 
         {/* Social Proof & Trust Sections */}
-        <div className="space-y-4 bg-background border-y border-zinc-100">
+        <div className="space-y-4 border-y border-zinc-200 bg-white">
           <ReviewSection product={product} />
           <FAQSection />
         </div>

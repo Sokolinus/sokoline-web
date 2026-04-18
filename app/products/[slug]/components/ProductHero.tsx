@@ -38,122 +38,140 @@ export default function ProductHero({ product }: ProductHeroProps) {
     setIsAdding(false);
   };
 
-  return (
-    <section className="bg-background dark:bg-background font-sans">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 py-10">
-        
-        {/* --- LEFT COLUMN: GALLERY --- */}
-        <div className="flex flex-col gap-6">
-          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[32px] bg-muted dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800">
-            <Image
-              src={allImages[activeImg]?.image || "/placeholder-product.png"}
-              alt={allImages[activeImg]?.alt_text || product.name}
-              fill
-              className="object-cover transition-transform duration-700 hover:scale-105"
-              priority
-            />
-            {product.is_on_sale && (
-              <div className="absolute top-6 left-6 bg-sokoline-accent text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-xl">
-                Sale -{discountPercent}%
-              </div>
-            )}
-          </div>
+  const uniqueColors = product.variants
+    .filter((variant) => variant.color_hex)
+    .reduce<ProductVariant[]>((acc, variant) => {
+      if (!acc.some((item) => item.color_hex === variant.color_hex)) {
+        acc.push(variant);
+      }
+      return acc;
+    }, []);
 
-          {/* Thumbnails */}
-          {allImages.length > 1 && (
-            <div className="flex gap-4 overflow-x-auto pb-2 no-scrollbar">
+  const imageSource = selectedVariant?.image_url || allImages[activeImg]?.image || "/placeholder-product.png";
+  const productPath = product.category?.name || "Products";
+
+  return (
+    <section className="py-4 md:py-6">
+      <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm md:p-6">
+        <p className="mb-4 text-[11px] font-medium text-zinc-500">
+          Home &gt; {productPath} &gt; <span className="font-semibold text-zinc-700">{product.name}</span>
+        </p>
+
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="flex flex-col gap-3">
+            <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50">
+              <Image
+                src={imageSource}
+                alt={allImages[activeImg]?.alt_text || product.name}
+                fill
+                className="object-cover"
+                priority
+              />
+            </div>
+
+            <div className="grid grid-cols-5 gap-2">
               {allImages.map((img, i) => (
                 <button
                   key={img.id}
                   onClick={() => setActiveImg(i)}
-                  className={`relative h-24 w-20 flex-shrink-0 overflow-hidden rounded-2xl border-2 transition-all ${
-                    activeImg === i ? "border-sokoline-accent" : "border-transparent opacity-60 hover:opacity-100"
+                  type="button"
+                  className={`relative aspect-square overflow-hidden rounded-md border ${
+                    activeImg === i ? "border-sokoline-accent" : "border-zinc-200"
                   }`}
+                  aria-label={`View ${img.alt_text || `image ${i + 1}`}`}
                 >
-                  <Image src={img.image} alt={img.alt_text} fill className="object-cover" />
+                  <Image src={img.image} alt={img.alt_text || product.name} fill className="object-cover" />
                 </button>
               ))}
             </div>
-          )}
-        </div>
+          </div>
 
-        {/* --- RIGHT COLUMN: INFO & ACTIONS --- */}
-        <div className="flex flex-col pt-4">
-          <div className="mb-8">
-            <div className="flex items-center gap-2 mb-4">
-               <span className="text-[10px] font-semibold uppercase tracking-wider text-sokoline-accent">{product.shop_name}</span>
-               <span className="h-1 w-1 rounded-full bg-zinc-300" />
-               <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400">{product.category?.name || "General"}</span>
-            </div>
-            <h1 className="text-3xl lg:text-4xl font-bold tracking-tight text-foreground dark:text-background leading-tight">
+          <div className="flex flex-col">
+            <h1 className="text-2xl font-bold leading-snug text-zinc-900 md:text-3xl">
               {product.name}
             </h1>
-          </div>
+            <p className="mt-2 text-sm text-zinc-500">
+              Sold by {product.shop_name}. {product.description.slice(0, 100)}
+            </p>
 
-          <div className="flex items-center gap-4 mb-8">
-            <div className="flex items-center gap-1 bg-[#F5F3FF] dark:bg-[#1E1B4B] px-3 py-1 rounded-full border border-sokoline-accent/10">
-              <Star size={14} className="fill-sokoline-accent text-sokoline-accent" />
-              <span className="text-sm font-bold text-sokoline-accent">{product.average_rating.toFixed(1)}</span>
+            <div className="mt-4 flex items-center gap-2 text-sm">
+              <Star size={16} className="fill-amber-400 text-amber-400" />
+              <span className="font-semibold text-zinc-900">{product.average_rating.toFixed(1)}</span>
+              <span className="text-zinc-500">{product.review_count} reviews</span>
             </div>
-            <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider decoration-dotted underline underline-offset-4 cursor-pointer hover:text-zinc-600">
-              {product.review_count} reviews
-            </span>
-          </div>
 
-          {/* Price Section */}
-          <div className="flex items-baseline gap-4 mb-10">
-            <span className="text-3xl font-bold text-foreground dark:text-background">
-              ${currentPrice}
-            </span>
-            {originalPrice && (
-              <span className="text-xl text-zinc-400 line-through decoration-zinc-400/40 italic font-medium">
-                ${originalPrice}
-              </span>
-            )}
-          </div>
+            <div className="mt-4 flex items-center gap-3">
+              {originalPrice && (
+                <span className="text-sm text-zinc-400 line-through">${originalPrice}</span>
+              )}
+              <span className="text-3xl font-bold text-zinc-900">${currentPrice}</span>
+              {discountPercent ? (
+                <span className="text-sm font-semibold text-rose-500">-{discountPercent}%</span>
+              ) : null}
+            </div>
 
-          {/* Variant Selector */}
-          {product.variants.length > 0 && (
-            <div className="mb-10">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-4">Select Option</p>
-              <div className="flex flex-wrap gap-3">
-                {product.variants.map((variant) => (
-                  <button 
-                    key={variant.id}
-                    onClick={() => setSelectedVariant(variant)}
-                    className={`px-5 py-2.5 rounded-xl border-2 font-semibold transition-all text-sm ${
-                      selectedVariant?.id === variant.id
-                        ? "border-sokoline-accent bg-sokoline-accent text-white shadow-lg shadow-purple-200 dark:shadow-none"
-                        : "border-zinc-100 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600"
-                    }`}
-                  >
-                    {variant.name}
-                  </button>
-                ))}
+            {uniqueColors.length > 0 && (
+              <div className="mt-6">
+                <p className="mb-2 text-sm font-medium text-zinc-700">Color</p>
+                <div className="flex items-center gap-2">
+                  {uniqueColors.map((variant) => (
+                    <button
+                      key={variant.id}
+                      onClick={() => setSelectedVariant(variant)}
+                      type="button"
+                      className={`h-6 w-6 rounded-full border ${
+                        selectedVariant?.color_hex === variant.color_hex ? "ring-2 ring-sokoline-accent ring-offset-2" : ""
+                      }`}
+                      style={{ backgroundColor: variant.color_hex || "#E4E4E7" }}
+                      aria-label={variant.color_name || variant.name}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Add to Cart Button */}
-          <button 
-            onClick={handleAddToCart}
-            disabled={isAdding}
-            className={`group relative w-full py-4 rounded-full font-bold tracking-wider text-sm flex items-center justify-center gap-3 transition-all duration-300 overflow-hidden ${
-              isAdding 
-                ? "bg-zinc-100 text-zinc-400 cursor-not-allowed" 
-                : "bg-foreground dark:bg-background text-white dark:text-foreground hover:bg-sokoline-accent dark:hover:bg-sokoline-accent hover:text-white shadow-2xl active:scale-95"
-            }`}
-          >
-            <ShoppingCart size={20} className={isAdding ? "animate-bounce" : "group-hover:translate-x-1 transition-transform"} />
-            {isAdding ? "Adding to bag..." : "Add to bag"}
-          </button>
+            {product.variants.length > 0 && (
+              <div className="mt-4">
+                <p className="mb-2 text-sm font-medium text-zinc-700">Options</p>
+                <div className="flex flex-wrap gap-2">
+                  {product.variants.map((variant) => (
+                    <button
+                      key={variant.id}
+                      onClick={() => setSelectedVariant(variant)}
+                      type="button"
+                      className={`rounded-md border px-3 py-1.5 text-sm ${
+                        selectedVariant?.id === variant.id
+                          ? "border-sokoline-accent bg-sokoline-accent text-white"
+                          : "border-zinc-200 text-zinc-700 hover:border-zinc-400"
+                      }`}
+                    >
+                      {variant.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
-          <FeaturesBar 
-            className="grid-cols-2 mt-8 border-t border-zinc-100 dark:border-zinc-800 pt-8" 
-            hasFreeShipping={product.has_free_shipping}
-            hasFreeReturns={product.has_free_returns}
-            hasSafetyCertification={product.is_safety_certified}
-          />
+            <button
+              onClick={handleAddToCart}
+              disabled={isAdding}
+              className={`mt-6 flex w-fit items-center justify-center gap-2 rounded-md px-5 py-2.5 text-sm font-semibold transition ${
+                isAdding
+                  ? "cursor-not-allowed bg-zinc-200 text-zinc-500"
+                  : "bg-sokoline-accent text-white hover:bg-sokoline-accent-hover"
+              }`}
+            >
+              <ShoppingCart size={16} />
+              {isAdding ? "Adding..." : "Add to cart"}
+            </button>
+
+            <FeaturesBar
+              className="mt-6 grid-cols-2 border-t border-zinc-200 pt-4"
+              hasFreeShipping={product.has_free_shipping}
+              hasFreeReturns={product.has_free_returns}
+              hasSafetyCertification={product.is_safety_certified}
+            />
+          </div>
         </div>
       </div>
     </section>

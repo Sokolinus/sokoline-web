@@ -18,17 +18,17 @@ const FeaturesBar = ({
     { title: "Secure Payments", enabled: true, icon: Lock },
     { title: "Free Shipping", enabled: hasFreeShipping, icon: Truck },
     { title: "Free Returns", enabled: hasFreeReturns, icon: RotateCcw },
-    { title: "Campus Certified", enabled: hasSafetyCertification, icon: ShieldCheck }
+    { title: "Safety Certified", enabled: hasSafetyCertification, icon: ShieldCheck }
   ].filter((feature) => feature.enabled);
 
   return (
-    <div className={`grid gap-y-6 gap-x-4 py-8 ${className}`}>
+    <div className={`grid gap-y-3 gap-x-4 ${className}`}>
       {features.map((item, index) => (
-        <div key={index} className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-2xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 flex items-center justify-center text-[#7C3AED] flex-shrink-0 shadow-sm">
-            <item.icon size={16} strokeWidth={2.5} />
+        <div key={index} className="flex items-center gap-2">
+          <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border border-zinc-200 bg-zinc-50 text-sokoline-accent">
+            <item.icon size={14} strokeWidth={2.25} />
           </div>
-          <span className="text-[10px] font-bold uppercase tracking-wider text-foreground dark:text-zinc-100 whitespace-nowrap">
+          <span className="text-xs font-medium text-zinc-700 whitespace-nowrap">
             {item.title}
           </span>
         </div>
