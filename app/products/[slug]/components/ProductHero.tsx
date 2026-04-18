@@ -11,10 +11,11 @@ interface ProductHeroProps {
   product: Product;
 }
 
-const OPTION_KEY_DELIMITER = "|";
+const VARIANT_KEY_SEPARATOR = "|";
+// Prefer a word boundary when it appears after at least 60% of the max length.
 const TRUNCATE_MIN_WORD_BOUNDARY_RATIO = 0.6;
 
-const getOptionKey = (variant: ProductVariant) => `${variant.name}${OPTION_KEY_DELIMITER}${variant.size || ""}`;
+const getOptionKey = (variant: ProductVariant) => `${variant.name}${VARIANT_KEY_SEPARATOR}${variant.size || ""}`;
 
 const truncateAtWord = (text: string, maxLength: number) => {
   if (text.length <= maxLength) return text;
@@ -107,9 +108,15 @@ export default function ProductHero({ product }: ProductHeroProps) {
   return (
     <section className="py-4 md:py-6">
       <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm md:p-6">
-        <p className="mb-4 text-[11px] font-medium text-zinc-500">
-          Home &gt; {productPath} &gt; <span className="font-semibold text-zinc-700">{product.name}</span>
-        </p>
+        <nav aria-label="Breadcrumb" className="mb-4">
+          <ol className="flex items-center gap-1 text-[11px] font-medium text-zinc-500">
+            <li>Home</li>
+            <li aria-hidden="true">&gt;</li>
+            <li>{productPath}</li>
+            <li aria-hidden="true">&gt;</li>
+            <li className="font-semibold text-zinc-700">{product.name}</li>
+          </ol>
+        </nav>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <div className="flex flex-col gap-3">
