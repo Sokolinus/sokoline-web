@@ -1,12 +1,12 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
-import { Space_Grotesque } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { CartProvider } from "@/components/providers/CartProvider";
 
-const spaceGrotesque = Space_Grotesque({
+const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesque",
   subsets: ["latin"],
 });
@@ -24,8 +24,8 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <CartProvider>
-        <html lang="en" className={`${spaceGrotesque.variable} antialiased`}>
-          <body className={spaceGrotesque.className}>
+        <html lang="en" className={`${spaceGrotesk.variable} antialiased`}>
+          <body className={spaceGrotesk.className}>
             <Navbar />
             <Breadcrumbs />
             <main>

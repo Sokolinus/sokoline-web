@@ -9,7 +9,7 @@ export default function HeroSection() {
   const title = "sokoline";
 
   return (
-    <section className="relative flex min-h-[80vh] w-full items-center justify-center overflow-hidden bg-zinc-50 dark:bg-black px-6 py-12 sm:px-12 lg:px-24">
+    <section className="relative flex min-h-[80vh] w-full items-center justify-center overflow-hidden px-6 py-12 sm:px-12 lg:px-24">
       <div className="grid w-full max-w-7xl grid-cols-1 items-center gap-12 lg:grid-cols-2">
         {/* Left Side: Text Content */}
         <div className="flex flex-col items-start gap-6">
@@ -50,13 +50,13 @@ export default function HeroSection() {
           >
             <Link 
               href="/products" 
-              className="rounded-full bg-[#7C3AED] px-8 py-3 text-lg font-bold text-white shadow-xl transition-all hover:scale-105 hover:bg-[#6D28D9] active:scale-95"
+              className="rounded-full bg-[#7C3AED] px-8 py-3 text-lg font-bold text-white transition-all hover:scale-[1.02] hover:bg-[#6D28D9] active:scale-95"
             >
               Browse Products
             </Link>
             <Link 
               href="/dashboard" 
-              className="rounded-full border-2 border-zinc-900 bg-transparent px-8 py-3 text-lg font-bold text-zinc-900 transition-all hover:scale-105 hover:bg-zinc-900 hover:text-white dark:border-zinc-100 dark:text-zinc-100 dark:hover:bg-zinc-100 dark:hover:text-zinc-900 active:scale-95"
+              className="rounded-full border border-zinc-300 bg-transparent px-8 py-3 text-lg font-bold text-zinc-900 transition-all hover:scale-[1.02] hover:border-[#7C3AED] hover:text-[#7C3AED] dark:border-zinc-700 dark:text-zinc-100 dark:hover:border-[#A855F7] dark:hover:text-[#A855F7] active:scale-95"
             >
               Launch Your Shop
             </Link>
@@ -65,7 +65,7 @@ export default function HeroSection() {
 
         {/* Right Side: Image */}
         <div className="relative aspect-[4/3] w-full max-w-xl justify-self-center lg:justify-self-end">
-          <div className="absolute -inset-4 rounded-3xl bg-blue-100/50 dark:bg-blue-900/20 blur-2xl" />
+          <div className="absolute -inset-4 rounded-3xl bg-[#7C3AED]/15 dark:bg-[#A855F7]/20 blur-2xl" />
           <div className="relative h-full w-full overflow-hidden rounded-2xl">
             <Image
               src="/hero_image.png"

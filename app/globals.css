@@ -31,8 +31,19 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  line-height: 1.5;
+  min-height: 100vh;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  background-image:
+    radial-gradient(circle at 12% -10%, color-mix(in oklab, var(--accent) 11%, transparent), transparent 36%),
+    radial-gradient(circle at 100% 0%, color-mix(in oklab, var(--accent) 6%, transparent), transparent 30%);
 }
 
 h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.02em;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--accent) 28%, transparent);
 }

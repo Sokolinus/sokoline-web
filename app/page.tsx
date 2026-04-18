@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center bg-white dark:bg-[#0A0A0A]">
+    <main className="flex min-h-screen flex-col items-center">
       <HeroSection />
       
       {/* Feature Section */}
@@ -45,7 +45,7 @@ export default function Home() {
       </section>
 
       {/* Showcase Section */}
-      <section className="w-full bg-[#F5F3FF] dark:bg-[#1E1B4B]/30 px-6 py-24 sm:px-12 lg:px-24">
+      <section className="w-full bg-[#F5F3FF]/70 dark:bg-[#1E1B4B]/25 px-6 py-24 sm:px-12 lg:px-24 border-y border-[#7C3AED]/10">
         <div className="mx-auto max-w-7xl">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="flex flex-col gap-6">
