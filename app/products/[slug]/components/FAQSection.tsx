@@ -22,16 +22,16 @@ const FAQItem = ({ faq }: { faq: { question: string; answer: string } }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border-b border-zinc-100 dark:border-zinc-800 last:border-0">
+    <div className="border-b border-zinc-200 last:border-0">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full py-8 flex items-center justify-between text-left group"
+        className="w-full py-5 flex items-center justify-between text-left group"
       >
-        <span className="text-base font-bold text-foreground dark:text-background group-hover:text-sokoline-accent transition-colors">{faq.question}</span>
+        <span className="text-sm font-semibold text-zinc-900 group-hover:text-sokoline-accent transition-colors">{faq.question}</span>
         <Plus className={`text-sokoline-accent transform transition-transform duration-500 ${isOpen ? 'rotate-45' : ''}`} size={20} />
       </button>
-      <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-60 pb-8' : 'max-h-0'}`}>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium max-w-xl">
+      <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-60 pb-5' : 'max-h-0'}`}>
+        <p className="text-sm text-zinc-600 leading-relaxed max-w-xl">
           {faq.answer}
         </p>
       </div>
@@ -41,11 +41,11 @@ const FAQItem = ({ faq }: { faq: { question: string; answer: string } }) => {
 
 export default function FAQSection() {
   return (
-    <section className="max-w-7xl mx-auto px-6 md:px-10 py-32 bg-background dark:bg-background transition-colors duration-300">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-16 lg:gap-24">
+    <section className="max-w-6xl mx-auto px-4 md:px-6 py-12 bg-white transition-colors duration-300">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
         <div>
-          <h2 className="text-4xl font-bold tracking-tight text-foreground dark:text-background mb-6 leading-none">FAQs</h2>
-          <p className="text-zinc-500 dark:text-zinc-400 font-medium text-lg leading-relaxed">
+          <h2 className="text-2xl font-bold tracking-tight text-zinc-900 mb-3 leading-none">FAQs</h2>
+          <p className="text-zinc-500 text-sm leading-relaxed">
             Quick answers about shopping and selling on the campus marketplace.
           </p>
         </div>

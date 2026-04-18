@@ -28,31 +28,31 @@ export default function RelatedProducts({ productId }: RelatedProductsProps) {
   if (products.length === 0 && !loading) return null;
 
   return (
-    <section className="max-w-7xl mx-auto py-40 px-6 md:px-10">
-      <div className="flex flex-col items-center text-center mb-24">
-        <h2 className="text-4xl font-bold tracking-tight text-foreground">Vibe match</h2>
-        <p className="text-zinc-500 mt-4 font-medium text-lg max-w-sm">Curated items similar to what you're seeing now.</p>
+    <section className="max-w-6xl mx-auto py-12 px-4 md:px-6">
+      <div className="flex flex-col items-start text-left mb-6">
+        <h2 className="text-2xl font-bold tracking-tight text-zinc-900">Related products</h2>
+        <p className="text-zinc-500 mt-2 text-sm max-w-sm">Curated items similar to what you&apos;re seeing now.</p>
       </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {loading ? (
           [...Array(4)].map((_, i) => (
             <div key={i} className="animate-pulse">
-              <div className="aspect-[4/5] bg-zinc-100 rounded-[48px] mb-6" />
-              <div className="h-4 w-2/3 bg-zinc-100 rounded-full mb-3" />
+              <div className="aspect-[4/5] bg-zinc-100 rounded-lg mb-3" />
+              <div className="h-4 w-2/3 bg-zinc-100 rounded-full mb-2" />
               <div className="h-6 w-1/3 bg-zinc-100 rounded-full" />
             </div>
           ))
         ) : (
           products.map((product) => (
             <Link key={product.id} href={`/products/${product.slug}`} className="group">
-              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[48px] bg-muted border border-zinc-100 mb-8 transition-all duration-700 group-hover:shadow-2xl group-hover:shadow-purple-100 group-hover:-translate-y-1">
+              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-lg bg-muted border border-zinc-200 mb-3 transition-all duration-300 group-hover:shadow-md">
                 {product.images?.[0] ? (
                   <Image 
                     src={product.images[0].image} 
                     alt={product.name} 
                     fill 
-                    className="object-cover group-hover:scale-105 transition-transform duration-700" 
+                    className="object-cover group-hover:scale-105 transition-transform duration-500" 
                   />
                 ) : (
                   <div className="flex items-center justify-center h-full text-zinc-300">
@@ -60,16 +60,16 @@ export default function RelatedProducts({ productId }: RelatedProductsProps) {
                   </div>
                 )}
                 {product.is_on_sale && (
-                  <div className="absolute top-6 left-6 bg-sokoline-accent text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-xl">
+                  <div className="absolute top-3 left-3 bg-sokoline-accent text-white text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wide">
                     Sale
                   </div>
                 )}
               </div>
-              <h3 className="text-lg font-semibold text-foreground group-hover:text-sokoline-accent transition-colors line-clamp-1 tracking-tight">
+              <h3 className="text-sm font-semibold text-zinc-900 group-hover:text-sokoline-accent transition-colors line-clamp-1 tracking-tight">
                 {product.name}
               </h3>
-              <div className="flex items-center gap-3 mt-1">
-                <span className="text-xl font-bold text-foreground">
+              <div className="flex items-center gap-2 mt-1">
+                <span className="text-base font-bold text-zinc-900">
                   ${product.discount_price || product.price}
                 </span>
               </div>

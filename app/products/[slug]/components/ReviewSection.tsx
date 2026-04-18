@@ -37,40 +37,40 @@ export default function ReviewSection({ product }: ReviewSectionProps) {
   };
 
   return (
-    <section className="max-w-7xl mx-auto px-6 md:px-10 py-32 bg-background">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-12 mb-20">
+    <section className="max-w-6xl mx-auto px-4 md:px-6 py-12 bg-white">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-10">
         <div>
-           <h2 className="text-4xl font-bold tracking-tight text-foreground mb-4">Community <br /> Feedback</h2>
-           <p className="text-zinc-500 font-medium text-lg">Real reviews from students who bought this.</p>
+           <h2 className="text-2xl font-bold tracking-tight text-zinc-900 mb-2">Community feedback</h2>
+           <p className="text-zinc-500 text-sm">Real reviews from students who bought this.</p>
         </div>
-        <div className="flex items-center gap-10">
+        <div className="flex items-center gap-6">
            <div className="text-center">
-              <div className="text-4xl font-bold text-foreground tracking-tight">{product.average_rating.toFixed(1)}</div>
+              <div className="text-2xl font-bold text-zinc-900 tracking-tight">{product.average_rating.toFixed(1)}</div>
               <div className="flex gap-1 mt-2 justify-center">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} size={14} className={i < Math.round(product.average_rating) ? "fill-sokoline-accent text-sokoline-accent" : "text-zinc-200"} />
                 ))}
               </div>
            </div>
-           <div className="h-16 w-px bg-zinc-200" />
+           <div className="h-10 w-px bg-zinc-200" />
            <div className="text-center">
-              <div className="text-4xl font-bold text-foreground tracking-tight">{product.review_count}</div>
-              <div className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider mt-2">Total Reviews</div>
+              <div className="text-2xl font-bold text-zinc-900 tracking-tight">{product.review_count}</div>
+              <div className="text-xs text-zinc-500 mt-1">Total reviews</div>
            </div>
         </div>
       </div>
 
-      <div className="space-y-8">
+      <div className="space-y-4">
         {reviews.map((review) => (
-          <div key={review.id} className="bg-card p-10 rounded-[40px] border border-zinc-100 shadow-sm transition-all hover:shadow-xl hover:shadow-purple-100/20">
-            <div className="flex justify-between items-start mb-8">
-              <div className="flex items-center gap-5">
-                <div className="h-12 w-12 rounded-2xl bg-[#F5F3FF] border border-sokoline-accent/10 flex items-center justify-center text-sokoline-accent">
-                   <User size={24} />
+          <div key={review.id} className="bg-white p-5 rounded-lg border border-zinc-200">
+            <div className="flex justify-between items-start mb-4">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-full bg-zinc-100 border border-zinc-200 flex items-center justify-center text-sokoline-accent">
+                   <User size={18} />
                 </div>
                 <div>
-                  <div className="font-bold text-foreground text-lg">{review.user.first_name} {review.user.last_name[0]}.</div>
-                  <div className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">{new Date(review.created_at).toLocaleDateString()}</div>
+                  <div className="font-semibold text-zinc-900 text-sm">{review.user.first_name} {review.user.last_name[0]}.</div>
+                  <div className="text-xs text-zinc-500">{new Date(review.created_at).toLocaleDateString()}</div>
                 </div>
               </div>
               <div className="flex gap-1">
@@ -79,24 +79,24 @@ export default function ReviewSection({ product }: ReviewSectionProps) {
                 ))}
               </div>
             </div>
-            <p className="text-zinc-600 leading-relaxed font-medium text-lg max-w-2xl">
+            <p className="text-zinc-600 leading-relaxed text-sm max-w-2xl">
               {review.comment}
             </p>
           </div>
         ))}
 
         {reviews.length === 0 && !loading && (
-          <div className="py-20 text-center text-zinc-400 font-medium italic border-2 border-dashed border-zinc-200 rounded-[40px]">
+          <div className="py-10 text-center text-zinc-400 text-sm border border-dashed border-zinc-200 rounded-lg">
             No reviews yet. Be the first student to review this product!
           </div>
         )}
 
         {hasMore && reviews.length > 0 && (
-          <div className="flex justify-center mt-16">
+          <div className="flex justify-center mt-6">
             <button 
               onClick={handleSeeMore}
               disabled={loading}
-              className="flex items-center gap-3 text-xs font-bold uppercase tracking-wider text-sokoline-accent hover:opacity-70 transition-opacity disabled:opacity-50"
+              className="flex items-center gap-2 rounded-md border border-zinc-200 px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-zinc-50 transition-colors disabled:opacity-50"
             >
               {loading ? "Loading..." : "Load More Experiences"}
               {!loading && <ChevronDown size={18} />}
