@@ -39,7 +39,7 @@ export default function HeroSection() {
             transition={{ duration: 0.8, delay: 0.5 }}
             className="max-w-xl text-lg leading-relaxed text-zinc-600 dark:text-zinc-400 sm:text-xl font-medium"
           >
-            The ultimate marketplace for student entrepreneurs. Shop from local student-led businesses, analyze your sales, and manage payments with ease.
+            The dedicated platform for student-led businesses. Launch your shop, analyze your growth, and manage payments with professional-grade tools.
           </motion.p>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -48,10 +48,10 @@ export default function HeroSection() {
             className="flex flex-wrap gap-4 mt-4"
           >
             <button className="rounded-full bg-[#7C3AED] px-8 py-3 text-lg font-bold text-white shadow-xl transition-all hover:scale-105 hover:bg-[#6D28D9] active:scale-95">
-              Start Shopping
+              Browse Products
             </button>
             <button className="rounded-full border-2 border-zinc-900 bg-transparent px-8 py-3 text-lg font-bold text-zinc-900 transition-all hover:scale-105 hover:bg-zinc-900 hover:text-white dark:border-zinc-100 dark:text-zinc-100 dark:hover:bg-zinc-100 dark:hover:text-zinc-900 active:scale-95">
-              Open Your Shop
+              Launch Your Shop
             </button>
           </motion.div>
         </div>

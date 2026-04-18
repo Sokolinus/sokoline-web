@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 const phrases = [
   "empowers student ventures",
   "provides business analytics",
+  "offers marketing solutions",
   "enables credit card payments",
   "handles daraja payments",
 ];
