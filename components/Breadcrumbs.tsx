@@ -22,19 +22,19 @@ const Breadcrumbs = () => {
   ];
 
   return (
-    <nav className="flex px-4 md:px-10 py-4 text-[10px] md:text-xs uppercase tracking-widest text-gray-400 font-sans max-w-7xl mx-auto">
+    <nav className="flex px-4 md:px-10 py-4 text-[10px] md:text-xs uppercase tracking-widest text-gray-400 dark:text-zinc-500 font-sans max-w-7xl mx-auto transition-colors duration-300">
       {breadcrumbs.map((path, index) => (
         <div key={index} className="flex items-center">
           <Link
             href={path.link}
-            className={`hover:text-black transition-colors ${
-              index === breadcrumbs.length - 1 ? "text-[#7C3AED] font-bold" : ""
+            className={`hover:text-black dark:hover:text-white transition-colors ${
+              index === breadcrumbs.length - 1 ? "text-[#7C3AED] dark:text-[#A855F7] font-bold" : ""
             }`}
           >
             {path.name}
           </Link>
           {index < breadcrumbs.length - 1 && (
-            <span className="mx-2 text-gray-300">/</span>
+            <span className="mx-2 text-gray-300 dark:text-zinc-800">/</span>
           )}
         </div>
       ))}
