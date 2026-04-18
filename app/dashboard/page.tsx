@@ -2,114 +2,185 @@
 
 import React from "react";
 import { useUser } from "@clerk/nextjs";
-import { motion } from "framer-motion";
-import { ShoppingBag, TrendingUp, Users, Plus, ArrowRight } from "lucide-react";
+import {
+  AlertTriangle,
+  CheckCircle2,
+  ChevronRight,
+  Clock3,
+  DollarSign,
+  ShoppingBag,
+  TrendingUp,
+  Users,
+} from "lucide-react";
 import Link from "next/link";
 
 const stats = [
-  { name: "Total Revenue", value: "$1,240.00", icon: TrendingUp, change: "+12.5%", changeType: "positive" },
-  { name: "Active Orders", value: "8", icon: ShoppingBag, change: "+2 today", changeType: "positive" },
-  { name: "Shop Visitors", value: "432", icon: Users, change: "+18%", changeType: "positive" },
+  { name: "Revenue (30d)", value: "$18,420", icon: DollarSign, change: "+8.7% vs last month", tone: "positive" },
+  { name: "Orders awaiting shipment", value: "14", icon: ShoppingBag, change: "3 are overdue", tone: "warning" },
+  { name: "Store visitors (7d)", value: "5,284", icon: Users, change: "+12.2% vs last week", tone: "positive" },
+  { name: "Conversion rate", value: "3.6%", icon: TrendingUp, change: "+0.4 pts", tone: "positive" },
+];
+
+const salesBars = [64, 42, 58, 74, 68, 82, 61];
+
+const recentOrders = [
+  { id: "SKL-2198", customer: "Amelia Hart", items: 3, total: "$126.00", status: "Packed", age: "12m ago" },
+  { id: "SKL-2194", customer: "Noah Bell", items: 1, total: "$42.00", status: "Awaiting pickup", age: "38m ago" },
+  { id: "SKL-2189", customer: "Rina Alvarez", items: 2, total: "$84.00", status: "Payment confirmed", age: "1h ago" },
+];
+
+const priorities = [
+  { label: "Ship overdue orders", note: "3 orders are past SLA", icon: AlertTriangle, level: "high" },
+  { label: "Restock low inventory", note: "7 products below threshold", icon: Clock3, level: "medium" },
+  { label: "Complete trust verification", note: "Estimated impact: +15% conversion", icon: CheckCircle2, level: "low" },
 ];
 
 export default function DashboardOverview() {
   const { user } = useUser();
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="space-y-12"
-    >
-      {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+    <div className="space-y-8">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-5xl font-black tracking-tighter text-[#1A1A1A] dark:text-[#FBFBFB] uppercase leading-none">
-            Sup, <br /> <span className="text-[#7C3AED]">{user?.firstName || "Entreprenuer"}</span>
-          </h1>
-          <p className="text-zinc-500 dark:text-zinc-400 mt-4 text-lg font-medium">
-            Your shop is performing 24% better than last week. Keep it up.
+          <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Welcome back</p>
+          <h1 className="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Hi {user?.firstName || "Seller"}</h1>
+          <p className="mt-2 max-w-2xl text-sm text-zinc-600 dark:text-zinc-300">
+            Your store health is improving. Focus on shipping overdue orders and finishing verification to keep momentum.
           </p>
         </div>
-        <Link 
-          href="/dashboard/products" 
-          className="bg-[#1A1A1A] dark:bg-[#FBFBFB] text-white dark:text-[#1A1A1A] px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center gap-3 hover:bg-[#7C3AED] dark:hover:bg-[#7C3AED] dark:hover:text-white transition-all shadow-2xl active:scale-95"
-        >
-          <Plus size={18} />
-          List New Product
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/dashboard/products"
+            className="inline-flex items-center rounded-xl border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-900"
+          >
+            Manage inventory
+          </Link>
+          <Link
+            href="/dashboard/products"
+            className="inline-flex items-center rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-700"
+          >
+            Add product
+          </Link>
+        </div>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {stats.map((stat, i) => (
-          <motion.div
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {stats.map((stat) => (
+          <article
             key={stat.name}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            className="p-8 bg-white dark:bg-[#0A0A0A] border border-zinc-100 dark:border-zinc-800 rounded-[32px] shadow-sm hover:shadow-xl hover:shadow-purple-100 dark:hover:shadow-none transition-all duration-500"
+            className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
           >
-            <div className="flex justify-between items-start mb-6">
-              <div className="h-12 w-12 rounded-2xl bg-[#F5F3FF] dark:bg-[#1E1B4B] flex items-center justify-center text-[#7C3AED]">
-                <stat.icon size={24} />
+            <div className="flex items-start justify-between gap-3">
+              <div className="rounded-xl bg-zinc-100 p-2 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
+                <stat.icon size={18} />
               </div>
-              <span className={`text-xs font-black px-3 py-1 rounded-full uppercase tracking-tighter ${
-                stat.changeType === 'positive' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'
-              }`}>
+              <span
+                className={`rounded-full px-2.5 py-1 text-xs font-medium ${
+                  stat.tone === "warning"
+                    ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300"
+                    : "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300"
+                }`}
+              >
                 {stat.change}
               </span>
             </div>
-            <p className="text-xs font-black uppercase tracking-widest text-zinc-400 mb-1">{stat.name}</p>
-            <h3 className="text-3xl font-black text-[#1A1A1A] dark:text-[#FBFBFB]">{stat.value}</h3>
-          </motion.div>
+            <p className="mt-4 text-sm font-medium text-zinc-500 dark:text-zinc-400">{stat.name}</p>
+            <p className="mt-1 text-2xl font-bold tracking-tight">{stat.value}</p>
+          </article>
         ))}
       </div>
 
-      {/* Recent Activity & Quick Links */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 pt-8">
-         {/* Order Preview */}
-         <div className="space-y-8">
-            <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-black uppercase tracking-tighter">Latest Sales</h2>
-              <Link href="/dashboard/orders" className="text-xs font-black uppercase tracking-widest text-[#7C3AED] hover:underline flex items-center gap-2">
-                View All <ArrowRight size={14} />
-              </Link>
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-[2fr_1fr]">
+        <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-semibold">Sales trend (last 7 days)</h2>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400">Gross sales by day</p>
             </div>
-            <div className="bg-zinc-50 dark:bg-zinc-900/50 rounded-[40px] p-4 space-y-2">
-               {[1, 2, 3].map((item) => (
-                 <div key={item} className="flex items-center justify-between p-6 bg-white dark:bg-[#0A0A0A] rounded-[28px] border border-zinc-100 dark:border-zinc-800">
-                    <div className="flex items-center gap-4">
-                       <div className="h-12 w-12 rounded-xl bg-zinc-100 dark:bg-zinc-800" />
-                       <div>
-                          <p className="font-bold text-sm uppercase">Order #SKL-00{item}2</p>
-                          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">2 items • 4m ago</p>
-                       </div>
-                    </div>
-                    <span className="font-black text-[#1A1A1A] dark:text-[#FBFBFB]">$42.00</span>
-                 </div>
-               ))}
-            </div>
-         </div>
+            <Link href="/dashboard/orders" className="inline-flex items-center gap-1 text-sm font-medium text-violet-600 hover:text-violet-700">
+              View orders <ChevronRight size={16} />
+            </Link>
+          </div>
+          <div className="mt-5 grid h-44 grid-cols-7 items-end gap-2">
+            {salesBars.map((height, index) => (
+              <div key={index} className="space-y-2">
+                <div style={{ height: `${height}%` }} className="w-full rounded-md bg-violet-500/85 transition hover:bg-violet-500" />
+                <p className="text-center text-xs text-zinc-500 dark:text-zinc-400">D{index + 1}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
-         {/* Shop Health */}
-         <div className="space-y-8">
-            <h2 className="text-2xl font-black uppercase tracking-tighter">Shop Insights</h2>
-            <div className="bg-[#7C3AED] rounded-[40px] p-10 text-white relative overflow-hidden group">
-               <div className="relative z-10">
-                 <h3 className="text-3xl font-bold leading-tight mb-4 uppercase italic">Your "Safety Certified" badge is pending.</h3>
-                 <p className="text-purple-100 font-medium mb-8 max-w-sm">Complete your shop verification to unlock the trust badge and boost sales by up to 40%.</p>
-                 <button className="bg-white text-[#7C3AED] px-8 py-3 rounded-full font-black uppercase tracking-widest text-xs hover:scale-105 transition-transform active:scale-95">
-                   Verify Now
-                 </button>
-               </div>
-               {/* Abstract Background Shapes */}
-               <div className="absolute top-[-20%] right-[-10%] w-64 h-64 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-all duration-700" />
-               <div className="absolute bottom-[-10%] left-[-5%] w-32 h-32 bg-black/10 rounded-full blur-2xl" />
-            </div>
-         </div>
+        <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+          <h2 className="text-lg font-semibold">Priority actions</h2>
+          <ul className="mt-4 space-y-3">
+            {priorities.map((task) => (
+              <li key={task.label} className="rounded-xl border border-zinc-200 p-3 dark:border-zinc-800">
+                <div className="flex items-start gap-3">
+                  <div
+                    className={`mt-0.5 rounded-lg p-1.5 ${
+                      task.level === "high"
+                        ? "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300"
+                        : task.level === "medium"
+                          ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300"
+                          : "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300"
+                    }`}
+                  >
+                    <task.icon size={14} />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold">{task.label}</p>
+                    <p className="text-xs text-zinc-500 dark:text-zinc-400">{task.note}</p>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
       </div>
-    </motion.div>
+
+      <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <h2 className="text-lg font-semibold">Recent orders</h2>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">Track status and resolve bottlenecks fast</p>
+          </div>
+          <Link href="/dashboard/orders" className="inline-flex items-center gap-1 text-sm font-medium text-violet-600 hover:text-violet-700">
+            Open order manager <ChevronRight size={16} />
+          </Link>
+        </div>
+
+        <div className="mt-4 overflow-x-auto">
+          <table className="min-w-full divide-y divide-zinc-200 text-sm dark:divide-zinc-800">
+            <thead className="text-left text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+              <tr>
+                <th className="py-3 pr-4 font-medium">Order</th>
+                <th className="py-3 pr-4 font-medium">Customer</th>
+                <th className="py-3 pr-4 font-medium">Items</th>
+                <th className="py-3 pr-4 font-medium">Status</th>
+                <th className="py-3 pr-4 font-medium">Total</th>
+                <th className="py-3 font-medium">Received</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+              {recentOrders.map((order) => (
+                <tr key={order.id}>
+                  <td className="py-3 pr-4 font-semibold text-zinc-900 dark:text-zinc-100">#{order.id}</td>
+                  <td className="py-3 pr-4 text-zinc-700 dark:text-zinc-300">{order.customer}</td>
+                  <td className="py-3 pr-4 text-zinc-700 dark:text-zinc-300">{order.items}</td>
+                  <td className="py-3 pr-4">
+                    <span className="rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                      {order.status}
+                    </span>
+                  </td>
+                  <td className="py-3 pr-4 font-semibold text-zinc-900 dark:text-zinc-100">{order.total}</td>
+                  <td className="py-3 text-zinc-600 dark:text-zinc-400">{order.age}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
   );
 }
