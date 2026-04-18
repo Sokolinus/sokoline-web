@@ -12,6 +12,8 @@ interface ProductHeroProps {
 }
 
 export default function ProductHero({ product }: ProductHeroProps) {
+  const OPTION_KEY_DELIMITER = "|";
+  const MIN_WORD_BOUNDARY_RATIO = 0.6;
   const { addItem } = useCart();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
     product.variants.length > 0 ? product.variants[0] : null
@@ -47,7 +49,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
       return acc;
     }, []);
 
-  const getOptionKey = (variant: ProductVariant) => `${variant.name}__${variant.size || ""}`;
+  const getOptionKey = (variant: ProductVariant) => `${variant.name}${OPTION_KEY_DELIMITER}${variant.size || ""}`;
   const uniqueOptions = product.variants.reduce<ProductVariant[]>((acc, variant) => {
     if (!acc.some((item) => getOptionKey(item) === getOptionKey(variant))) {
       acc.push(variant);
@@ -69,7 +71,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
     if (text.length <= maxLength) return text;
     const sliced = text.slice(0, maxLength + 1);
     const wordBoundary = sliced.lastIndexOf(" ");
-    const trimmed = (wordBoundary > Math.floor(maxLength * 0.6) ? sliced.slice(0, wordBoundary) : text.slice(0, maxLength)).trimEnd();
+    const trimmed = (wordBoundary > Math.floor(maxLength * MIN_WORD_BOUNDARY_RATIO) ? sliced.slice(0, wordBoundary) : text.slice(0, maxLength)).trimEnd();
     return `${trimmed}...`;
   };
 
