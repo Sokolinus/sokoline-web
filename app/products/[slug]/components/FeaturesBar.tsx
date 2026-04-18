@@ -4,20 +4,20 @@ interface FeaturesBarProps {
   className?: string;
   hasFreeShipping?: boolean;
   hasFreeReturns?: boolean;
-  isSafetyCertified?: boolean;
+  hasSafetyCertification?: boolean;
 }
 
 const FeaturesBar = ({
   className = "grid-cols-2",
   hasFreeShipping = true,
   hasFreeReturns = true,
-  isSafetyCertified = true
+  hasSafetyCertification = true
 }: FeaturesBarProps) => {
   const features = [
     { title: "Secure Payments", enabled: true },
     { title: "Free Shipping", enabled: hasFreeShipping },
     { title: "Free Returns", enabled: hasFreeReturns },
-    { title: "Safety certified", enabled: isSafetyCertified }
+    { title: "Safety certified", enabled: hasSafetyCertification }
   ].filter((feature) => feature.enabled);
 
   return (
