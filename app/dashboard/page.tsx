@@ -59,13 +59,13 @@ export default function DashboardOverview() {
         <div className="flex items-center gap-3">
           <Link
             href="/dashboard/products"
-            className="inline-flex items-center rounded-xl border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-900"
+            className="inline-flex items-center rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-900"
           >
             Manage inventory
           </Link>
           <Link
             href="/dashboard/products"
-            className="inline-flex items-center rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2"
+            className="inline-flex items-center rounded-lg bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
           >
             Add product
           </Link>
@@ -76,17 +76,17 @@ export default function DashboardOverview() {
         {stats.map((stat) => (
           <article
             key={stat.name}
-            className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+            className="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900"
           >
             <div className="flex items-start justify-between gap-3">
-              <div className="rounded-xl bg-zinc-100 p-2 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
+              <div className="rounded-lg bg-zinc-100 p-2 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
                 <stat.icon size={18} />
               </div>
               <span
                 className={`rounded-full px-2.5 py-1 text-xs font-medium ${
                   stat.status === "warning"
-                    ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300"
-                    : "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300"
+                    ? "bg-zinc-200 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-200"
+                    : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
                 }`}
               >
                 {stat.change}
@@ -99,13 +99,13 @@ export default function DashboardOverview() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-[2fr_1fr]">
-        <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+        <section className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-lg font-semibold">Sales trend (last 7 days)</h2>
               <p className="text-sm text-zinc-500 dark:text-zinc-400">Gross sales by day</p>
             </div>
-            <Link href="/dashboard/orders" className="inline-flex items-center gap-1 text-sm font-medium text-violet-600 hover:text-violet-700">
+            <Link href="/dashboard/orders" className="inline-flex items-center gap-1 text-sm font-medium text-zinc-700 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-100">
               View orders <ChevronRight size={16} />
             </Link>
           </div>
@@ -115,7 +115,7 @@ export default function DashboardOverview() {
                 <div
                   aria-label={`${day.label}: ${day.amount} in gross sales, shown at ${day.value}% of weekly max`}
                   style={{ height: `${day.value}%` }}
-                  className="w-full rounded-md bg-violet-500/85 transition hover:bg-violet-500"
+                  className="w-full rounded-sm bg-zinc-700/85 transition hover:bg-zinc-700 dark:bg-zinc-300/85 dark:hover:bg-zinc-300"
                 />
                 <p className="text-center text-xs text-zinc-500 dark:text-zinc-400">{day.label}</p>
               </div>
@@ -123,19 +123,19 @@ export default function DashboardOverview() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+        <section className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
           <h2 className="text-lg font-semibold">Priority actions</h2>
           <ul className="mt-4 space-y-3">
             {priorities.map((task) => (
-              <li key={task.label} className="rounded-xl border border-zinc-200 p-3 dark:border-zinc-800">
+              <li key={task.label} className="rounded-lg border border-zinc-200 p-3 dark:border-zinc-800">
                 <div className="flex items-start gap-3">
                   <div
                     className={`mt-0.5 rounded-lg p-1.5 ${
                       task.level === "high"
-                        ? "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300"
+                        ? "bg-zinc-200 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-200"
                         : task.level === "medium"
-                          ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300"
-                          : "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300"
+                          ? "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
+                          : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
                     }`}
                   >
                     <task.icon size={14} />
@@ -151,13 +151,13 @@ export default function DashboardOverview() {
         </section>
       </div>
 
-      <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+      <section className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
         <div className="flex items-center justify-between gap-4">
           <div>
             <h2 className="text-lg font-semibold">Recent orders</h2>
             <p className="text-sm text-zinc-500 dark:text-zinc-400">Track status and resolve bottlenecks fast</p>
           </div>
-          <Link href="/dashboard/orders" className="inline-flex items-center gap-1 text-sm font-medium text-violet-600 hover:text-violet-700">
+          <Link href="/dashboard/orders" className="inline-flex items-center gap-1 text-sm font-medium text-zinc-700 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-100">
             Open order manager <ChevronRight size={16} />
           </Link>
         </div>

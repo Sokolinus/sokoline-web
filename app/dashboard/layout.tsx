@@ -15,9 +15,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   ];
 
   return (
-    <div className="flex min-h-screen bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50">
+    <div className="flex min-h-screen bg-zinc-100 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50">
       {/* Sidebar */}
-      <aside className="hidden h-screen w-72 shrink-0 flex-col border-r border-zinc-200 bg-white/90 backdrop-blur lg:sticky lg:top-0 lg:flex dark:border-zinc-800 dark:bg-zinc-950/90">
+      <aside className="hidden h-screen w-72 shrink-0 flex-col border-r border-zinc-200 bg-white lg:sticky lg:top-0 lg:flex dark:border-zinc-800 dark:bg-zinc-950">
         <div className="px-8 pb-6 pt-8">
           <Link href="/" className="text-2xl font-black tracking-tight">
             Sokoline
@@ -34,9 +34,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition ${
+                className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition ${
                   isActive
-                    ? "bg-violet-50 text-violet-700 dark:bg-violet-950/60 dark:text-violet-200"
+                    ? "bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100"
                     : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-900 dark:hover:text-zinc-50"
                 }`}
               >
@@ -61,12 +61,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Mobile Header */}
-        <header className="flex h-16 items-center justify-between border-b border-zinc-200 bg-white/90 px-5 backdrop-blur lg:hidden dark:border-zinc-800 dark:bg-zinc-950/90">
+        <header className="flex h-16 items-center justify-between border-b border-zinc-200 bg-white px-5 lg:hidden dark:border-zinc-800 dark:bg-zinc-950">
            <span className="text-base font-bold tracking-tight">Sokoline</span>
            <Link
              href="/dashboard/products"
              aria-label="Add product"
-             className="rounded-lg bg-violet-600 p-2 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2"
+             className="rounded-lg bg-zinc-900 p-2 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2 dark:bg-zinc-100 dark:text-zinc-900"
            >
              <PlusCircle size={18} />
            </Link>
