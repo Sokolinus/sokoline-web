@@ -40,12 +40,12 @@ export default function ReviewSection({ product }: ReviewSectionProps) {
     <section className="max-w-7xl mx-auto px-6 md:px-10 py-32 bg-background">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-12 mb-20">
         <div>
-           <h2 className="text-5xl font-black tracking-tighter text-foreground uppercase leading-none mb-4">Community <br /> Feedback</h2>
+           <h2 className="text-4xl font-bold tracking-tight text-foreground mb-4">Community <br /> Feedback</h2>
            <p className="text-zinc-500 font-medium text-lg">Real reviews from students who bought this.</p>
         </div>
         <div className="flex items-center gap-10">
            <div className="text-center">
-              <div className="text-5xl font-black text-foreground tracking-tighter">{product.average_rating.toFixed(1)}</div>
+              <div className="text-4xl font-bold text-foreground tracking-tight">{product.average_rating.toFixed(1)}</div>
               <div className="flex gap-1 mt-2 justify-center">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} size={14} className={i < Math.round(product.average_rating) ? "fill-sokoline-accent text-sokoline-accent" : "text-zinc-200"} />
@@ -54,8 +54,8 @@ export default function ReviewSection({ product }: ReviewSectionProps) {
            </div>
            <div className="h-16 w-px bg-zinc-200" />
            <div className="text-center">
-              <div className="text-5xl font-black text-foreground tracking-tighter">{product.review_count}</div>
-              <div className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mt-2">Total Reviews</div>
+              <div className="text-4xl font-bold text-foreground tracking-tight">{product.review_count}</div>
+              <div className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider mt-2">Total Reviews</div>
            </div>
         </div>
       </div>
@@ -69,8 +69,8 @@ export default function ReviewSection({ product }: ReviewSectionProps) {
                    <User size={24} />
                 </div>
                 <div>
-                  <div className="font-bold text-foreground uppercase tracking-tight text-lg">{review.user.first_name} {review.user.last_name[0]}.</div>
-                  <div className="text-xs font-bold text-zinc-400 uppercase tracking-[0.2em]">{new Date(review.created_at).toLocaleDateString()}</div>
+                  <div className="font-bold text-foreground text-lg">{review.user.first_name} {review.user.last_name[0]}.</div>
+                  <div className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">{new Date(review.created_at).toLocaleDateString()}</div>
                 </div>
               </div>
               <div className="flex gap-1">
@@ -96,7 +96,7 @@ export default function ReviewSection({ product }: ReviewSectionProps) {
             <button 
               onClick={handleSeeMore}
               disabled={loading}
-              className="flex items-center gap-3 text-xs font-black uppercase tracking-[0.2em] text-sokoline-accent hover:opacity-70 transition-opacity disabled:opacity-50"
+              className="flex items-center gap-3 text-xs font-bold uppercase tracking-wider text-sokoline-accent hover:opacity-70 transition-opacity disabled:opacity-50"
             >
               {loading ? "Loading..." : "Load More Experiences"}
               {!loading && <ChevronDown size={18} />}

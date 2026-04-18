@@ -28,16 +28,16 @@ const Navbar = () => {
 
         {/* DESKTOP NAV */}
         <div className="hidden items-center gap-8 md:flex">
-          <Link href="/products" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground">
+          <Link href="/products" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
             products
           </Link>
-          <Link href="/shops" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground">
+          <Link href="/shops" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
             shops
           </Link>
           
           <Show when="signed-in">
-            <Link href="/orders" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground">
-              <Package className="h-3 w-3" />
+            <Link href="/orders" className="flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+              <Package className="h-4 w-4" />
               orders
             </Link>
           </Show>
@@ -46,14 +46,14 @@ const Navbar = () => {
         {/* ICONS & ACTIONS */}
         <div className="flex items-center gap-2 sm:gap-4">
           <button className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
-            <Search size={18} strokeWidth={2.5} />
+            <Search size={20} strokeWidth={1.5} />
             <span className="sr-only">Search</span>
           </button>
 
           <Link href="/cart" className="relative rounded-full p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
-            <ShoppingBag size={18} strokeWidth={2.5} />
+            <ShoppingBag size={20} strokeWidth={1.5} />
             {cartItemCount > 0 && (
-              <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-sokoline-accent text-[9px] font-black text-white">
+              <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-sokoline-accent text-[10px] font-bold text-white">
                 {cartItemCount}
               </span>
             )}
@@ -63,9 +63,9 @@ const Navbar = () => {
           <Show when="signed-in">
             <Link 
               href="/dashboard" 
-              className="hidden items-center gap-2 rounded-2xl bg-muted px-4 py-2 text-[10px] font-black uppercase tracking-widest text-foreground transition-colors hover:bg-muted/80 md:flex"
+              className="hidden items-center gap-2 rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/80 md:flex"
             >
-              <LayoutDashboard className="h-3.5 w-3.5" />
+              <LayoutDashboard className="h-4 w-4" />
               dashboard
             </Link>
             <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border border-border">
@@ -83,12 +83,12 @@ const Navbar = () => {
           <Show when="signed-out">
             <div className="hidden items-center gap-2 md:flex">
               <SignInButton mode="modal">
-                <button className="rounded-2xl px-5 py-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
+                <button className="rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
                   login
                 </button>
               </SignInButton>
               <SignUpButton mode="modal">
-                <button className="rounded-2xl bg-sokoline-accent px-5 py-2 text-[10px] font-black uppercase tracking-widest text-white shadow-xl shadow-sokoline-accent/20 transition-all hover:bg-sokoline-accent-hover active:scale-95">
+                <button className="rounded-lg bg-sokoline-accent px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:bg-sokoline-accent-hover hover:shadow-md">
                   join
                 </button>
               </SignUpButton>

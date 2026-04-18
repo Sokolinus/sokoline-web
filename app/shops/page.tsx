@@ -19,7 +19,7 @@ export default async function ShopsPage() {
         
         {/* Header */}
         <div className="mb-16">
-          <h1 className="text-5xl font-black tracking-tighter text-foreground mb-4 uppercase">Student Shops</h1>
+          <h1 className="text-5xl font-bold tracking-tight text-foreground mb-4">Student Shops</h1>
           <p className="text-muted-foreground max-w-xl text-lg">
             Support your peers. Every shop here is owned and operated by students within the campus ecosystem.
           </p>
@@ -48,10 +48,10 @@ export default async function ShopsPage() {
                   {shop.description || "A student-led business specializing in high-quality products and services."}
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  <span className="px-3 py-1 rounded-full bg-muted text-xs font-bold text-muted-foreground uppercase tracking-widest">
+                  <span className="px-3 py-1 rounded-full bg-muted text-xs font-semibold text-muted-foreground uppercase tracking-widest">
                     {shop.category || "General"}
                   </span>
-                  <span className="px-3 py-1 rounded-full bg-sokoline-accent/10 text-xs font-bold text-sokoline-accent uppercase tracking-widest">
+                  <span className="px-3 py-1 rounded-full bg-sokoline-accent/10 text-xs font-semibold text-sokoline-accent uppercase tracking-widest">
                     Verified Shop
                   </span>
                 </div>

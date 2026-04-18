@@ -28,7 +28,7 @@ const FeaturesBar = ({
           <div className="w-8 h-8 rounded-2xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 flex items-center justify-center text-[#7C3AED] flex-shrink-0 shadow-sm">
             <item.icon size={16} strokeWidth={2.5} />
           </div>
-          <span className="text-[10px] font-black uppercase tracking-widest text-[#1A1A1A] dark:text-[#FBFBFB] whitespace-nowrap">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-foreground dark:text-zinc-100 whitespace-nowrap">
             {item.title}
           </span>
         </div>

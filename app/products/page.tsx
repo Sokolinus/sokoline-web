@@ -20,7 +20,7 @@ export default async function ProductsPage() {
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-16">
           <div className="max-w-2xl">
-            <h1 className="text-6xl font-black tracking-tighter text-foreground dark:text-background uppercase mb-4 leading-none">
+            <h1 className="text-5xl font-bold tracking-tight text-foreground dark:text-background mb-4 leading-none">
               Explore <br /> <span className="text-sokoline-accent">Ventures</span>
             </h1>
             <p className="text-zinc-500 dark:text-zinc-400 text-lg font-medium">
@@ -28,10 +28,10 @@ export default async function ProductsPage() {
             </p>
           </div>
           <div className="flex gap-4">
-             <button className="flex items-center gap-2 px-6 py-3 bg-muted dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-2xl text-xs font-black uppercase tracking-widest text-foreground dark:text-background hover:border-sokoline-accent transition-colors">
+             <button className="flex items-center gap-2 px-5 py-2.5 bg-muted dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-2xl text-xs font-semibold tracking-wider text-foreground dark:text-background hover:border-sokoline-accent transition-colors">
                <Filter size={14} /> Filter
              </button>
-             <button className="flex items-center gap-2 px-6 py-3 bg-muted dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-2xl text-xs font-black uppercase tracking-widest text-foreground dark:text-background hover:border-sokoline-accent transition-colors">
+             <button className="flex items-center gap-2 px-5 py-2.5 bg-muted dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-2xl text-xs font-semibold tracking-wider text-foreground dark:text-background hover:border-sokoline-accent transition-colors">
                <ArrowUpDown size={14} /> Sort
              </button>
           </div>
@@ -56,7 +56,7 @@ export default async function ProductsPage() {
                 )}
                 
                 {product.is_on_sale && (
-                  <div className="absolute top-4 left-4 bg-sokoline-accent text-white text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-tighter shadow-xl">
+                  <div className="absolute top-4 left-4 bg-sokoline-accent text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-xl">
                     Sale
                   </div>
                 )}
@@ -68,17 +68,17 @@ export default async function ProductsPage() {
 
               <div className="flex justify-between items-start gap-4">
                 <div>
-                  <h3 className="text-lg font-bold text-foreground dark:text-background group-hover:text-sokoline-accent transition-colors line-clamp-1 uppercase tracking-tight">
+                  <h3 className="text-lg font-semibold text-foreground dark:text-background group-hover:text-sokoline-accent transition-colors line-clamp-1 tracking-tight">
                     {product.name}
                   </h3>
-                  <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest mt-0.5">{product.shop_name}</p>
+                  <p className="text-xs font-medium text-zinc-400 uppercase tracking-wider mt-0.5">{product.shop_name}</p>
                 </div>
                 <div className="flex flex-col items-end">
-                   <span className="text-xl font-black text-foreground dark:text-background">
+                   <span className="text-xl font-bold text-foreground dark:text-background">
                      ${product.discount_price || product.price}
                    </span>
                    {product.is_on_sale && (
-                     <span className="text-[10px] text-zinc-400 line-through decoration-zinc-400/40 font-bold uppercase">
+                     <span className="text-[10px] text-zinc-400 line-through decoration-zinc-400/40 font-semibold uppercase">
                        ${product.price}
                      </span>
                    )}
@@ -87,8 +87,8 @@ export default async function ProductsPage() {
 
               <div className="flex items-center gap-1 mt-4">
                  <Star size={10} className="fill-sokoline-accent text-sokoline-accent" />
-                 <span className="text-[10px] font-black text-sokoline-accent uppercase tracking-tighter">{product.average_rating.toFixed(1)}</span>
-                 <span className="text-[10px] font-bold text-zinc-300 uppercase tracking-tighter ml-1">({product.review_count} Reviews)</span>
+                 <span className="text-[10px] font-bold text-sokoline-accent tracking-normal">{product.average_rating.toFixed(1)}</span>
+                 <span className="text-[10px] font-medium text-zinc-300 tracking-normal ml-1">({product.review_count} Reviews)</span>
               </div>
             </Link>
           ))}
@@ -96,7 +96,7 @@ export default async function ProductsPage() {
 
         {products.length === 0 && (
           <div className="py-40 text-center border-2 border-dashed border-zinc-100 dark:border-zinc-800 rounded-[48px]">
-            <h2 className="text-2xl font-bold text-zinc-300 uppercase">No products found</h2>
+            <h2 className="text-xl font-semibold text-zinc-300">No products found</h2>
             <p className="text-zinc-500 font-medium">The marketplace is currently resting. Check back soon!</p>
           </div>
         )}

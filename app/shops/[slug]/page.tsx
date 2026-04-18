@@ -43,15 +43,15 @@ export default async function ShopPage({ params }: { params: Promise<{ slug: str
               </div>
             )}
             <div>
-              <h1 className="text-5xl font-black tracking-tighter text-foreground uppercase">{shop.name}</h1>
+              <h1 className="text-5xl font-bold tracking-tight text-foreground">{shop.name}</h1>
               <p className="text-muted-foreground mt-2 max-w-2xl text-lg leading-relaxed">
                 {shop.description}
               </p>
               <div className="flex gap-4 mt-6">
-                 <span className="text-xs font-bold uppercase tracking-widest px-4 py-2 bg-muted rounded-full text-muted-foreground">
+                 <span className="text-xs font-semibold uppercase tracking-widest px-4 py-2 bg-muted rounded-full text-muted-foreground">
                    Student Owned
                  </span>
-                 <span className="text-xs font-bold uppercase tracking-widest px-4 py-2 bg-sokoline-accent/10 rounded-full text-sokoline-accent">
+                 <span className="text-xs font-semibold uppercase tracking-widest px-4 py-2 bg-sokoline-accent/10 rounded-full text-sokoline-accent">
                    Verified Campus Vendor
                  </span>
               </div>
@@ -63,7 +63,7 @@ export default async function ShopPage({ params }: { params: Promise<{ slug: str
       {/* Products Grid */}
       <section className="max-w-7xl mx-auto px-6 py-20 md:px-10">
         <div className="flex justify-between items-end mb-12">
-           <h2 className="text-2xl font-bold tracking-tighter text-foreground uppercase">Inventory</h2>
+           <h2 className="text-2xl font-bold tracking-tight text-foreground">Inventory</h2>
            <p className="text-sm text-muted-foreground font-medium">{shop.products?.length || 0} Products available</p>
         </div>
 
@@ -84,14 +84,14 @@ export default async function ShopPage({ params }: { params: Promise<{ slug: str
                   </div>
                 )}
                 {product.is_on_sale && (
-                  <div className="absolute top-4 left-4 bg-sokoline-accent text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter shadow-lg">
+                  <div className="absolute top-4 left-4 bg-sokoline-accent text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-tighter shadow-lg">
                     Sale
                   </div>
                 )}
               </div>
               <h3 className="text-lg font-bold text-foreground group-hover:text-sokoline-accent transition-colors line-clamp-1">{product.name}</h3>
               <div className="flex items-center gap-3 mt-1">
-                <span className="text-xl font-black text-foreground">
+                <span className="text-xl font-bold text-foreground">
                   ${product.discount_price || product.price}
                 </span>
                 {product.is_on_sale && (

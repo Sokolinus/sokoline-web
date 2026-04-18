@@ -30,7 +30,7 @@ export default function RelatedProducts({ productId }: RelatedProductsProps) {
   return (
     <section className="max-w-7xl mx-auto py-40 px-6 md:px-10">
       <div className="flex flex-col items-center text-center mb-24">
-        <h2 className="text-5xl font-black tracking-tighter text-foreground uppercase">Vibe match</h2>
+        <h2 className="text-4xl font-bold tracking-tight text-foreground">Vibe match</h2>
         <p className="text-zinc-500 mt-4 font-medium text-lg max-w-sm">Curated items similar to what you're seeing now.</p>
       </div>
       
@@ -60,16 +60,16 @@ export default function RelatedProducts({ productId }: RelatedProductsProps) {
                   </div>
                 )}
                 {product.is_on_sale && (
-                  <div className="absolute top-6 left-6 bg-sokoline-accent text-white text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-xl">
+                  <div className="absolute top-6 left-6 bg-sokoline-accent text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-xl">
                     Sale
                   </div>
                 )}
               </div>
-              <h3 className="text-lg font-bold text-foreground group-hover:text-sokoline-accent transition-colors line-clamp-1 uppercase tracking-tight">
+              <h3 className="text-lg font-semibold text-foreground group-hover:text-sokoline-accent transition-colors line-clamp-1 tracking-tight">
                 {product.name}
               </h3>
               <div className="flex items-center gap-3 mt-1">
-                <span className="text-xl font-black text-foreground">
+                <span className="text-xl font-bold text-foreground">
                   ${product.discount_price || product.price}
                 </span>
               </div>

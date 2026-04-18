@@ -53,7 +53,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
               priority
             />
             {product.is_on_sale && (
-              <div className="absolute top-6 left-6 bg-sokoline-accent text-white text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-xl">
+              <div className="absolute top-6 left-6 bg-sokoline-accent text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-xl">
                 Sale -{discountPercent}%
               </div>
             )}
@@ -81,11 +81,11 @@ export default function ProductHero({ product }: ProductHeroProps) {
         <div className="flex flex-col pt-4">
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-4">
-               <span className="text-xs font-bold uppercase tracking-[0.2em] text-sokoline-accent">{product.shop_name}</span>
+               <span className="text-[10px] font-semibold uppercase tracking-wider text-sokoline-accent">{product.shop_name}</span>
                <span className="h-1 w-1 rounded-full bg-zinc-300" />
-               <span className="text-xs font-bold uppercase tracking-[0.2em] text-zinc-400">{product.category?.name || "General"}</span>
+               <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400">{product.category?.name || "General"}</span>
             </div>
-            <h1 className="text-4xl lg:text-5xl font-black tracking-tighter text-foreground dark:text-background uppercase leading-[0.9]">
+            <h1 className="text-3xl lg:text-4xl font-bold tracking-tight text-foreground dark:text-background leading-tight">
               {product.name}
             </h1>
           </div>
@@ -93,16 +93,16 @@ export default function ProductHero({ product }: ProductHeroProps) {
           <div className="flex items-center gap-4 mb-8">
             <div className="flex items-center gap-1 bg-[#F5F3FF] dark:bg-[#1E1B4B] px-3 py-1 rounded-full border border-sokoline-accent/10">
               <Star size={14} className="fill-sokoline-accent text-sokoline-accent" />
-              <span className="text-sm font-black text-sokoline-accent">{product.average_rating.toFixed(1)}</span>
+              <span className="text-sm font-bold text-sokoline-accent">{product.average_rating.toFixed(1)}</span>
             </div>
-            <span className="text-sm font-bold text-zinc-400 uppercase tracking-widest decoration-dotted underline underline-offset-4 cursor-pointer hover:text-zinc-600">
+            <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider decoration-dotted underline underline-offset-4 cursor-pointer hover:text-zinc-600">
               {product.review_count} reviews
             </span>
           </div>
 
           {/* Price Section */}
           <div className="flex items-baseline gap-4 mb-10">
-            <span className="text-4xl font-black text-foreground dark:text-background">
+            <span className="text-3xl font-bold text-foreground dark:text-background">
               ${currentPrice}
             </span>
             {originalPrice && (
@@ -115,13 +115,13 @@ export default function ProductHero({ product }: ProductHeroProps) {
           {/* Variant Selector */}
           {product.variants.length > 0 && (
             <div className="mb-10">
-              <p className="text-xs font-black uppercase tracking-widest text-zinc-400 mb-4">Select Option</p>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-4">Select Option</p>
               <div className="flex flex-wrap gap-3">
                 {product.variants.map((variant) => (
                   <button 
                     key={variant.id}
                     onClick={() => setSelectedVariant(variant)}
-                    className={`px-6 py-3 rounded-2xl border-2 font-bold transition-all text-sm ${
+                    className={`px-5 py-2.5 rounded-xl border-2 font-semibold transition-all text-sm ${
                       selectedVariant?.id === variant.id
                         ? "border-sokoline-accent bg-sokoline-accent text-white shadow-lg shadow-purple-200 dark:shadow-none"
                         : "border-zinc-100 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600"
@@ -138,7 +138,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
           <button 
             onClick={handleAddToCart}
             disabled={isAdding}
-            className={`group relative w-full py-5 rounded-[24px] font-black uppercase tracking-widest flex items-center justify-center gap-3 transition-all duration-300 overflow-hidden ${
+            className={`group relative w-full py-4 rounded-full font-bold tracking-wider text-sm flex items-center justify-center gap-3 transition-all duration-300 overflow-hidden ${
               isAdding 
                 ? "bg-zinc-100 text-zinc-400 cursor-not-allowed" 
                 : "bg-foreground dark:bg-background text-white dark:text-foreground hover:bg-sokoline-accent dark:hover:bg-sokoline-accent hover:text-white shadow-2xl active:scale-95"

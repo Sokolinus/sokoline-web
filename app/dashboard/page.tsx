@@ -81,8 +81,8 @@ export default function DashboardOverview() {
     <div className="space-y-8 animate-in fade-in duration-700">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-bold text-muted-foreground uppercase tracking-widest">Vendor Overview</p>
-          <h1 className="mt-1 text-4xl font-black tracking-tight uppercase text-foreground">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Vendor Overview</p>
+          <h1 className="mt-1 text-4xl font-bold tracking-tight text-foreground">
              Hi {user?.firstName || "Entrepreneur"}
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground font-medium">
@@ -93,13 +93,13 @@ export default function DashboardOverview() {
         <div className="flex items-center gap-3">
           <Link
             href="/dashboard/products"
-            className="inline-flex items-center rounded-2xl border border-border px-6 py-3 text-xs font-black uppercase tracking-widest text-muted-foreground transition hover:bg-muted"
+            className="inline-flex items-center rounded-2xl border border-border px-6 py-3 text-xs font-bold text-muted-foreground transition hover:bg-muted"
           >
             Inventory
           </Link>
           <Link
             href="/dashboard/products"
-            className="inline-flex items-center rounded-2xl bg-foreground px-6 py-3 text-xs font-black uppercase tracking-widest text-background transition hover:bg-sokoline-accent shadow-xl active:scale-95"
+            className="inline-flex items-center rounded-2xl bg-foreground px-6 py-3 text-xs font-bold text-background transition hover:bg-sokoline-accent shadow-xl active:scale-95"
           >
             <Plus size={16} className="mr-2" />
             Add Product
@@ -119,9 +119,9 @@ export default function DashboardOverview() {
                 <stat.icon size={20} />
               </div>
             </div>
-            <p className="mt-6 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">{stat.name}</p>
-            <p className="mt-1 text-3xl font-black tracking-tighter text-foreground">{stat.value}</p>
-            <p className="mt-2 text-[10px] font-bold text-muted-foreground uppercase">{stat.change}</p>
+            <p className="mt-6 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">{stat.name}</p>
+            <p className="mt-1 text-3xl font-bold tracking-tight text-foreground">{stat.value}</p>
+            <p className="mt-2 text-[10px] font-semibold text-muted-foreground uppercase">{stat.change}</p>
           </article>
         ))}
       </div>
@@ -131,7 +131,7 @@ export default function DashboardOverview() {
         <section className="rounded-[40px] border border-border bg-card p-8">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-xl font-black uppercase tracking-tight text-foreground">Sales performance</h2>
+              <h2 className="text-xl font-bold tracking-tight text-foreground">Sales performance</h2>
               <p className="text-sm text-muted-foreground font-medium mt-1">Real-time revenue tracking</p>
             </div>
           </div>
@@ -141,7 +141,7 @@ export default function DashboardOverview() {
         </section>
 
         <section className="rounded-[40px] border border-border bg-card p-8">
-          <h2 className="text-xl font-black uppercase tracking-tight text-foreground">Next Steps</h2>
+          <h2 className="text-xl font-bold tracking-tight text-foreground">Next Steps</h2>
           <ul className="mt-6 space-y-4">
             {priorities.map((task) => (
               <li key={task.label} className="rounded-2xl border border-border bg-muted/30 p-4">
@@ -156,8 +156,8 @@ export default function DashboardOverview() {
                     <task.icon size={16} />
                   </div>
                   <div>
-                    <p className="text-sm font-bold uppercase tracking-tight text-foreground">{task.label}</p>
-                    <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-widest mt-0.5">{task.note}</p>
+                    <p className="text-sm font-bold tracking-tight text-foreground">{task.label}</p>
+                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest mt-0.5">{task.note}</p>
                   </div>
                 </div>
               </li>
@@ -170,7 +170,7 @@ export default function DashboardOverview() {
       <section className="rounded-[40px] border border-border bg-card p-8 pb-4">
         <div className="flex items-center justify-between gap-4 mb-8">
           <div>
-            <h2 className="text-xl font-black uppercase tracking-tight text-foreground">Recent Transactions</h2>
+            <h2 className="text-xl font-bold tracking-tight text-foreground">Recent Transactions</h2>
             <p className="text-sm text-muted-foreground font-medium mt-1">Track your support from other students</p>
           </div>
         </div>
@@ -182,7 +182,7 @@ export default function DashboardOverview() {
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-border">
-              <thead className="text-left text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
+              <thead className="text-left text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
                 <tr>
                   <th className="pb-6 pr-4">Order ID</th>
                   <th className="pb-6 pr-4">Status</th>
@@ -195,14 +195,14 @@ export default function DashboardOverview() {
                   <tr key={order.id} className="group">
                     <td className="py-6 pr-4 font-bold text-sm text-foreground">#SKL-{order.id.toString().padStart(4, '0')}</td>
                     <td className="py-6 pr-4">
-                      <span className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-tighter ${
+                      <span className={`rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-tighter ${
                         order.status === 'COMPLETED' ? "bg-green-500/10 text-green-500" : "bg-muted text-muted-foreground"
                       }`}>
                         {order.status}
                       </span>
                     </td>
-                    <td className="py-6 pr-4 font-black text-sm text-foreground">${order.total_price}</td>
-                    <td className="py-6 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{new Date(order.created_at).toLocaleDateString()}</td>
+                    <td className="py-6 pr-4 font-bold text-sm text-foreground">${order.total_price}</td>
+                    <td className="py-6 text-[10px] font-semibold text-muted-foreground uppercase tracking-widest">{new Date(order.created_at).toLocaleDateString()}</td>
                   </tr>
                 ))}
               </tbody>

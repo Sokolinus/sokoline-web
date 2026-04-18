@@ -21,7 +21,7 @@ export default function HeroSection() {
         {/* Left Side: Clean Typography */}
         <div className="flex flex-col items-start gap-12">
           <div className="space-y-4">
-            <h1 className="text-6xl font-black leading-[0.9] tracking-tighter text-foreground sm:text-7xl lg:text-9xl uppercase">
+            <h1 className="text-6xl font-semibold leading-[1.1] tracking-tight text-foreground sm:text-7xl lg:text-9xl">
               <span className="flex overflow-hidden">
                 {title.split("").map((char, i) => (
                   <motion.span
@@ -38,7 +38,7 @@ export default function HeroSection() {
                   </motion.span>
                 ))}
               </span>
-              <span className="mt-4 block text-xl font-bold tracking-widest text-muted-foreground uppercase lg:text-2xl">
+              <span className="mt-2 block text-2xl font-normal lg:text-3xl">
                 <AnimatedText />
               </span>
             </h1>
@@ -50,16 +50,16 @@ export default function HeroSection() {
             transition={{ duration: 1, delay: 0.6 }}
             className="flex flex-col gap-10"
           >
-            <p className="max-w-md text-sm font-medium leading-relaxed text-muted-foreground uppercase tracking-wider">
-              A high-performance commerce engine for student ventures. Built for scale, technical clarity, and campus-wide impact.
+            <p className="max-w-md text-lg leading-relaxed text-muted-foreground">
+              A minimalist commerce engine designed for student entrepreneurs to launch and scale their ventures with total technical clarity.
             </p>
             
-            <div className="flex items-center gap-8">
-              <Link href="/products" className="group flex items-center gap-3 text-xs font-black text-sokoline-accent transition-all hover:text-sokoline-accent-hover uppercase tracking-widest">
-                explore ventures <ArrowRight size={14} strokeWidth={2.5} className="transition-transform group-hover:translate-x-1" />
+            <div className="flex items-center gap-10">
+              <Link href="/products" className="group flex items-center gap-3 text-sm font-semibold text-sokoline-accent transition-all hover:text-sokoline-accent-hover">
+                explore the collection <ArrowRight size={16} strokeWidth={1.5} className="transition-transform group-hover:translate-x-1" />
               </Link>
-              <Link href="/sign-up" className="text-xs font-black text-muted-foreground transition-colors hover:text-foreground uppercase tracking-widest">
-                launch yours
+              <Link href="/sign-up" className="text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground">
+                apply to sell
               </Link>
             </div>
           </motion.div>
