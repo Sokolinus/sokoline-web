@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import {
   SignInButton,
@@ -12,7 +12,7 @@ import { useCart } from "@/components/providers/CartProvider";
 import { ShoppingBag, Search, Menu } from "lucide-react";
 
 const Navbar = () => {
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const { cart } = useCart();
   const cartItemCount = cart?.items.reduce((acc, item) => acc + item.quantity, 0) || 0;
 
@@ -82,7 +82,7 @@ const Navbar = () => {
           <Show when="signed-out">
             <div className="hidden md:block">
               <SignUpButton mode="modal">
-                <button className="rounded-full bg-[#7C3AED] dark:bg-[#A855F7] px-6 py-2.5 text-xs font-black uppercase tracking-widest text-white hover:bg-[#6D28D9] dark:hover:bg-[#9333EA] transition-all active:scale-95 shadow-lg shadow-purple-100/60 dark:shadow-none">
+                <button className="rounded-lg bg-[#7C3AED] dark:bg-[#A855F7] px-6 py-2.5 text-xs font-black uppercase tracking-widest text-white hover:bg-[#6D28D9] dark:hover:bg-[#9333EA] transition-all active:scale-95 shadow-lg shadow-purple-100/60 dark:shadow-none">
                   Sign up
                 </button>
               </SignUpButton>
@@ -123,7 +123,7 @@ const Navbar = () => {
                 </button>
               </SignInButton>
               <SignUpButton mode="modal">
-                <button className="w-fit rounded-full bg-[#7C3AED] dark:bg-[#A855F7] px-5 py-2 text-white hover:bg-[#6D28D9] dark:hover:bg-[#9333EA] transition-colors">
+                <button className="w-fit rounded-lg bg-[#7C3AED] dark:bg-[#A855F7] px-5 py-2 text-white hover:bg-[#6D28D9] dark:hover:bg-[#9333EA] transition-colors">
                   Sign up
                 </button>
               </SignUpButton>

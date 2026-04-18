@@ -50,13 +50,13 @@ export default function HeroSection() {
           >
             <Link 
               href="/products" 
-              className="rounded-full bg-[#7C3AED] px-8 py-3 text-lg font-bold text-white transition-all hover:scale-[1.02] hover:bg-[#6D28D9] active:scale-95"
+              className="rounded-lg bg-[#7C3AED] px-8 py-3 text-lg font-bold text-white transition-all hover:scale-[1.02] hover:bg-[#6D28D9] active:scale-95"
             >
               Browse Products
             </Link>
             <Link 
               href="/dashboard" 
-              className="rounded-full border border-zinc-300 bg-transparent px-8 py-3 text-lg font-bold text-zinc-900 transition-all hover:scale-[1.02] hover:border-[#7C3AED] hover:text-[#7C3AED] dark:border-zinc-700 dark:text-zinc-100 dark:hover:border-[#A855F7] dark:hover:text-[#A855F7] active:scale-95"
+              className="rounded-lg border border-zinc-300 bg-transparent px-8 py-3 text-lg font-bold text-zinc-900 transition-all hover:scale-[1.02] hover:border-[#7C3AED] hover:text-[#7C3AED] dark:border-zinc-700 dark:text-zinc-100 dark:hover:border-[#A855F7] dark:hover:text-[#A855F7] active:scale-95"
             >
               Launch Your Shop
             </Link>
