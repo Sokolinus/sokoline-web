@@ -15,10 +15,10 @@ import {
 import Link from "next/link";
 
 const stats = [
-  { name: "Revenue (30d)", value: "$18,420", icon: DollarSign, change: "+8.7% vs last month", tone: "positive" },
-  { name: "Orders awaiting shipment", value: "14", icon: ShoppingBag, change: "3 are overdue", tone: "warning" },
-  { name: "Store visitors (7d)", value: "5,284", icon: Users, change: "+12.2% vs last week", tone: "positive" },
-  { name: "Conversion rate", value: "3.6%", icon: TrendingUp, change: "+0.4 pts", tone: "positive" },
+  { name: "Revenue (30d)", value: "$18,420", icon: DollarSign, change: "+8.7% vs last month", status: "positive" },
+  { name: "Orders awaiting shipment", value: "14", icon: ShoppingBag, change: "3 are overdue", status: "warning" },
+  { name: "Store visitors (7d)", value: "5,284", icon: Users, change: "+12.2% vs last week", status: "positive" },
+  { name: "Conversion rate", value: "3.6%", icon: TrendingUp, change: "+0.4 pts", status: "positive" },
 ];
 
 const salesBars = [
@@ -51,7 +51,7 @@ export default function DashboardOverview() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Welcome back</p>
-          <h1 className="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Hi {user?.firstName || "Seller"}</h1>
+          <h1 className="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Hi {user?.firstName || "there"}</h1>
           <p className="mt-2 max-w-2xl text-sm text-zinc-600 dark:text-zinc-300">
             Your store health is improving. Focus on shipping overdue orders and finishing verification to keep momentum.
           </p>
@@ -84,7 +84,7 @@ export default function DashboardOverview() {
               </div>
               <span
                 className={`rounded-full px-2.5 py-1 text-xs font-medium ${
-                  stat.tone === "warning"
+                  stat.status === "warning"
                     ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300"
                     : "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300"
                 }`}
@@ -113,7 +113,7 @@ export default function DashboardOverview() {
             {salesBars.map((day) => (
               <div key={day.label} className="space-y-2">
                 <div
-                  aria-label={`${day.label}: ${day.value}% of max sales`}
+                  aria-label={`${day.label}: relative sales bar at ${day.value}% of chart maximum`}
                   style={{ height: `${day.value}%` }}
                   className="w-full rounded-md bg-violet-500/85 transition hover:bg-violet-500"
                 />
@@ -163,7 +163,7 @@ export default function DashboardOverview() {
         </div>
 
         <div className="mt-4 overflow-x-auto">
-          <table role="table" aria-label="Recent orders" className="min-w-full divide-y divide-zinc-200 text-sm dark:divide-zinc-800">
+          <table aria-label="Recent orders" className="min-w-full divide-y divide-zinc-200 text-sm dark:divide-zinc-800">
             <thead className="text-left text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
               <tr>
                 <th className="py-3 pr-4 font-medium">Order</th>
