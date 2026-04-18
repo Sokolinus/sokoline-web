@@ -22,13 +22,13 @@ const stats = [
 ];
 
 const salesBars = [
-  { value: 64, label: "Mon" },
-  { value: 42, label: "Tue" },
-  { value: 58, label: "Wed" },
-  { value: 74, label: "Thu" },
-  { value: 68, label: "Fri" },
-  { value: 82, label: "Sat" },
-  { value: 61, label: "Sun" },
+  { value: 64, label: "Mon", amount: "$2.1k" },
+  { value: 42, label: "Tue", amount: "$1.4k" },
+  { value: 58, label: "Wed", amount: "$1.9k" },
+  { value: 74, label: "Thu", amount: "$2.5k" },
+  { value: 68, label: "Fri", amount: "$2.3k" },
+  { value: 82, label: "Sat", amount: "$2.8k" },
+  { value: 61, label: "Sun", amount: "$2.0k" },
 ];
 
 const recentOrders = [
@@ -51,7 +51,7 @@ export default function DashboardOverview() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Welcome back</p>
-          <h1 className="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Hi {user?.firstName || "there"}</h1>
+          <h1 className="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Hi {user?.firstName || "Seller"}</h1>
           <p className="mt-2 max-w-2xl text-sm text-zinc-600 dark:text-zinc-300">
             Your store health is improving. Focus on shipping overdue orders and finishing verification to keep momentum.
           </p>
@@ -113,7 +113,7 @@ export default function DashboardOverview() {
             {salesBars.map((day) => (
               <div key={day.label} className="space-y-2">
                 <div
-                  aria-label={`${day.label}: relative sales bar at ${day.value}% of chart maximum`}
+                  aria-label={`${day.label}: ${day.amount} in gross sales, shown at ${day.value}% of weekly max`}
                   style={{ height: `${day.value}%` }}
                   className="w-full rounded-md bg-violet-500/85 transition hover:bg-violet-500"
                 />
@@ -164,14 +164,15 @@ export default function DashboardOverview() {
 
         <div className="mt-4 overflow-x-auto">
           <table aria-label="Recent orders" className="min-w-full divide-y divide-zinc-200 text-sm dark:divide-zinc-800">
+            <caption className="sr-only">Latest order activity with status and received time</caption>
             <thead className="text-left text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
               <tr>
-                <th className="py-3 pr-4 font-medium">Order</th>
-                <th className="py-3 pr-4 font-medium">Customer</th>
-                <th className="py-3 pr-4 font-medium">Items</th>
-                <th className="py-3 pr-4 font-medium">Status</th>
-                <th className="py-3 pr-4 font-medium">Total</th>
-                <th className="py-3 font-medium">Received</th>
+                <th scope="col" className="py-3 pr-4 font-medium">Order</th>
+                <th scope="col" className="py-3 pr-4 font-medium">Customer</th>
+                <th scope="col" className="py-3 pr-4 font-medium">Items</th>
+                <th scope="col" className="py-3 pr-4 font-medium">Status</th>
+                <th scope="col" className="py-3 pr-4 font-medium">Total</th>
+                <th scope="col" className="py-3 font-medium">Received</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
