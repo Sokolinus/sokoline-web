@@ -42,6 +42,7 @@ export default function RelatedProducts({ productId }: { productId: number }) {
                   src={product.images[0]?.image || "/file.svg"} 
                   alt={product.name}
                   fill
+                  sizes="(max-width: 640px) 50vw, 300px"
                   className="object-contain group-hover:scale-105 transition-transform duration-500"
                 />
               </div>

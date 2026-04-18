@@ -71,6 +71,7 @@ export default function HeroSection() {
               src="/hero_image.png"
               alt="Sokoline Marketplace"
               fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
               className="object-contain"
               priority
             />

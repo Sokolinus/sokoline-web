@@ -43,6 +43,7 @@ export default async function ProductsPage() {
                   src={product.images[0]?.image || "/file.svg"} 
                   alt={product.name}
                   fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                   className="object-contain p-4 transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute top-4 right-4 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-black shadow-sm flex items-center gap-1">

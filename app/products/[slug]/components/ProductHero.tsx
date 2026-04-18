@@ -38,6 +38,7 @@ export default function ProductHero({ product }: { product: Product }) {
                 src={activeVariant?.image || displayImages[activeImg]} 
                 alt={product.name}
                 fill
+                sizes="(max-width: 768px) 100vw, 800px"
                 className="object-contain transition-transform duration-500 group-hover:scale-105"
                 priority
               />
@@ -54,7 +55,7 @@ export default function ProductHero({ product }: { product: Product }) {
                       activeImg === i ? 'border-[#7C3AED]' : 'border-transparent opacity-60 hover:opacity-100'
                     }`}
                   >
-                    <Image src={img} alt={`Thumbnail ${i}`} fill className="object-cover" />
+                    <Image src={img} alt={`Thumbnail ${i}`} fill sizes="150px" className="object-cover" />
                   </button>
                 ))}
               </div>

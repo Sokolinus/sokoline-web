@@ -74,6 +74,7 @@ export default function Home() {
                 src="/about-section-image.jpg"
                 alt="Student entrepreneurs working"
                 fill
+                sizes="(max-width: 1024px) 100vw, 800px"
                 className="object-cover transition-all duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#7C3AED]/10 to-transparent" />
