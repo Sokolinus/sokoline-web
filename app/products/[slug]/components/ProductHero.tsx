@@ -5,17 +5,16 @@ import Image from 'next/image';
 import { Product, ProductVariant } from "@/lib/types";
 import { useCart } from "@/components/providers/CartProvider";
 import FeaturesBar from './FeaturesBar';
-import { ShoppingCart, Star } from "lucide-react";
+import { Check, ShoppingCart, Star } from "lucide-react";
 
 interface ProductHeroProps {
   product: Product;
 }
 
-const VARIANT_KEY_SEPARATOR = "|";
 // Prefer a word boundary when it appears after at least 60% of the max length.
 const TRUNCATE_MIN_WORD_BOUNDARY_RATIO = 0.6;
 
-const getOptionKey = (variant: ProductVariant) => `${variant.name}${VARIANT_KEY_SEPARATOR}${variant.size || ""}`;
+const getOptionKey = (variant: ProductVariant) => JSON.stringify([variant.name, variant.size || ""]);
 
 const truncateAtWord = (text: string, maxLength: number) => {
   if (text.length <= maxLength) return text;
@@ -180,12 +179,16 @@ export default function ProductHero({ product }: ProductHeroProps) {
                       key={variant.id}
                       onClick={() => handleColorSelect(variant.color_hex)}
                       type="button"
-                      className={`h-6 w-6 rounded-full border ${
+                      className={`relative flex h-6 w-6 items-center justify-center rounded-full border ${
                         selectedVariant?.color_hex === variant.color_hex ? "ring-2 ring-sokoline-accent ring-offset-2" : ""
                       }`}
                       style={{ backgroundColor: variant.color_hex || "#E4E4E7" }}
                       aria-label={variant.color_name || variant.name}
-                    />
+                    >
+                      {selectedVariant?.color_hex === variant.color_hex ? (
+                        <Check size={12} className="text-white drop-shadow-sm" />
+                      ) : null}
+                    </button>
                   ))}
                 </div>
               </div>
