@@ -23,7 +23,7 @@ export default function AnimatedText() {
   const currentPhrase = phrases[index];
 
   return (
-    <div className="relative inline-block h-[1.2em] w-[800px] overflow-hidden align-middle text-zinc-400">
+    <div className="relative inline-block h-[1.3em] w-[18ch] max-w-full overflow-hidden align-middle text-zinc-500">
       <AnimatePresence mode="wait">
         <motion.div
           key={currentPhrase}
