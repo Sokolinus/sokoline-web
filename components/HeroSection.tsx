@@ -3,6 +3,7 @@
 import Image from "next/image";
 import AnimatedText from "./AnimatedText";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 export default function HeroSection() {
   const title = "sokoline";
@@ -47,12 +48,18 @@ export default function HeroSection() {
             transition={{ duration: 0.8, delay: 0.7 }}
             className="flex flex-wrap gap-4 mt-4"
           >
-            <button className="rounded-full bg-[#7C3AED] px-8 py-3 text-lg font-bold text-white shadow-xl transition-all hover:scale-105 hover:bg-[#6D28D9] active:scale-95">
+            <Link 
+              href="/products" 
+              className="rounded-full bg-[#7C3AED] px-8 py-3 text-lg font-bold text-white shadow-xl transition-all hover:scale-105 hover:bg-[#6D28D9] active:scale-95"
+            >
               Browse Products
-            </button>
-            <button className="rounded-full border-2 border-zinc-900 bg-transparent px-8 py-3 text-lg font-bold text-zinc-900 transition-all hover:scale-105 hover:bg-zinc-900 hover:text-white dark:border-zinc-100 dark:text-zinc-100 dark:hover:bg-zinc-100 dark:hover:text-zinc-900 active:scale-95">
+            </Link>
+            <Link 
+              href="/dashboard" 
+              className="rounded-full border-2 border-zinc-900 bg-transparent px-8 py-3 text-lg font-bold text-zinc-900 transition-all hover:scale-105 hover:bg-zinc-900 hover:text-white dark:border-zinc-100 dark:text-zinc-100 dark:hover:bg-zinc-100 dark:hover:text-zinc-900 active:scale-95"
+            >
               Launch Your Shop
-            </button>
+            </Link>
           </motion.div>
         </div>
 
