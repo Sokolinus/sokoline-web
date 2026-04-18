@@ -1,4 +1,4 @@
-import { Product, Review, Cart, Order } from "./types";
+import { Product, Review, Cart, Order, Shop } from "./types";
 
 const API_BASE_URL = "https://api.sokoline.app/api";
 
@@ -30,6 +30,19 @@ export async function getProduct(slug: string): Promise<Product | null> {
   }
 }
 
+export async function getProducts(params?: Record<string, string>): Promise<Product[]> {
+  try {
+    const query = params ? `?${new URLSearchParams(params).toString()}` : "";
+    const response = await fetch(`${API_BASE_URL}/products/${query}`);
+    if (!response.ok) return [];
+    const data = await response.json();
+    return data.results || data;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return [];
+  }
+}
+
 export async function getRelatedProducts(productId: number): Promise<Product[]> {
   try {
     const response = await fetch(`${API_BASE_URL}/products/${productId}/related_products/`);
@@ -53,7 +66,34 @@ export async function getReviews(productId: number, limit = 10, offset = 0): Pro
   }
 }
 
-// --- Authenticated Cart & Order Services ---
+// --- Authenticated Services ---
+
+export async function fetchMyShop(token: string): Promise<Shop | null> {
+  try {
+    const response = await authenticatedFetch("/shops/", token);
+    if (!response.ok) return null;
+    const shops = await response.json();
+    const shopList = shops.results || shops;
+    return shopList[0] || null; 
+  } catch (error) {
+    console.error("Error fetching user shop:", error);
+    return null;
+  }
+}
+
+export async function updateShop(token: string, shopId: number, data: Partial<Shop>): Promise<Shop | null> {
+  try {
+    const response = await authenticatedFetch(`/shops/${shopId}/`, token, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) return null;
+    return response.json();
+  } catch (error) {
+    console.error("Error updating shop:", error);
+    return null;
+  }
+}
 
 export async function fetchCart(token: string): Promise<Cart | null> {
   try {
