@@ -47,16 +47,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           })}
         </nav>
 
-        <div className="px-4 pb-4">
-          <Link
-            href="/dashboard/products"
-            className="flex items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-violet-700"
-          >
-            <PlusCircle size={16} />
-            Add product
-          </Link>
-        </div>
-
         <div className="mt-auto p-4">
           <Link 
             href="/" 
