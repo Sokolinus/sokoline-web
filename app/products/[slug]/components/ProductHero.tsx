@@ -47,8 +47,54 @@ export default function ProductHero({ product }: ProductHeroProps) {
       return acc;
     }, []);
 
-  const imageSource = selectedVariant?.image_url || allImages[activeImg]?.image || "/placeholder-product.png";
+  const getOptionKey = (variant: ProductVariant) => `${variant.name}__${variant.size || ""}`;
+  const uniqueOptions = product.variants.reduce<ProductVariant[]>((acc, variant) => {
+    if (!acc.some((item) => getOptionKey(item) === getOptionKey(variant))) {
+      acc.push(variant);
+    }
+    return acc;
+  }, []);
+
+  const selectedVariantImage = selectedVariant?.image
+    ? allImages.find((img) => img.id === selectedVariant.image)
+    : null;
+  const imageSource =
+    selectedVariant?.image_url ||
+    selectedVariantImage?.image ||
+    allImages[activeImg]?.image ||
+    "/placeholder-product.png";
+  const imageAlt = selectedVariantImage?.alt_text || allImages[activeImg]?.alt_text || product.name;
+
+  const truncateAtWord = (text: string, maxLength: number) => {
+    if (text.length <= maxLength) return text;
+    const sliced = text.slice(0, maxLength + 1);
+    const wordBoundary = sliced.lastIndexOf(" ");
+    const trimmed = (wordBoundary > Math.floor(maxLength * 0.6) ? sliced.slice(0, wordBoundary) : text.slice(0, maxLength)).trimEnd();
+    return `${trimmed}...`;
+  };
+
+  const shortDescription = truncateAtWord(product.description, 100);
   const productPath = product.category?.name || "Products";
+
+  const handleColorSelect = (colorHex: string) => {
+    const preferred = product.variants.find(
+      (variant) =>
+        variant.color_hex === colorHex &&
+        variant.name === selectedVariant?.name &&
+        variant.size === selectedVariant?.size
+    );
+    const fallback = product.variants.find((variant) => variant.color_hex === colorHex);
+    setSelectedVariant(preferred || fallback || null);
+  };
+
+  const handleOptionSelect = (option: ProductVariant) => {
+    const optionKey = getOptionKey(option);
+    const preferred = product.variants.find(
+      (variant) => getOptionKey(variant) === optionKey && variant.color_hex === selectedVariant?.color_hex
+    );
+    const fallback = product.variants.find((variant) => getOptionKey(variant) === optionKey);
+    setSelectedVariant(preferred || fallback || null);
+  };
 
   return (
     <section className="py-4 md:py-6">
@@ -62,7 +108,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
             <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50">
               <Image
                 src={imageSource}
-                alt={allImages[activeImg]?.alt_text || product.name}
+                alt={imageAlt}
                 fill
                 className="object-cover"
                 priority
@@ -91,7 +137,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
               {product.name}
             </h1>
             <p className="mt-2 text-sm text-zinc-500">
-              Sold by {product.shop_name}. {product.description.slice(0, 100)}
+              Sold by {product.shop_name}. {shortDescription}
             </p>
 
             <div className="mt-4 flex items-center gap-2 text-sm">
@@ -117,7 +163,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
                   {uniqueColors.map((variant) => (
                     <button
                       key={variant.id}
-                      onClick={() => setSelectedVariant(variant)}
+                      onClick={() => handleColorSelect(variant.color_hex)}
                       type="button"
                       className={`h-6 w-6 rounded-full border ${
                         selectedVariant?.color_hex === variant.color_hex ? "ring-2 ring-sokoline-accent ring-offset-2" : ""
@@ -134,18 +180,18 @@ export default function ProductHero({ product }: ProductHeroProps) {
               <div className="mt-4">
                 <p className="mb-2 text-sm font-medium text-zinc-700">Options</p>
                 <div className="flex flex-wrap gap-2">
-                  {product.variants.map((variant) => (
+                  {uniqueOptions.map((variant) => (
                     <button
-                      key={variant.id}
-                      onClick={() => setSelectedVariant(variant)}
+                      key={getOptionKey(variant)}
+                      onClick={() => handleOptionSelect(variant)}
                       type="button"
                       className={`rounded-md border px-3 py-1.5 text-sm ${
-                        selectedVariant?.id === variant.id
+                        selectedVariant ? getOptionKey(selectedVariant) === getOptionKey(variant) : false
                           ? "border-sokoline-accent bg-sokoline-accent text-white"
                           : "border-zinc-200 text-zinc-700 hover:border-zinc-400"
                       }`}
                     >
-                      {variant.name}
+                      {variant.size ? `${variant.name} (${variant.size})` : variant.name}
                     </button>
                   ))}
                 </div>
@@ -155,7 +201,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
             <button
               onClick={handleAddToCart}
               disabled={isAdding}
-              className={`mt-6 flex w-fit items-center justify-center gap-2 rounded-md px-5 py-2.5 text-sm font-semibold transition ${
+              className={`mt-6 flex w-full items-center justify-center gap-2 rounded-md px-5 py-2.5 text-sm font-semibold transition sm:w-fit ${
                 isAdding
                   ? "cursor-not-allowed bg-zinc-200 text-zinc-500"
                   : "bg-sokoline-accent text-white hover:bg-sokoline-accent-hover"
