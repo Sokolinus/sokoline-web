@@ -1,11 +1,15 @@
+"use client";
+
 import React, { useState } from 'react';
 
+type TabName = 'Details' | 'Shipping' | 'Returns';
+
 const ProductTabs = () => {
-  const [activeTab, setActiveTab] = useState('Details');
+  const [activeTab, setActiveTab] = useState<TabName>('Details');
 
-  const tabs = ['Details', 'Shipping', 'Returns'];
+  const tabs: TabName[] = ['Details', 'Shipping', 'Returns'];
 
-  const tabContent = {
+  const tabContent: Record<TabName, React.ReactNode> = {
     Details: (
       <div className="space-y-6 text-gray-600 text-sm leading-relaxed">
         <p>Voted 2023's best goggles by GogglesGlobal. These low temp goggles provide clear vision with zero fogging protection.</p>
@@ -13,8 +17,8 @@ const ProductTabs = () => {
         <p>Voted 2023's best goggles by GogglesGlobal. These low temp goggles provide clear vision with zero fogging protection.</p>
       </div>
     ),
-    Shipping: <div className="text-gray-600 text-sm">Standard shipping information goes here.</div>,
-    Returns: <div className="text-gray-600 text-sm">Return policy details go here.</div>,
+    Shipping: <div className="text-gray-600 text-sm py-4">Standard shipping information goes here.</div>,
+    Returns: <div className="text-gray-600 text-sm py-4">Return policy details go here.</div>,
   };
 
   return (

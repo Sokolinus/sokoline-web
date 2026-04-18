@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from 'react';
 
 // This would ideally come from a separate data file or an API

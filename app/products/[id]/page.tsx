@@ -1,5 +1,4 @@
 import React from 'react';
-import Breadcrumbs from './components/Breadcrumbs';
 import ProductHero from './components/ProductHero';
 import ProductInfoTabs from './components/ProductInfoTabs';
 import ReviewSection from './components/ReviewSection';
@@ -14,7 +13,6 @@ export default function ProductPage() {
         
         {/* Top Section: Navigation and Product Purchase */}
         <div className="md:px-10">
-          <Breadcrumbs />
           <ProductHero />
         </div>
 

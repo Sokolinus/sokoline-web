@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from 'react';
 import FeaturesBar from './FeaturesBar';
 
@@ -14,7 +16,7 @@ export default function ProductHero() {
         <div className="flex flex-col">
           {/* Mobile Navigation/Breadcrumbs (Only shows on mobile) */}
           <div className="px-4 py-2 md:hidden text-[10px] text-gray-400 uppercase tracking-widest">
-            Home > Mens > Accessories > <span className="text-black font-bold">Goggles</span>
+            Home &gt; Mens &gt; Accessories &gt; <span className="text-black font-bold">Goggles</span>
           </div>
 
           {/* Desktop Title (Hidden on Mobile) */}

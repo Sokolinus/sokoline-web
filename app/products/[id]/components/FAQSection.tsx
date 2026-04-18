@@ -1,54 +1,60 @@
+"use client";
+
 import React, { useState } from 'react';
 
 const faqData = [
   {
-    question: "Frequently Asked Question",
-    answer: "This is the answer to your frequently asked question. It appears when the box is clicked."
+    question: "How long does shipping take?",
+    answer: "Shipping typically takes 3-5 business days within the country. International shipping varies by location."
   },
   {
-    question: "Frequently Asked Question",
-    answer: "Another detailed answer to help your users understand the product better."
+    question: "What is your return policy?",
+    answer: "We offer a 30-day return policy for unused products in their original packaging."
   },
   {
-    question: "Frequently Asked Question",
-    answer: "You can put as much text as you want here. The box will expand to fit the content."
+    question: "How do I track my order?",
+    answer: "Once your order is shipped, you will receive an email with a tracking link."
   }
 ];
 
 // Sub-component for individual FAQ items
-const FAQItem = ({ faq }) => {
+const FAQItem = ({ faq }: { faq: { question: string; answer: string } }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div 
-      className="border border-gray-300 mb-4 cursor-pointer transition-all duration-300"
-      onClick={() => setIsOpen(!isOpen)}
-    >
-      <div className="p-6 flex justify-between items-center bg-white">
-        <h3 className="text-xl font-bold text-center w-full">
-          {faq.question}
-        </h3>
-        {/* Optional: Add a +/- or chevron icon here */}
+    <div className="border-b border-gray-100 last:border-0">
+      <button 
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full py-6 flex items-center justify-between text-left hover:text-purple-600 transition-colors group"
+      >
+        <span className="text-sm font-bold uppercase tracking-wider">{faq.question}</span>
+        <span className={`text-xl transform transition-transform duration-300 ${isOpen ? 'rotate-45' : ''}`}>+</span>
+      </button>
+      <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-40 pb-6' : 'max-h-0'}`}>
+        <p className="text-sm text-gray-500 leading-relaxed">
+          {faq.answer}
+        </p>
       </div>
-      
-      {isOpen && (
-        <div className="px-6 pb-6 text-gray-700 animate-fadeIn">
-          <p>{faq.answer}</p>
-        </div>
-      )}
     </div>
   );
 };
 
 export default function FAQSection() {
   return (
-    <section className="max-w-3xl mx-auto py-16 px-4 font-sans text-center">
-      <h2 className="text-2xl font-bold mb-8 tracking-wide">FAQ</h2>
-      
-      <div className="flex flex-col">
-        {faqData.map((item, index) => (
-          <FAQItem key={index} faq={item} />
-        ))}
+    <section className="max-w-7xl mx-auto px-6 md:px-10 py-20 bg-white">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div>
+          <h2 className="text-4xl font-black tracking-tighter mb-4">FAQS</h2>
+          <p className="text-gray-400 text-sm leading-relaxed">
+            Everything you need to know about our products and services.
+          </p>
+        </div>
+        
+        <div className="md:col-span-2">
+          {faqData.map((faq, i) => (
+            <FAQItem key={i} faq={faq} />
+          ))}
+        </div>
       </div>
     </section>
   );
