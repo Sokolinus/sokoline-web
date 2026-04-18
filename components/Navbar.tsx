@@ -100,7 +100,7 @@ const Navbar = () => {
         </div>
       </div>
       {mobileOpen && (
-        <div className="md:hidden border-t border-zinc-200/70 dark:border-zinc-800">
+        <div className="md:hidden border-t border-zinc-200/70 dark:border-zinc-800" role="navigation" aria-label="Mobile navigation">
           <div className="px-4 py-4 flex flex-col gap-3 text-xs font-bold uppercase tracking-widest">
             <Link href="/products" className="text-zinc-600 hover:text-[#7C3AED] transition-colors" onClick={() => setMobileOpen(false)}>
               Shop

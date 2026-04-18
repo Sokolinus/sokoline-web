@@ -4,8 +4,10 @@
   --background: #FFFFFF;
   --foreground: #1A1A1A;
   --accent: #7C3AED;
+  --accent-rgb: 124, 58, 237;
   --accent-hover: #6D28D9;
   --accent-light: #F5F3FF;
+  --line-height-base: 1.5;
 }
 
 @theme inline {
@@ -22,6 +24,7 @@
     --background: #0A0A0A;
     --foreground: #FBFBFB;
     --accent: #A855F7;
+    --accent-rgb: 168, 85, 247;
     --accent-hover: #9333EA;
     --accent-light: #1E1B4B;
   }
@@ -31,13 +34,13 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  line-height: 1.5;
+  line-height: var(--line-height-base);
   min-height: 100vh;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   background-image:
-    radial-gradient(circle at 12% -10%, rgb(124 58 237 / 0.11), transparent 36%),
-    radial-gradient(circle at 100% 0%, rgb(124 58 237 / 0.06), transparent 30%);
+    radial-gradient(circle at 12% -10%, rgba(var(--accent-rgb), 0.11), transparent 36%),
+    radial-gradient(circle at 100% 0%, rgba(var(--accent-rgb), 0.06), transparent 30%);
 }
 
 @supports (background: color-mix(in oklab, white 50%, black)) {
@@ -53,7 +56,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::selection {
-  background: rgb(124 58 237 / 0.28);
+  background: rgba(var(--accent-rgb), 0.28);
   color: var(--foreground);
 }
 
