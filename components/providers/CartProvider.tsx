@@ -70,6 +70,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       return false;
     }
 
+    const errorMsg = "Could not add item to cart. Please try again.";
     try {
       const token = await getToken();
       if (token) {
@@ -79,12 +80,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
           toast("Added to cart!", "success");
           return true;
         } else {
-          toast("Could not add item to cart. Please try again.", "error");
+          toast(errorMsg, "error");
         }
       }
     } catch (error) {
       console.error("Failed to add item:", error);
-      toast("Could not add item to cart. Please try again.", "error");
+      toast(errorMsg, "error");
     }
     return false;
   };
