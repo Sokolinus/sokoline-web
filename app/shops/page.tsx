@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Store, ArrowRight, ShieldCheck, MapPin } from "lucide-react";
+import { formatImageUrl } from "@/lib/api";
 
 async function getShops() {
   try {
@@ -32,7 +33,7 @@ export default async function ShopsPage() {
                 <div className="relative aspect-video w-full overflow-hidden rounded-t-xl bg-white border-b border-gray-100">
                   {shop.logo ? (
                     <Image 
-                      src={shop.logo} 
+                      src={formatImageUrl(shop.logo)} 
                       alt={shop.name} 
                       fill 
                       className="object-cover transition-transform duration-500 group-hover:scale-105" 

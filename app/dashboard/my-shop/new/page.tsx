@@ -57,7 +57,7 @@ export default function CreateShopPage() {
         if (shop) {
           await refetchShop();
           toast("Shop created successfully!", "success");
-          router.push("/dashboard");
+          router.push(`/dashboard/my-shop/success?shop=${shop.slug}`);
         } else {
           setError("Failed to create shop. The URL handle might already be taken.");
         }

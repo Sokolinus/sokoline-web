@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   SignInButton,
   SignUpButton,
@@ -20,40 +21,58 @@ const Navbar = () => {
   const cartItemCount = cart?.items.reduce((acc, item) => acc + item.quantity, 0) || 0;
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-sm border-b border-gray-100">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
+    <nav className="sticky top-0 z-50 w-full bg-white border-b border-gray-100 font-logo">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6">
 
         {/* LEFT: Logo + Nav Links */}
-        <div className="flex items-center gap-8">
-          <Link href="/" className="text-lg font-black tracking-tight text-gray-950">
-            sokoline
+        <div className="flex items-center gap-12">
+          <Link href="/" className="relative h-16 w-56 transition-opacity hover:opacity-90">
+            <Image
+              src="/logo.svg"
+              alt="Sokoline"
+              fill
+              className="object-contain"
+              priority
+            />
           </Link>
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-12">
             <Link
-              href="/products"
-              className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+              href="/"
+              className="text-[36px] font-medium text-black hover:text-gray-600 transition-colors"
             >
-              Browse
+              Home
             </Link>
             <Link
               href="/shops"
-              className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+              className="text-[36px] font-medium text-black hover:text-gray-600 transition-colors"
             >
               Shops
+            </Link>
+            <Link
+              href="/products"
+              className="text-[36px] font-medium text-black hover:text-gray-600 transition-colors"
+            >
+              Explore
             </Link>
           </div>
         </div>
 
         {/* RIGHT: Actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-6">
           {/* Cart */}
           <Link
             href="/cart"
-            className="relative flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+            className="relative flex h-14 w-14 items-center justify-center transition-transform hover:scale-105"
           >
-            <ShoppingBag size={20} />
+            <Image 
+              src="/CartIcon.svg" 
+              alt="Cart" 
+              width={84} 
+              height={83} 
+              className="object-contain"
+            />
             {cartItemCount > 0 && (
-              <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-violet-600 text-[9px] font-bold text-white">
+              <span className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full bg-black text-[12px] font-bold text-white">
                 {cartItemCount}
               </span>
             )}
@@ -65,26 +84,25 @@ const Navbar = () => {
               hasShop ? (
                 <Link
                   href="/dashboard"
-                  className="hidden md:flex items-center gap-1.5 h-9 px-4 rounded-lg bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition-colors"
+                  className="hidden md:flex items-center h-10 px-6 rounded-lg bg-black text-white text-sm font-bold hover:bg-gray-800 transition-colors"
                 >
                   Dashboard
                 </Link>
               ) : (
                 <Link
                   href="/dashboard/my-shop/new"
-                  className="hidden md:flex items-center gap-1.5 h-9 px-4 rounded-lg bg-violet-600 text-white text-sm font-semibold hover:bg-violet-700 transition-colors"
+                  className="hidden md:flex items-center h-10 px-6 rounded-lg bg-sokoline-accent text-black text-sm font-bold hover:opacity-90 transition-colors"
                 >
-                  <Store size={14} />
+                  <Store size={16} className="mr-2" />
                   Open a Shop
                 </Link>
               )
             )}
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center ml-2">
               <UserButton
                 appearance={{
                   elements: {
-                    userButtonAvatarBox: "w-8 h-8",
-                    userButtonTrigger: "focus:shadow-none focus:ring-0",
+                    userButtonAvatarBox: "w-9 h-9",
                   },
                 }}
               />
@@ -93,14 +111,14 @@ const Navbar = () => {
 
           {/* Guest */}
           <Show when="signed-out">
-            <div className="hidden md:flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-3">
               <SignInButton mode="modal">
-                <button className="h-9 px-4 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-100 transition-colors">
+                <button className="h-10 px-6 rounded-lg text-sm font-bold text-black hover:bg-gray-100 transition-colors">
                   Log in
                 </button>
               </SignInButton>
               <SignUpButton mode="modal">
-                <button className="h-9 px-4 rounded-lg bg-gray-900 text-white text-sm font-semibold hover:bg-gray-800 transition-colors">
+                <button className="h-10 px-6 rounded-lg bg-black text-white text-sm font-bold hover:bg-gray-800 transition-colors">
                   Sign up
                 </button>
               </SignUpButton>
@@ -109,11 +127,11 @@ const Navbar = () => {
 
           {/* Mobile toggle */}
           <button
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-50 transition-colors md:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-lg text-black hover:bg-gray-50 transition-colors md:hidden"
             onClick={() => setMobileOpen((prev) => !prev)}
             aria-label="Toggle menu"
           >
-            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>

@@ -1,11 +1,25 @@
 import { Product, Review, Cart, Order, Shop, Category } from "./types";
 
 const getApiUrl = () => {
+  // Client-side: use the local proxy defined in next.config.ts to avoid CORS
+  if (typeof window !== "undefined") {
+    return "/api/remote";
+  }
+  
   const envUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.sokoline.app";
   return `${envUrl.replace(/\/$/, "")}/api`;
 };
 
 const API_BASE_URL = getApiUrl();
+
+export function formatImageUrl(url: string | null | undefined): string {
+  if (!url) return "/placeholder-product.png";
+  if (url.startsWith("http")) return url;
+  
+  // Clean up API URL for image prefixing
+  const envUrl = (process.env.NEXT_PUBLIC_API_URL || "https://api.sokoline.app").replace(/\/$/, "");
+  return `${envUrl}${url.startsWith("/") ? "" : "/"}${url}`;
+}
 
 export const FALLBACK_CATEGORIES: Category[] = [
   { id: 1, name: "Art", slug: "art" },

@@ -17,46 +17,54 @@ export default function ProductInfoTabs({ product }: ProductInfoTabsProps) {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto px-4 md:px-6 py-10">
-      <div className="flex gap-6 border-b border-zinc-200 mb-6">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`pb-3 text-sm font-medium transition-all relative ${
-              activeTab === tab.id 
-                ? "text-zinc-900" 
-                : "text-zinc-500 hover:text-zinc-900"
-            }`}
-          >
-            {tab.label}
-            {activeTab === tab.id && (
-              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-sokoline-accent rounded-full" />
+    <div className="w-full bg-white flex flex-col gap-[50px] items-center py-[98px] px-[64px]">
+      <div className="w-full max-w-[1580px] flex flex-col gap-[67px]">
+        {/* Tab Headers */}
+        <div className="w-full border-b border-black flex items-center px-[28px] py-[30px]">
+          <div className="flex gap-[115px] items-center">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`text-[36px] transition-all relative ${
+                  activeTab === tab.id 
+                    ? "font-logo font-bold text-black" 
+                    : "font-logo font-normal text-black/60 hover:text-black"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Tab Content */}
+        <div className="w-full px-[43px] animate-in fade-in slide-in-from-bottom-2 duration-300">
+          <div className="font-sans text-[36px] text-black leading-relaxed flex flex-col gap-[55px]">
+            {activeTab === 'details' && (
+              <>
+                <p className="max-w-[1088px]">
+                  {product.description || "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin varius egestas urna, quis laoreet mi tincidunt sed. Etiam nec pharetra dolor, non luctus velit."}
+                </p>
+                <p>
+                  Donec pharetra pellentesque scelerisque. Aliquam scelerisque pellentesque sapien. Morbi ut dui tristique, dictum risus quis, malesuada lacus.
+                </p>
+              </>
             )}
-          </button>
-        ))}
-      </div>
+            
+            {activeTab === 'shipping' && (
+              <p>
+                {product.shipping_info || "Standard shipping applied by the student vendor. Contact the shop for more specific delivery timelines."}
+              </p>
+            )}
 
-      <div className="max-w-4xl animate-in fade-in slide-in-from-bottom-2 duration-300">
-        {activeTab === 'details' && (
-          <div className="max-w-none">
-            <p className="text-sm text-zinc-600 leading-relaxed">
-              {product.description}
-            </p>
+            {activeTab === 'returns' && (
+              <p>
+                {product.return_policy || "Returns are subject to the vendor's policy. Most student ventures offer exchanges within 7 days of purchase."}
+              </p>
+            )}
           </div>
-        )}
-        
-        {activeTab === 'shipping' && (
-          <div className="text-sm text-zinc-600 leading-relaxed">
-            {product.shipping_info || "Standard shipping applied by the student vendor. Contact the shop for more specific delivery timelines."}
-          </div>
-        )}
-
-        {activeTab === 'returns' && (
-          <div className="text-sm text-zinc-600 leading-relaxed">
-            {product.return_policy || "Returns are subject to the vendor's policy. Most student ventures offer exchanges within 7 days of purchase."}
-          </div>
-        )}
+        </div>
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ShoppingBag, ShieldCheck, MapPin, Star } from "lucide-react";
+import { formatImageUrl } from "@/lib/api";
 
 async function getShopData(slug: string) {
   try {
@@ -43,7 +44,7 @@ export default async function ShopPage({ params }: { params: Promise<{ slug: str
           <div className="flex flex-col md:flex-row gap-8 items-start md:items-center">
             {shop.logo ? (
                <div className="relative h-24 w-32 rounded-xl overflow-hidden border border-gray-200 bg-white shrink-0 shadow-sm">
-                 <Image src={shop.logo} alt={shop.name} fill className="object-cover" />
+                 <Image src={formatImageUrl(shop.logo)} alt={shop.name} fill className="object-cover" />
                </div>
             ) : (
               <div className="h-24 w-24 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-gray-300 shrink-0 shadow-sm">
@@ -85,7 +86,7 @@ export default async function ShopPage({ params }: { params: Promise<{ slug: str
                 <div className="relative aspect-square w-full overflow-hidden rounded-t-xl bg-white">
                   {product.images?.[0] ? (
                     <Image 
-                      src={product.images[0].image} 
+                      src={formatImageUrl(product.images[0].image)} 
                       alt={product.name} 
                       fill 
                       className="object-cover transition-transform duration-500 group-hover:scale-105" 

@@ -1,7 +1,7 @@
 import HeroSection from "@/components/HeroSection";
 import Image from "next/image";
 import Link from "next/link";
-import { getProducts, getCategories } from "@/lib/api";
+import { getProducts, getCategories, formatImageUrl } from "@/lib/api";
 import { mockProducts } from "@/lib/mockProducts";
 import { ShoppingBag, Star, ArrowRight } from "lucide-react";
 
@@ -27,7 +27,7 @@ export default async function Home() {
                     <Link href={`/products/${item.slug}`}>
                         <div className="relative aspect-square w-full overflow-hidden rounded-t-xl bg-white">
                             {item.images?.[0] ? (
-                              <Image src={item.images[0].image} alt={item.name} fill className="object-cover transition-transform group-hover:scale-105" />
+                              <Image src={formatImageUrl(item.images[0].image)} alt={item.name} fill className="object-cover transition-transform group-hover:scale-105" />
                             ) : (
                               <div className="flex items-center justify-center h-full text-gray-200">
                                 <ShoppingBag size={64} />

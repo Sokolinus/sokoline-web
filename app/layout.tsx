@@ -1,6 +1,6 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Montserrat, Quicksand } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -9,13 +9,13 @@ import { ShopProvider } from "@/components/providers/ShopProvider";
 import { ToastProvider } from "@/components/providers/ToastProvider";
 import ChatSheet from "@/components/ChatSheet";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const quicksand = Quicksand({
+  variable: "--font-quicksand",
   subsets: ["latin"],
 });
 
@@ -35,7 +35,7 @@ export default function RootLayout({
         <CartProvider>
           <ShopProvider>
             <html lang="en" className="antialiased">
-              <body className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
+              <body className={`${montserrat.variable} ${quicksand.variable} font-sans`}>
                 <Navbar />
                 <Breadcrumbs />
                 <main>

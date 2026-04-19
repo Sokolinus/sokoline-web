@@ -3,7 +3,6 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import React from "react";
-import { ChevronRight } from "lucide-react";
 
 const Breadcrumbs = () => {
   const pathname = usePathname();
@@ -14,28 +13,24 @@ const Breadcrumbs = () => {
   const pathSegments = pathname.split("/").filter((segment) => segment !== "");
   
   const breadcrumbs = [
-    { name: "home", link: "/" },
+    { name: "Home", link: "/" },
     ...pathSegments.map((segment, index) => {
       const link = `/${pathSegments.slice(0, index + 1).join("/")}`;
-      const name = segment.replace(/-/g, " ");
+      const name = segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, " ");
       return { name, link };
     }),
   ];
 
   return (
-    <nav className="mx-auto flex max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-      <ol className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest">
+    <nav className="w-full bg-white flex items-center justify-center px-[10px] py-[24px]">
+      <ol className="flex items-center gap-2 font-sans text-[24px] text-black">
         {breadcrumbs.map((path, index) => (
           <li key={index} className="flex items-center gap-2">
-            {index > 0 && (
-              <ChevronRight className="h-3 w-3 text-muted-foreground/40" strokeWidth={3} />
-            )}
+            {index > 0 && <span className="opacity-60">{`>`}</span>}
             <Link
               href={path.link}
-              className={`transition-colors hover:text-foreground ${
-                index === breadcrumbs.length - 1 
-                  ? "text-sokoline-accent" 
-                  : "text-muted-foreground/60"
+              className={`hover:text-black/60 transition-colors ${
+                index === breadcrumbs.length - 1 ? "font-bold" : "font-normal"
               }`}
             >
               {path.name}
