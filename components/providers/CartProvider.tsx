@@ -2,8 +2,9 @@
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { useAuth } from "@clerk/nextjs";
-import { Cart, CartItem } from "@/lib/types";
+import { Cart } from "@/lib/types";
 import { fetchCart, addToCart, removeFromCart, updateCartItem } from "@/lib/api";
+import { useToast } from "@/components/providers/ToastProvider";
 
 interface CartContextType {
   cart: Cart | null;
@@ -20,6 +21,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<Cart | null>(null);
   const [loading, setLoading] = useState(true);
   const { getToken, isLoaded, isSignedIn } = useAuth();
+  const { toast } = useToast();
 
   const refreshCart = async () => {
     if (!isSignedIn) {
@@ -43,14 +45,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (isLoaded) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       refreshCart();
     }
   }, [isLoaded, isSignedIn]);
 
   const addItem = async (productId: number, quantity: number = 1) => {
     if (!isSignedIn) {
-      // For now, only authenticated users can use the cart
-      alert("Please sign in to add items to your cart.");
+      toast("Sign in to add items to your cart.", "info");
       return;
     }
 
@@ -60,6 +62,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         const success = await addToCart(token, productId, quantity);
         if (success) {
           await refreshCart();
+          toast("Added to cart!", "success");
         }
       }
     } catch (error) {

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
 import { fetchMyShop, getCategories, createProduct } from "@/lib/api";
+import { useToast } from "@/components/providers/ToastProvider";
 import { Category } from "@/lib/types";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -23,7 +24,8 @@ import {
 export default function NewProductPage() {
   const router = useRouter();
   const { getToken, isLoaded, isSignedIn } = useAuth();
-  
+  const { toast } = useToast();
+
   const [categories, setCategories] = useState<Category[]>([]);
   const [shopId, setShopId] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -77,15 +79,17 @@ export default function NewProductPage() {
           price: parseFloat(formData.price),
           stock: parseInt(formData.stock)
         });
-        
+
         if (product) {
+          toast("Product listed successfully!", "success");
           router.push("/dashboard/products");
         } else {
           setError("Failed to create product. Please verify your inputs.");
         }
       }
-    } catch (err: any) {
-      setError(err.message || "An error occurred while saving.");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "An error occurred while saving.";
+      setError(msg);
     } finally {
       setIsSubmitting(false);
     }
@@ -94,7 +98,7 @@ export default function NewProductPage() {
   if (!isLoaded || !isSignedIn) return null;
 
   return (
-    <main className="bg-zinc-50 min-h-screen pb-20">
+    <main className="bg-gray-50 min-h-screen pb-20">
       <div className="max-w-4xl mx-auto px-4 py-8">
         <Button variant="ghost" size="sm" render={<Link href="/dashboard/products" />} className="mb-8 text-muted-foreground hover:text-foreground">
           <ArrowLeft size={14} className="mr-2" /> Products
@@ -103,15 +107,15 @@ export default function NewProductPage() {
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-2xl font-semibold text-foreground">Add product</h1>
           <div className="flex gap-3">
-             <Button variant="outline" render={<Link href="/dashboard/products" />}>Cancel</Button>
-             <Button 
-               onClick={handleSubmit}
-               disabled={isSubmitting || !shopId}
-               className="bg-sokoline-accent hover:bg-sokoline-accent/90"
-             >
-               {isSubmitting && <Loader2 size={14} className="mr-2 animate-spin" />}
-               Save product
-             </Button>
+            <Button variant="outline" render={<Link href="/dashboard/products" />}>Cancel</Button>
+            <Button
+              onClick={handleSubmit}
+              disabled={isSubmitting || !shopId}
+              className="bg-violet-600 hover:bg-violet-700 text-white"
+            >
+              {isSubmitting && <Loader2 size={14} className="mr-2 animate-spin" />}
+              Save product
+            </Button>
           </div>
         </div>
 
@@ -122,23 +126,23 @@ export default function NewProductPage() {
               <CardContent className="pt-6 space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="title">Title</Label>
-                  <Input 
+                  <Input
                     id="title"
                     required
                     value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    placeholder="Short sleeve t-shirt"
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="e.g. Vintage denim jacket"
                   />
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="description">Description</Label>
-                  <textarea 
+                  <textarea
                     id="description"
                     required
                     rows={6}
                     value={formData.description}
-                    onChange={(e) => setFormData({...formData, description: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                     placeholder="Describe your product in detail..."
                   />
@@ -148,33 +152,33 @@ export default function NewProductPage() {
 
             <Card className="shadow-sm">
               <CardHeader>
-                <CardTitle className="text-sm font-semibold">Pricing & Inventory</CardTitle>
+                <CardTitle className="text-sm font-semibold">Pricing &amp; Inventory</CardTitle>
               </CardHeader>
               <CardContent className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="price">Price (USD)</Label>
+                  <Label htmlFor="price">Price (KES)</Label>
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">$</span>
-                    <Input 
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">KES</span>
+                    <Input
                       id="price"
                       required
                       type="number"
                       step="0.01"
-                      className="pl-7"
+                      className="pl-12"
                       value={formData.price}
-                      onChange={(e) => setFormData({...formData, price: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                       placeholder="0.00"
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="stock">Quantity</Label>
-                  <Input 
+                  <Input
                     id="stock"
                     required
                     type="number"
                     value={formData.stock}
-                    onChange={(e) => setFormData({...formData, stock: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
                     placeholder="0"
                   />
                 </div>
@@ -183,25 +187,25 @@ export default function NewProductPage() {
 
             <Card className="shadow-sm">
               <CardHeader>
-                <CardTitle className="text-sm font-semibold">Shipping & Returns</CardTitle>
+                <CardTitle className="text-sm font-semibold">Shipping &amp; Returns</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="shipping">Shipping Policy</Label>
-                  <Input 
+                  <Input
                     id="shipping"
                     value={formData.shipping_info}
-                    onChange={(e) => setFormData({...formData, shipping_info: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, shipping_info: e.target.value })}
                     placeholder="e.g. Ships within 24 hours"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="return">Return Policy</Label>
-                  <Input 
+                  <Input
                     id="return"
                     value={formData.return_policy}
-                    onChange={(e) => setFormData({...formData, return_policy: e.target.value})}
-                    placeholder="e.g. 30-day money back guarantee"
+                    onChange={(e) => setFormData({ ...formData, return_policy: e.target.value })}
+                    placeholder="e.g. 7-day return policy"
                   />
                 </div>
               </CardContent>
@@ -212,14 +216,13 @@ export default function NewProductPage() {
           <div className="space-y-6">
             <Card className="shadow-sm">
               <CardHeader>
-                <CardTitle className="text-sm font-semibold">Organization</CardTitle>
+                <CardTitle className="text-sm font-semibold">Category</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  <Label>Category</Label>
-                  <Select 
-                    value={formData.category} 
-                    onValueChange={(val: string | null) => setFormData({...formData, category: val || ""})}
+                  <Select
+                    value={formData.category}
+                    onValueChange={(val: string | null) => setFormData({ ...formData, category: val || "" })}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select category" />

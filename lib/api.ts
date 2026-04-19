@@ -2,11 +2,21 @@ import { Product, Review, Cart, Order, Shop, Category } from "./types";
 
 const getApiUrl = () => {
   const envUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.sokoline.app";
-  // Remove trailing slash if exists, then add /api
   return `${envUrl.replace(/\/$/, "")}/api`;
 };
 
 const API_BASE_URL = getApiUrl();
+
+export const FALLBACK_CATEGORIES: Category[] = [
+  { id: 1, name: "Art", slug: "art" },
+  { id: 2, name: "Fashion", slug: "fashion" },
+  { id: 3, name: "Electronics", slug: "electronics" },
+  { id: 4, name: "Food & Drink", slug: "food-drink" },
+  { id: 5, name: "Books", slug: "books" },
+  { id: 6, name: "Beauty", slug: "beauty" },
+  { id: 7, name: "Services", slug: "services" },
+  { id: 8, name: "Home", slug: "home" },
+];
 
 async function authenticatedFetch(endpoint: string, token?: string | null, options: RequestInit = {}) {
   const headers = {
@@ -26,12 +36,13 @@ async function authenticatedFetch(endpoint: string, token?: string | null, optio
 export async function getCategories(): Promise<Category[]> {
   try {
     const response = await fetch(`${API_BASE_URL}/categories/`);
-    if (!response.ok) return [];
+    if (!response.ok) return FALLBACK_CATEGORIES;
     const data = await response.json();
-    return data.results || data;
+    const cats = data.results || data;
+    return cats.length > 0 ? cats : FALLBACK_CATEGORIES;
   } catch (error) {
     console.error("Error fetching categories:", error);
-    return [];
+    return FALLBACK_CATEGORIES;
   }
 }
 

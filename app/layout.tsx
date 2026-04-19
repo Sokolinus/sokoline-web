@@ -5,6 +5,8 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { CartProvider } from "@/components/providers/CartProvider";
+import { ShopProvider } from "@/components/providers/ShopProvider";
+import { ToastProvider } from "@/components/providers/ToastProvider";
 import ChatSheet from "@/components/ChatSheet";
 
 const geistSans = Geist({
@@ -29,18 +31,22 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <CartProvider>
-        <html lang="en" className="antialiased">
-          <body className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
-            <Navbar />
-            <Breadcrumbs />
-            <main>
-              {children}
-            </main>
-            <ChatSheet />
-          </body>
-        </html>
-      </CartProvider>
+      <ToastProvider>
+        <CartProvider>
+          <ShopProvider>
+            <html lang="en" className="antialiased">
+              <body className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
+                <Navbar />
+                <Breadcrumbs />
+                <main>
+                  {children}
+                </main>
+                <ChatSheet />
+              </body>
+            </html>
+          </ShopProvider>
+        </CartProvider>
+      </ToastProvider>
     </ClerkProvider>
   );
 }
