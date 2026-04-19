@@ -41,9 +41,11 @@ export default function ProductCard({ product, className = "" }: ProductCardProp
     setIsAdding(true);
     try {
       // Use main product ID as expected by backend CartItem model
-      await addItem(product.id, 1);
-      setIsDone(true);
-      setTimeout(() => setIsDone(false), 2000);
+      const success = await addItem(product.id, 1);
+      if (success) {
+        setIsDone(true);
+        setTimeout(() => setIsDone(false), 2000);
+      }
     } catch (error) {
       console.error("Failed to add to cart:", error);
     } finally {
