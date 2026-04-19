@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   SignInButton,
   SignUpButton,
@@ -10,121 +9,170 @@ import {
   Show,
 } from "@clerk/nextjs";
 import { useCart } from "@/components/providers/CartProvider";
-import { ShoppingBag, Search, Menu, Package, LayoutDashboard, X } from "lucide-react";
+import { useShop } from "@/components/providers/ShopProvider";
+import { ShoppingBag, Menu, X, Store } from "lucide-react";
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const router = useRouter();
-  
+
   const { cart } = useCart();
+  const { hasShop, loading: shopLoading } = useShop();
   const cartItemCount = cart?.items.reduce((acc, item) => acc + item.quantity, 0) || 0;
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchQuery("");
-    }
-  };
-
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white py-2 px-6">
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between">
-        
-        {/* LEFT: LOGO & NAV */}
-        <div className="flex items-center gap-8">
-          <Link href="/" className="flex items-center">
-            <span className="text-xl font-bold tracking-tight text-gray-900">
-              metric
-            </span>
-          </Link>
+    <nav className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-sm border-b border-gray-100">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
 
-          <div className="hidden items-center gap-6 md:flex text-lg font-semibold">
-            <Link href="/products" className="hover:text-gray-500 transition-colors">
+        {/* LEFT: Logo + Nav Links */}
+        <div className="flex items-center gap-8">
+          <Link href="/" className="text-lg font-black tracking-tight text-gray-950">
+            sokoline
+          </Link>
+          <div className="hidden md:flex items-center gap-1">
+            <Link
+              href="/products"
+              className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+            >
               Browse
             </Link>
-            <Link href="/shops" className="hover:text-gray-500 transition-colors">
+            <Link
+              href="/shops"
+              className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+            >
               Shops
             </Link>
           </div>
         </div>
 
-        {/* RIGHT: ACTIONS */}
-        <div className="flex items-center gap-4 sm:gap-6">
+        {/* RIGHT: Actions */}
+        <div className="flex items-center gap-2">
+          {/* Cart */}
+          <Link
+            href="/cart"
+            className="relative flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+          >
+            <ShoppingBag size={20} />
+            {cartItemCount > 0 && (
+              <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-violet-600 text-[9px] font-bold text-white">
+                {cartItemCount}
+              </span>
+            )}
+          </Link>
+
+          {/* Authenticated */}
           <Show when="signed-in">
-             <Link
-              href="/dashboard"
-              className="px-6 py-2.5 text-lg font-semibold bg-gray-500 text-white rounded-xl hover:bg-gray-700 transition-colors hidden md:block"
-            >
-              Dashboard
-            </Link>
-            
-            <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border border-gray-200">
-              <UserButton 
+            {!shopLoading && (
+              hasShop ? (
+                <Link
+                  href="/dashboard"
+                  className="hidden md:flex items-center gap-1.5 h-9 px-4 rounded-lg bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition-colors"
+                >
+                  Dashboard
+                </Link>
+              ) : (
+                <Link
+                  href="/dashboard/my-shop/new"
+                  className="hidden md:flex items-center gap-1.5 h-9 px-4 rounded-lg bg-violet-600 text-white text-sm font-semibold hover:bg-violet-700 transition-colors"
+                >
+                  <Store size={14} />
+                  Open a Shop
+                </Link>
+              )
+            )}
+            <div className="flex items-center justify-center">
+              <UserButton
                 appearance={{
                   elements: {
-                    userButtonAvatarBox: "w-full h-full",
-                    userButtonTrigger: "focus:shadow-none focus:ring-0"
-                  }
+                    userButtonAvatarBox: "w-8 h-8",
+                    userButtonTrigger: "focus:shadow-none focus:ring-0",
+                  },
                 }}
               />
             </div>
           </Show>
 
-          <Link href="/cart" className="relative p-2 text-gray-500 hover:text-teal-500 transition-colors">
-            <ShoppingBag size={24} strokeWidth={2} />
-            {cartItemCount > 0 && (
-              <span className="absolute right-0 top-0 flex h-5 w-5 items-center justify-center rounded-full bg-teal-500 text-[10px] font-bold text-white">
-                {cartItemCount}
-              </span>
-            )}
-          </Link>
-          
+          {/* Guest */}
           <Show when="signed-out">
-            <div className="hidden items-center gap-4 md:flex">
+            <div className="hidden md:flex items-center gap-2">
               <SignInButton mode="modal">
-                <button className="px-6 py-2.5 text-lg font-semibold bg-gray-500 text-white rounded-xl hover:bg-gray-700 transition-colors">
+                <button className="h-9 px-4 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-100 transition-colors">
                   Log in
                 </button>
               </SignInButton>
               <SignUpButton mode="modal">
-                <button className="px-6 py-2.5 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700 transition-colors shadow-sm">
+                <button className="h-9 px-4 rounded-lg bg-gray-900 text-white text-sm font-semibold hover:bg-gray-800 transition-colors">
                   Sign up
                 </button>
               </SignUpButton>
             </div>
           </Show>
 
+          {/* Mobile toggle */}
           <button
-            className="p-2 text-gray-500 md:hidden"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-50 transition-colors md:hidden"
             onClick={() => setMobileOpen((prev) => !prev)}
+            aria-label="Toggle menu"
           >
-            <Menu size={24} />
+            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </div>
-      
-      {/* Mobile Nav */}
+
+      {/* Mobile menu */}
       {mobileOpen && (
-        <div className="border-t border-gray-100 bg-white p-4 md:hidden">
-          <nav className="flex flex-col gap-2 font-semibold">
-            <Link href="/products" className="p-2 rounded-xl hover:bg-gray-100" onClick={() => setMobileOpen(false)}>Browse</Link>
-            <Link href="/shops" className="p-2 rounded-xl hover:bg-gray-100" onClick={() => setMobileOpen(false)}>Shops</Link>
+        <div className="border-t border-gray-100 bg-white px-4 py-4 md:hidden">
+          <div className="flex flex-col gap-1">
+            <Link
+              href="/products"
+              className="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              onClick={() => setMobileOpen(false)}
+            >
+              Browse
+            </Link>
+            <Link
+              href="/shops"
+              className="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              onClick={() => setMobileOpen(false)}
+            >
+              Shops
+            </Link>
+
             <Show when="signed-in">
-              <Link href="/dashboard" className="p-2 rounded-xl hover:bg-gray-100" onClick={() => setMobileOpen(false)}>Dashboard</Link>
+              {hasShop ? (
+                <Link
+                  href="/dashboard"
+                  className="rounded-lg px-3 py-2.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 transition-colors"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Dashboard
+                </Link>
+              ) : (
+                <Link
+                  href="/dashboard/my-shop/new"
+                  className="mt-1 flex items-center justify-center gap-2 rounded-lg bg-violet-600 px-3 py-2.5 text-sm font-semibold text-white"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <Store size={14} />
+                  Open a Shop
+                </Link>
+              )}
             </Show>
-            <Show when="signed-out" >
-              <div className="mt-2 flex flex-col gap-2 pt-2 border-t border-gray-100">
+
+            <Show when="signed-out">
+              <div className="mt-2 flex flex-col gap-2 border-t border-gray-100 pt-3">
                 <SignInButton mode="modal">
-                  <button className="w-full rounded-xl bg-gray-500 py-3 text-lg font-semibold text-white">Log in</button>
+                  <button className="w-full rounded-lg border border-gray-200 py-2.5 text-sm font-semibold text-gray-800 hover:bg-gray-50 transition-colors">
+                    Log in
+                  </button>
                 </SignInButton>
                 <SignUpButton mode="modal">
-                  <button className="w-full rounded-xl bg-teal-500 py-3 text-lg font-semibold text-white">Sign up</button>
+                  <button className="w-full rounded-lg bg-gray-900 py-2.5 text-sm font-semibold text-white hover:bg-gray-800 transition-colors">
+                    Sign up
+                  </button>
                 </SignUpButton>
               </div>
             </Show>
-          </nav>
+          </div>
         </div>
       )}
     </nav>

@@ -118,4 +118,6 @@ export interface Shop {
   logo?: string;
   owner: number;
   products?: any[];
+  mpesa_phone?: string;
+  paybill_number?: string;
 }
