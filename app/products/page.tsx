@@ -1,32 +1,10 @@
-import Link from "next/link";
-import { SearchX } from "lucide-react";
 import { Product } from "@/lib/types";
-import { mockProducts } from "@/lib/mockProducts";
-import { getCategories } from "@/lib/api";
+import { getCategories, getProducts } from "@/lib/api";
 import CategoryFilter from "@/components/CategoryFilter";
 import { Suspense } from "react";
 import ProductCard from "@/components/sokoline/ProductCard";
-
-async function getProducts(search?: string, category?: string) {
-  try {
-    const envUrl = (process.env.NEXT_PUBLIC_API_URL || "https://api.sokoline.app").replace(/\/$/, "");
-    const params = new URLSearchParams();
-    if (search) params.append("search", search);
-    if (category) params.append("category", category);
-
-    const res = await fetch(`${envUrl}/api/products/?${params.toString()}`, { next: { revalidate: 10 } });
-    if (!res.ok) return mockProducts;
-    const data = await res.json();
-    const products = data.results || data;
-
-    if ((search || category) && products.length === 0) return [];
-
-    return products.length > 0 ? products : mockProducts;
-  } catch (error) {
-    console.error("Error fetching products page data:", error);
-    return mockProducts;
-  }
-}
+import { SearchX } from "lucide-react";
+import Link from "next/link";
 
 export default async function ProductsPage({
   searchParams,
@@ -34,8 +12,10 @@ export default async function ProductsPage({
   searchParams: Promise<{ search?: string; category?: string }>;
 }) {
   const { search, category } = await searchParams;
+  
+  // Use the standardized API functions
   const [products, categories] = await Promise.all([
-    getProducts(search, category),
+    getProducts(category ? { category } : (search ? { search } : undefined)),
     getCategories(),
   ]);
 
@@ -88,9 +68,7 @@ export default async function ProductsPage({
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[10px] pb-24">
             {products.map((product: Product) => (
-              <Link key={product.id} href={`/products/${product.slug}`}>
-                <ProductCard product={product} />
-              </Link>
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         )}

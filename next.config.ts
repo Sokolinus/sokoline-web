@@ -6,22 +6,24 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'api.sokoline.app',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "sokoline.sfo3.cdn.digitaloceanspaces.com",
+        port: "",
+        pathname: "/media/**",
       },
       {
-        protocol: 'https',
-        hostname: 'sokoline.sfo3.cdn.digitaloceanspaces.com',
-        pathname: '/**',
-      }
+        protocol: "https",
+        hostname: "api.sokoline.app",
+        port: "",
+        pathname: "/media/**",
+      },
     ],
   },
   async rewrites() {
     return [
       {
         source: "/api/remote/:path*",
-        destination: "https://api.sokoline.app/api/:path*",
+        destination: "https://api.sokoline.app/api/:path*/", // Added trailing slash for Django
       },
     ];
   },

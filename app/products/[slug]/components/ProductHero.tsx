@@ -35,8 +35,8 @@ export default function ProductHero({ product }: ProductHeroProps) {
   const handleAddToCart = async () => {
     if (addState !== "idle") return;
     setAddState("adding");
-    const idToTrack = selectedVariant ? selectedVariant.id : product.id;
-    await addItem(idToTrack, 1);
+    // Use main product ID as expected by backend CartItem model
+    await addItem(product.id, 1);
     setAddState("done");
     setTimeout(() => setAddState("idle"), 1400);
   };

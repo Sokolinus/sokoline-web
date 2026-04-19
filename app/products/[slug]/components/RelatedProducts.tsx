@@ -43,9 +43,7 @@ export default function RelatedProducts({ productId }: RelatedProductsProps) {
           ))
         ) : (
           products.map((product) => (
-            <Link key={product.id} href={`/products/${product.slug}`}>
-              <ProductCard product={product} />
-            </Link>
+            <ProductCard key={product.id} product={product} />
           ))
         )}
       </div>

@@ -23,9 +23,9 @@ export default function AnimatedText() {
   const currentPhrase = phrases[index];
 
   return (
-    <div className="relative inline-block h-[1.3em] w-[18ch] max-w-full overflow-hidden align-middle text-zinc-500">
+    <span className="relative inline-block h-[1.3em] w-[18ch] max-w-full overflow-hidden align-middle text-zinc-500">
       <AnimatePresence mode="wait">
-        <motion.div
+        <motion.span
           key={currentPhrase}
           className="absolute left-0 top-0 flex whitespace-nowrap gap-x-[0.3em] py-1"
         >
@@ -45,8 +45,8 @@ export default function AnimatedText() {
               </motion.span>
             </span>
           ))}
-        </motion.div>
+        </motion.span>
       </AnimatePresence>
-    </div>
+    </span>
   );
 }

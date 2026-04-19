@@ -1,22 +1,24 @@
 import { Product, Review, Cart, Order, Shop, Category } from "./types";
 
-const getApiUrl = () => {
-  // Client-side: use the local proxy defined in next.config.ts to avoid CORS
+/**
+ * Returns the correct base URL for API calls.
+ * On the client, it uses a local proxy to avoid CORS.
+ * On the server, it uses the absolute URL.
+ */
+export const getApiBaseUrl = () => {
   if (typeof window !== "undefined") {
     return "/api/remote";
   }
   
   const envUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.sokoline.app";
-  return `${envUrl.replace(/\/$/, "")}/api`;
+  const cleanUrl = envUrl.replace(/\/$/, "");
+  return `${cleanUrl}/api`;
 };
-
-const API_BASE_URL = getApiUrl();
 
 export function formatImageUrl(url: string | null | undefined): string {
   if (!url) return "/placeholder-product.png";
   if (url.startsWith("http")) return url;
   
-  // Clean up API URL for image prefixing
   const envUrl = (process.env.NEXT_PUBLIC_API_URL || "https://api.sokoline.app").replace(/\/$/, "");
   return `${envUrl}${url.startsWith("/") ? "" : "/"}${url}`;
 }
@@ -33,13 +35,17 @@ export const FALLBACK_CATEGORIES: Category[] = [
 ];
 
 async function authenticatedFetch(endpoint: string, token?: string | null, options: RequestInit = {}) {
+  const baseUrl = getApiBaseUrl();
   const headers = {
     "Content-Type": "application/json",
     ...options.headers,
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+  // Ensure endpoint starts with /
+  const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+
+  const response = await fetch(`${baseUrl}${cleanEndpoint}`, {
     ...options,
     headers,
   });
@@ -49,7 +55,8 @@ async function authenticatedFetch(endpoint: string, token?: string | null, optio
 
 export async function getCategories(): Promise<Category[]> {
   try {
-    const response = await fetch(`${API_BASE_URL}/categories/`);
+    const baseUrl = getApiBaseUrl();
+    const response = await fetch(`${baseUrl}/categories/`);
     if (!response.ok) return FALLBACK_CATEGORIES;
     const data = await response.json();
     const cats = data.results || data;
@@ -76,7 +83,8 @@ export async function createProduct(token: string, data: any): Promise<Product |
 
 export async function getProduct(slug: string): Promise<Product | null> {
   try {
-    const response = await fetch(`${API_BASE_URL}/products/${slug}/`, {
+    const baseUrl = getApiBaseUrl();
+    const response = await fetch(`${baseUrl}/products/${slug}/`, {
       next: { revalidate: 3600 }, // Cache for 1 hour
     });
     if (!response.ok) return null;
@@ -89,8 +97,9 @@ export async function getProduct(slug: string): Promise<Product | null> {
 
 export async function getProducts(params?: Record<string, string>): Promise<Product[]> {
   try {
+    const baseUrl = getApiBaseUrl();
     const query = params ? `?${new URLSearchParams(params).toString()}` : "";
-    const response = await fetch(`${API_BASE_URL}/products/${query}`);
+    const response = await fetch(`${baseUrl}/products/${query}`);
     if (!response.ok) return [];
     const data = await response.json();
     return data.results || data;
@@ -102,7 +111,8 @@ export async function getProducts(params?: Record<string, string>): Promise<Prod
 
 export async function getRelatedProducts(productId: number): Promise<Product[]> {
   try {
-    const response = await fetch(`${API_BASE_URL}/products/${productId}/related_products/`);
+    const baseUrl = getApiBaseUrl();
+    const response = await fetch(`${baseUrl}/products/${productId}/related_products/`);
     if (!response.ok) return [];
     return response.json();
   } catch (error) {
@@ -113,13 +123,43 @@ export async function getRelatedProducts(productId: number): Promise<Product[]> 
 
 export async function getReviews(productId: number, limit = 10, offset = 0): Promise<Review[]> {
   try {
-    const response = await fetch(`${API_BASE_URL}/reviews/?product=${productId}&limit=${limit}&offset=${offset}`);
+    const baseUrl = getApiBaseUrl();
+    const response = await fetch(`${baseUrl}/reviews/?product=${productId}&limit=${limit}&offset=${offset}`);
     if (!response.ok) return [];
     const data = await response.json();
     return data.results || data; // Handle paginated response
   } catch (error) {
     console.error(`Error fetching reviews for ${productId}:`, error);
     return [];
+  }
+}
+
+export async function getShops(): Promise<Shop[]> {
+  try {
+    const baseUrl = getApiBaseUrl();
+    const response = await fetch(`${baseUrl}/shops/`, {
+      next: { revalidate: 3600 },
+    });
+    if (!response.ok) return [];
+    const data = await response.json();
+    return data.results || data;
+  } catch (error) {
+    console.error("Error fetching shops:", error);
+    return [];
+  }
+}
+
+export async function getShop(slug: string): Promise<Shop | null> {
+  try {
+    const baseUrl = getApiBaseUrl();
+    const response = await fetch(`${baseUrl}/shops/${slug}/`, {
+      next: { revalidate: 60 },
+    });
+    if (!response.ok) return null;
+    return response.json();
+  } catch (error) {
+    console.error(`Error fetching shop ${slug}:`, error);
+    return null;
   }
 }
 
@@ -138,12 +178,25 @@ export async function fetchMyShop(token: string): Promise<Shop | null> {
   }
 }
 
-export async function createShop(token: string, data: Partial<Shop>): Promise<Shop | null> {
+export async function createShop(token: string, data: any): Promise<Shop | null> {
   try {
-    const response = await authenticatedFetch("/shops/", token, {
+    const baseUrl = getApiBaseUrl();
+    const isFormData = data instanceof FormData;
+    
+    const headers: Record<string, string> = {
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    };
+
+    if (!isFormData) {
+      headers["Content-Type"] = "application/json";
+    }
+
+    const response = await fetch(`${baseUrl}/shops/`, {
       method: "POST",
-      body: JSON.stringify(data),
+      headers,
+      body: isFormData ? data : JSON.stringify(data),
     });
+
     if (!response.ok) return null;
     return response.json();
   } catch (error) {
@@ -168,7 +221,8 @@ export async function updateShop(token: string, shopId: number, data: Partial<Sh
 
 export async function fetchCart(token: string): Promise<Cart | null> {
   try {
-    const response = await authenticatedFetch("/cart/my_cart/", token);
+    const timestamp = new Date().getTime();
+    const response = await authenticatedFetch(`/cart/my_cart/?t=${timestamp}`, token);
     if (!response.ok) return null;
     return response.json();
   } catch (error) {
