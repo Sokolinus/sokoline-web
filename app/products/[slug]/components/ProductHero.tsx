@@ -36,9 +36,13 @@ export default function ProductHero({ product }: ProductHeroProps) {
     if (addState !== "idle") return;
     setAddState("adding");
     // Use main product ID as expected by backend CartItem model
-    await addItem(product.id, 1);
-    setAddState("done");
-    setTimeout(() => setAddState("idle"), 1400);
+    const success = await addItem(product.id, 1);
+    if (success) {
+      setAddState("done");
+      setTimeout(() => setAddState("idle"), 1400);
+    } else {
+      setAddState("idle");
+    }
   };
 
   const uniqueColors = product.variants

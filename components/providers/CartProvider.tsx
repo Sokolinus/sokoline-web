@@ -9,7 +9,7 @@ import { useToast } from "@/components/providers/ToastProvider";
 interface CartContextType {
   cart: Cart | null;
   loading: boolean;
-  addItem: (productId: number, quantity?: number) => Promise<void>;
+  addItem: (productId: number, quantity?: number) => Promise<boolean>;
   removeItem: (itemId: number) => Promise<void>;
   updateQuantity: (itemId: number, quantity: number) => Promise<void>;
   refreshCart: () => Promise<void>;
@@ -64,12 +64,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, [isLoaded, isSignedIn, refreshCart]);
 
-  const addItem = async (productId: number, quantity: number = 1) => {
+  const addItem = async (productId: number, quantity: number = 1): Promise<boolean> => {
     if (!isSignedIn) {
       toast("Sign in to add items to your cart.", "info");
-      return;
+      return false;
     }
 
+    const errorMsg = "Could not add item to cart. Please try again.";
     try {
       const token = await getToken();
       if (token) {
@@ -77,11 +78,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
         if (success) {
           await refreshCart();
           toast("Added to cart!", "success");
+          return true;
+        } else {
+          toast(errorMsg, "error");
         }
       }
     } catch (error) {
       console.error("Failed to add item:", error);
+      toast(errorMsg, "error");
     }
+    return false;
   };
 
   const removeItem = async (itemId: number) => {
