@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import React, { createContext, useContext, useEffect, useState, ReactNode, useCallback } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { Cart } from "@/lib/types";
 import { fetchCart, addToCart, removeFromCart, updateCartItem } from "@/lib/api";
@@ -23,7 +23,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const { getToken, isLoaded, isSignedIn } = useAuth();
   const { toast } = useToast();
 
-  const refreshCart = async () => {
+  const refreshCart = useCallback(async () => {
     if (!isSignedIn) {
       setCart(null);
       setLoading(false);
@@ -41,14 +41,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [isSignedIn, getToken]);
 
   useEffect(() => {
     if (isLoaded) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       refreshCart();
     }
-  }, [isLoaded, isSignedIn]);
+  }, [isLoaded, isSignedIn, refreshCart]);
 
   const addItem = async (productId: number, quantity: number = 1) => {
     if (!isSignedIn) {

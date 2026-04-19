@@ -56,8 +56,7 @@ export default function CheckoutPage() {
     return () => {
       if (interval) clearInterval(interval);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderId, pollingStatus, getToken, refreshCart, router]);
+  }, [orderId, pollingStatus, getToken, refreshCart, router, toast]);
 
   if (!isLoaded) return null;
 
