@@ -7,6 +7,7 @@ import { createShop } from "@/lib/api";
 import { useShop } from "@/components/providers/ShopProvider";
 import { useToast } from "@/components/providers/ToastProvider";
 import { Store, Loader2, ArrowRight, Phone, Hash } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
 function slugify(str: string) {
@@ -186,11 +187,21 @@ export default function CreateShopPage() {
             </div>
           </div>
 
-          {error && (
-            <div className="rounded-xl bg-red-50 border border-red-100 px-4 py-3 text-sm font-medium text-red-600">
-              {error}
-            </div>
-          )}
+          <AnimatePresence>
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -6, height: 0 }}
+                animate={{ opacity: 1, y: 0, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden"
+              >
+                <div className="rounded-xl bg-red-50 border border-red-100 px-4 py-3 text-sm font-medium text-red-600">
+                  {error}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <div className="flex gap-3">
             <Link
@@ -199,9 +210,10 @@ export default function CreateShopPage() {
             >
               Cancel
             </Link>
-            <button
+            <motion.button
               type="submit"
               disabled={isSubmitting}
+              whileTap={{ scale: 0.97 }}
               className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-violet-600 py-3 text-sm font-semibold text-white hover:bg-violet-700 transition-all disabled:opacity-60"
             >
               {isSubmitting ? (
@@ -212,7 +224,7 @@ export default function CreateShopPage() {
                   <ArrowRight size={16} />
                 </>
               )}
-            </button>
+            </motion.button>
           </div>
         </form>
       </div>

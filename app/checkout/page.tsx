@@ -8,6 +8,7 @@ import { useToast } from "@/components/providers/ToastProvider";
 import { checkoutCart, getOrderPaymentStatus } from "@/lib/api";
 import { CheckCircle2, ArrowLeft, Loader2, Phone, XCircle, ShieldCheck } from "lucide-react";
 import Link from 'next/link';
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function CheckoutPage() {
   const { cart, refreshCart } = useCart();
@@ -98,13 +99,35 @@ export default function CheckoutPage() {
   if (isSuccess) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[70vh] text-center px-6">
-        <div className="h-20 w-20 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-500 mb-8 border border-emerald-100 shadow-sm">
-          <CheckCircle2 size={44} />
-        </div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-3 tracking-tight">Payment confirmed</h1>
-        <p className="text-gray-500 max-w-sm text-base">
-          Your order has been placed. Redirecting to your orders...
-        </p>
+        {/* Animated success icon */}
+        <motion.div
+          initial={{ scale: 0.5, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.05 }}
+          className="relative mb-8"
+        >
+          {/* Outer ring pulse */}
+          <motion.span
+            initial={{ scale: 1, opacity: 0.5 }}
+            animate={{ scale: 1.8, opacity: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            className="absolute inset-0 rounded-2xl bg-emerald-200 block"
+          />
+          <div className="relative h-20 w-20 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-500 border border-emerald-100 shadow-sm">
+            <CheckCircle2 size={44} />
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.3 }}
+        >
+          <h1 className="text-3xl font-bold text-gray-900 mb-3 tracking-tight">Payment confirmed</h1>
+          <p className="text-gray-500 max-w-sm text-base">
+            Your order has been placed. Redirecting to your orders…
+          </p>
+        </motion.div>
       </div>
     );
   }
@@ -137,62 +160,90 @@ export default function CheckoutPage() {
             </div>
 
             <div className="p-8">
-              {pollingStatus === "pending" ? (
-                <div className="flex flex-col items-center text-center gap-5 py-8">
-                  <div className="h-16 w-16 rounded-2xl bg-violet-50 flex items-center justify-center">
-                    <Loader2 size={32} className="animate-spin text-violet-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-gray-900">Check your phone</h3>
-                    <p className="text-gray-500 text-sm mt-1">Enter your M-Pesa PIN to complete the transaction.</p>
-                  </div>
-                </div>
-              ) : (
-                <form onSubmit={handleCheckout} className="space-y-6">
-                  <div className="space-y-2">
-                    <label htmlFor="phone" className="block text-xs font-semibold uppercase tracking-widest text-gray-400">
-                      M-Pesa phone number
-                    </label>
-                    <div className="relative">
-                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                        <Phone size={18} />
-                      </div>
-                      <input
-                        id="phone"
-                        type="tel"
-                        placeholder="2547XXXXXXXX"
-                        value={phoneNumber}
-                        onChange={(e) => setPhoneNumber(e.target.value)}
-                        disabled={isProcessing}
-                        className="w-full rounded-xl border border-gray-200 bg-gray-50 py-3 pl-12 pr-4 text-sm font-medium text-gray-900 outline-none transition-all focus:border-violet-500 focus:bg-white focus:ring-2 focus:ring-violet-100 disabled:opacity-50"
-                      />
-                    </div>
-                    <p className="text-[11px] text-gray-400">Format: 254700000000</p>
-                  </div>
-
-                  {error && (
-                    <div className="flex items-center gap-2 rounded-xl bg-red-50 border border-red-100 px-4 py-3 text-sm text-red-600">
-                      <XCircle size={16} className="shrink-0" />
-                      {error}
-                    </div>
-                  )}
-
-                  <button
-                    type="submit"
-                    disabled={isProcessing}
-                    className="w-full rounded-xl bg-violet-600 py-4 text-sm font-semibold text-white hover:bg-violet-700 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              <AnimatePresence mode="wait">
+                {pollingStatus === "pending" ? (
+                  <motion.div
+                    key="pending"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="flex flex-col items-center text-center gap-5 py-8"
                   >
-                    {isProcessing ? (
-                      <>
-                        <Loader2 size={18} className="animate-spin" />
-                        Processing...
-                      </>
-                    ) : (
-                      "Pay now"
-                    )}
-                  </button>
-                </form>
-              )}
+                    <div className="h-16 w-16 rounded-2xl bg-violet-50 flex items-center justify-center">
+                      <Loader2 size={32} className="animate-spin text-violet-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-900">Check your phone</h3>
+                      <p className="text-gray-500 text-sm mt-1">Enter your M-Pesa PIN to complete the transaction.</p>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <motion.form
+                    key="form"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onSubmit={handleCheckout}
+                    className="space-y-6"
+                  >
+                    <div className="space-y-2">
+                      <label htmlFor="phone" className="block text-xs font-semibold uppercase tracking-widest text-gray-400">
+                        M-Pesa phone number
+                      </label>
+                      <div className="relative">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                          <Phone size={18} />
+                        </div>
+                        <input
+                          id="phone"
+                          type="tel"
+                          placeholder="2547XXXXXXXX"
+                          value={phoneNumber}
+                          onChange={(e) => setPhoneNumber(e.target.value)}
+                          disabled={isProcessing}
+                          className="w-full rounded-xl border border-gray-200 bg-gray-50 py-3 pl-12 pr-4 text-sm font-medium text-gray-900 outline-none transition-all focus:border-violet-500 focus:bg-white focus:ring-2 focus:ring-violet-100 disabled:opacity-50"
+                        />
+                      </div>
+                      <p className="text-[11px] text-gray-400">Format: 254700000000</p>
+                    </div>
+
+                    {/* Animated error banner */}
+                    <AnimatePresence>
+                      {error && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -6, height: 0 }}
+                          animate={{ opacity: 1, y: 0, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="overflow-hidden"
+                        >
+                          <div className="flex items-center gap-2 rounded-xl bg-red-50 border border-red-100 px-4 py-3 text-sm text-red-600">
+                            <XCircle size={16} className="shrink-0" />
+                            {error}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    <motion.button
+                      type="submit"
+                      disabled={isProcessing}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full rounded-xl bg-violet-600 py-4 text-sm font-semibold text-white hover:bg-violet-700 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                    >
+                      {isProcessing ? (
+                        <>
+                          <Loader2 size={18} className="animate-spin" />
+                          Processing…
+                        </>
+                      ) : (
+                        "Pay now"
+                      )}
+                    </motion.button>
+                  </motion.form>
+                )}
+              </AnimatePresence>
             </div>
 
             <div className="px-8 py-4 border-t border-gray-100 flex items-center justify-center gap-2 text-gray-400">
@@ -235,3 +286,4 @@ export default function CheckoutPage() {
     </main>
   );
 }
+

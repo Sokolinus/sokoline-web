@@ -7,6 +7,7 @@ import { fetchMyShop, getCategories, createProduct } from "@/lib/api";
 import { useToast } from "@/components/providers/ToastProvider";
 import { Category } from "@/lib/types";
 import { ArrowLeft, Loader2 } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -237,13 +238,23 @@ export default function NewProductPage() {
               </CardContent>
             </Card>
 
-            {error && (
-              <Card className="bg-destructive/10 border-destructive/20 shadow-none">
-                <CardContent className="p-4 text-xs font-medium text-destructive">
-                  {error}
-                </CardContent>
-              </Card>
-            )}
+            <AnimatePresence>
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, y: -6, height: 0 }}
+                  animate={{ opacity: 1, y: 0, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="overflow-hidden"
+                >
+                  <Card className="bg-destructive/10 border-destructive/20 shadow-none">
+                    <CardContent className="p-4 text-xs font-medium text-destructive">
+                      {error}
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
