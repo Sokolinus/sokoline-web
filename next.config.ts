@@ -17,13 +17,18 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/media/**",
       },
+      {
+        protocol: "https",
+        hostname: "placehold.co",
+        pathname: "/**",
+      },
     ],
   },
   async rewrites() {
     return [
       {
-        source: "/api/remote/:path*",
-        destination: "https://api.sokoline.app/api/:path*/", // Added trailing slash for Django
+        source: "/remote-proxy/:path*",
+        destination: "https://api.sokoline.app/:path*",
       },
     ];
   },

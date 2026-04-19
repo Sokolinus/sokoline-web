@@ -7,7 +7,7 @@ import { Product, Review, Cart, Order, Shop, Category } from "./types";
  */
 export const getApiBaseUrl = () => {
   if (typeof window !== "undefined") {
-    // Client-side: use proxy
+    // Client-side: use proxy to avoid CORS
     return "/remote-proxy/api";
   }
   
@@ -16,6 +16,9 @@ export const getApiBaseUrl = () => {
   return `${cleanUrl}/api`;
 };
 
+/**
+ * Ensures images load correctly from the backend or CDN.
+ */
 export function formatImageUrl(url: string | null | undefined): string {
   if (!url) return "https://placehold.co/600x600/f4f4f5/999?text=No+Image";
   if (url.startsWith("http")) return url;
@@ -37,6 +40,7 @@ export const FALLBACK_CATEGORIES: Category[] = [
 
 /**
  * Helper for making authenticated requests to the API.
+ * Enforces trailing slashes for Django production compatibility.
  */
 async function authenticatedFetch(endpoint: string, token?: string | null, options: RequestInit = {}) {
   const baseUrl = getApiBaseUrl();
@@ -49,14 +53,19 @@ async function authenticatedFetch(endpoint: string, token?: string | null, optio
     headers["Authorization"] = `Bearer ${token}`;
   }
 
-  let path = endpoint.startsWith("/") ? endpoint.slice(1) : endpoint;
-  if (path.startsWith("api/")) {
-    path = path.slice(4);
+  // Ensure endpoint starts with / and ends with / (unless it has query params)
+  let cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+  
+  // Remove duplicate /api if present in endpoint
+  if (cleanEndpoint.startsWith("/api/")) {
+    cleanEndpoint = cleanEndpoint.slice(4);
   }
 
-  const url = `${baseUrl}/${path}`;
+  if (!cleanEndpoint.includes("?") && !cleanEndpoint.endsWith("/")) {
+    cleanEndpoint = `${cleanEndpoint}/`;
+  }
 
-  const response = await fetch(url, {
+  const response = await fetch(`${baseUrl}${cleanEndpoint}`, {
     ...options,
     headers,
   });
@@ -68,12 +77,13 @@ export async function getCategories(): Promise<Category[]> {
   try {
     const baseUrl = getApiBaseUrl();
     const response = await fetch(`${baseUrl}/categories/`);
-    if (!response.ok) return [];
+    if (!response.ok) return FALLBACK_CATEGORIES;
     const data = await response.json();
-    return data.results || data;
+    const cats = data.results || data;
+    return cats.length > 0 ? cats : FALLBACK_CATEGORIES;
   } catch (error) {
     console.error("Error fetching categories:", error);
-    return [];
+    return FALLBACK_CATEGORIES;
   }
 }
 
@@ -95,7 +105,7 @@ export async function getProduct(slug: string): Promise<Product | null> {
   try {
     const baseUrl = getApiBaseUrl();
     const response = await fetch(`${baseUrl}/products/${slug}/`, {
-      next: { revalidate: 3600 },
+      next: { revalidate: 10 },
     });
     if (!response.ok) return null;
     return response.json();
