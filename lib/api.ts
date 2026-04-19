@@ -7,7 +7,8 @@ import { Product, Review, Cart, Order, Shop, Category } from "./types";
  */
 export const getApiBaseUrl = () => {
   if (typeof window !== "undefined") {
-    return "/api/remote";
+    // Client-side: use proxy
+    return "/remote-proxy/api";
   }
   
   const envUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.sokoline.app";
@@ -16,7 +17,7 @@ export const getApiBaseUrl = () => {
 };
 
 export function formatImageUrl(url: string | null | undefined): string {
-  if (!url) return "/placeholder-product.png";
+  if (!url) return "https://placehold.co/600x600/f4f4f5/999?text=No+Image";
   if (url.startsWith("http")) return url;
   
   const envUrl = (process.env.NEXT_PUBLIC_API_URL || "https://api.sokoline.app").replace(/\/$/, "");
@@ -24,28 +25,38 @@ export function formatImageUrl(url: string | null | undefined): string {
 }
 
 export const FALLBACK_CATEGORIES: Category[] = [
-  { id: 1, name: "Art", slug: "art" },
+  { id: 1, name: "Stationery", slug: "stationery" },
   { id: 2, name: "Fashion", slug: "fashion" },
-  { id: 3, name: "Electronics", slug: "electronics" },
-  { id: 4, name: "Food & Drink", slug: "food-drink" },
-  { id: 5, name: "Books", slug: "books" },
-  { id: 6, name: "Beauty", slug: "beauty" },
-  { id: 7, name: "Services", slug: "services" },
-  { id: 8, name: "Home", slug: "home" },
+  { id: 3, name: "Foods & drinks", slug: "foods-drinks" },
+  { id: 4, name: "Electronics", slug: "electronics" },
+  { id: 5, name: "Art", slug: "art" },
+  { id: 6, name: "Books", slug: "books" },
+  { id: 7, name: "Beauty", slug: "beauty" },
+  { id: 8, name: "Services", slug: "services" },
 ];
 
+/**
+ * Helper for making authenticated requests to the API.
+ */
 async function authenticatedFetch(endpoint: string, token?: string | null, options: RequestInit = {}) {
   const baseUrl = getApiBaseUrl();
-  const headers = {
+  const headers: Record<string, string> = {
     "Content-Type": "application/json",
-    ...options.headers,
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...((options.headers as Record<string, string>) || {}),
   };
 
-  // Ensure endpoint starts with /
-  const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
 
-  const response = await fetch(`${baseUrl}${cleanEndpoint}`, {
+  let path = endpoint.startsWith("/") ? endpoint.slice(1) : endpoint;
+  if (path.startsWith("api/")) {
+    path = path.slice(4);
+  }
+
+  const url = `${baseUrl}/${path}`;
+
+  const response = await fetch(url, {
     ...options,
     headers,
   });
@@ -57,19 +68,18 @@ export async function getCategories(): Promise<Category[]> {
   try {
     const baseUrl = getApiBaseUrl();
     const response = await fetch(`${baseUrl}/categories/`);
-    if (!response.ok) return FALLBACK_CATEGORIES;
+    if (!response.ok) return [];
     const data = await response.json();
-    const cats = data.results || data;
-    return cats.length > 0 ? cats : FALLBACK_CATEGORIES;
+    return data.results || data;
   } catch (error) {
     console.error("Error fetching categories:", error);
-    return FALLBACK_CATEGORIES;
+    return [];
   }
 }
 
 export async function createProduct(token: string, data: any): Promise<Product | null> {
   try {
-    const response = await authenticatedFetch("/products/", token, {
+    const response = await authenticatedFetch("products/", token, {
       method: "POST",
       body: JSON.stringify(data),
     });
@@ -85,7 +95,7 @@ export async function getProduct(slug: string): Promise<Product | null> {
   try {
     const baseUrl = getApiBaseUrl();
     const response = await fetch(`${baseUrl}/products/${slug}/`, {
-      next: { revalidate: 3600 }, // Cache for 1 hour
+      next: { revalidate: 3600 },
     });
     if (!response.ok) return null;
     return response.json();
@@ -127,7 +137,7 @@ export async function getReviews(productId: number, limit = 10, offset = 0): Pro
     const response = await fetch(`${baseUrl}/reviews/?product=${productId}&limit=${limit}&offset=${offset}`);
     if (!response.ok) return [];
     const data = await response.json();
-    return data.results || data; // Handle paginated response
+    return data.results || data;
   } catch (error) {
     console.error(`Error fetching reviews for ${productId}:`, error);
     return [];
@@ -137,9 +147,7 @@ export async function getReviews(productId: number, limit = 10, offset = 0): Pro
 export async function getShops(): Promise<Shop[]> {
   try {
     const baseUrl = getApiBaseUrl();
-    const response = await fetch(`${baseUrl}/shops/`, {
-      next: { revalidate: 3600 },
-    });
+    const response = await fetch(`${baseUrl}/shops/`);
     if (!response.ok) return [];
     const data = await response.json();
     return data.results || data;
@@ -152,9 +160,7 @@ export async function getShops(): Promise<Shop[]> {
 export async function getShop(slug: string): Promise<Shop | null> {
   try {
     const baseUrl = getApiBaseUrl();
-    const response = await fetch(`${baseUrl}/shops/${slug}/`, {
-      next: { revalidate: 60 },
-    });
+    const response = await fetch(`${baseUrl}/shops/${slug}/`);
     if (!response.ok) return null;
     return response.json();
   } catch (error) {
@@ -163,11 +169,9 @@ export async function getShop(slug: string): Promise<Shop | null> {
   }
 }
 
-// --- Authenticated Services ---
-
 export async function fetchMyShop(token: string): Promise<Shop | null> {
   try {
-    const response = await authenticatedFetch("/shops/", token);
+    const response = await authenticatedFetch("shops/", token);
     if (!response.ok) return null;
     const shops = await response.json();
     const shopList = shops.results || shops;
@@ -207,7 +211,7 @@ export async function createShop(token: string, data: any): Promise<Shop | null>
 
 export async function updateShop(token: string, shopId: number, data: Partial<Shop>): Promise<Shop | null> {
   try {
-    const response = await authenticatedFetch(`/shops/${shopId}/`, token, {
+    const response = await authenticatedFetch(`shops/${shopId}/`, token, {
       method: "PATCH",
       body: JSON.stringify(data),
     });
@@ -222,7 +226,7 @@ export async function updateShop(token: string, shopId: number, data: Partial<Sh
 export async function fetchCart(token: string): Promise<Cart | null> {
   try {
     const timestamp = new Date().getTime();
-    const response = await authenticatedFetch(`/cart/my_cart/?t=${timestamp}`, token);
+    const response = await authenticatedFetch(`cart/my_cart/?t=${timestamp}`, token);
     if (!response.ok) return null;
     return response.json();
   } catch (error) {
@@ -233,7 +237,7 @@ export async function fetchCart(token: string): Promise<Cart | null> {
 
 export async function addToCart(token: string, productId: number, quantity: number = 1): Promise<boolean> {
   try {
-    const response = await authenticatedFetch("/cart-items/", token, {
+    const response = await authenticatedFetch("cart-items/", token, {
       method: "POST",
       body: JSON.stringify({ product: productId, quantity }),
     });
@@ -246,7 +250,7 @@ export async function addToCart(token: string, productId: number, quantity: numb
 
 export async function updateCartItem(token: string, itemId: number, quantity: number): Promise<boolean> {
   try {
-    const response = await authenticatedFetch(`/cart-items/${itemId}/`, token, {
+    const response = await authenticatedFetch(`cart-items/${itemId}/`, token, {
       method: "PATCH",
       body: JSON.stringify({ quantity }),
     });
@@ -259,7 +263,7 @@ export async function updateCartItem(token: string, itemId: number, quantity: nu
 
 export async function removeFromCart(token: string, itemId: number): Promise<boolean> {
   try {
-    const response = await authenticatedFetch(`/cart-items/${itemId}/`, token, {
+    const response = await authenticatedFetch(`cart-items/${itemId}/`, token, {
       method: "DELETE",
     });
     return response.ok;
@@ -271,7 +275,7 @@ export async function removeFromCart(token: string, itemId: number): Promise<boo
 
 export async function checkoutCart(token: string, phoneNumber: string): Promise<Order | null> {
   try {
-    const response = await authenticatedFetch("/cart/checkout/", token, {
+    const response = await authenticatedFetch("cart/checkout/", token, {
       method: "POST",
       body: JSON.stringify({ phone_number: phoneNumber }),
     });
@@ -288,7 +292,7 @@ export async function checkoutCart(token: string, phoneNumber: string): Promise<
 
 export async function getOrderPaymentStatus(token: string, orderId: number): Promise<{ payment_status: string, status: string } | null> {
   try {
-    const response = await authenticatedFetch(`/orders/${orderId}/payment_status/`, token);
+    const response = await authenticatedFetch(`orders/${orderId}/payment_status/`, token);
     if (!response.ok) return null;
     return response.json();
   } catch (error) {
@@ -299,7 +303,7 @@ export async function getOrderPaymentStatus(token: string, orderId: number): Pro
 
 export async function submitReview(token: string, data: { product: number, rating: number, comment: string }): Promise<Review | null> {
   try {
-    const response = await authenticatedFetch("/reviews/", token, {
+    const response = await authenticatedFetch("reviews/", token, {
       method: "POST",
       body: JSON.stringify(data),
     });
@@ -316,7 +320,7 @@ export async function submitReview(token: string, data: { product: number, ratin
 
 export async function fetchOrders(token: string): Promise<Order[]> {
   try {
-    const response = await authenticatedFetch("/orders/", token);
+    const response = await authenticatedFetch("orders/", token);
     if (!response.ok) return [];
     const data = await response.json();
     return data.results || data;
@@ -328,7 +332,7 @@ export async function fetchOrders(token: string): Promise<Order[]> {
 
 export async function fetchShopOrders(token: string): Promise<Order[]> {
   try {
-    const response = await authenticatedFetch("/orders/shop_orders/", token);
+    const response = await authenticatedFetch("orders/shop_orders/", token);
     if (!response.ok) return [];
     const data = await response.json();
     return data.results || data;
