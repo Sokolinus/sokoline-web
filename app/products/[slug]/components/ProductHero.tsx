@@ -5,15 +5,13 @@ import Image from 'next/image';
 import { Product, ProductVariant } from "@/lib/types";
 import { formatImageUrl } from "@/lib/api";
 import { useCart } from "@/components/providers/CartProvider";
-import { Check, ShoppingCart, Star, Loader2 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Check, Star, Loader2, ShoppingCart } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
 import AssuranceBadge from "@/components/sokoline/AssuranceBadge";
 
 interface ProductHeroProps {
   product: Product;
 }
-
-const getOptionKey = (variant: ProductVariant) => JSON.stringify([variant.name, variant.size || ""]);
 
 type AddState = "idle" | "adding" | "done";
 
@@ -25,12 +23,12 @@ export default function ProductHero({ product }: ProductHeroProps) {
   const [activeImg, setActiveImg] = useState(0);
   const [addState, setAddState] = useState<AddState>("idle");
 
-  // Derived data
-  const currentPrice = selectedVariant?.price_override || product.discount_price || product.price;
+  // Type-safe number conversions for arithmetic
+  const priceNum = Number(product.price);
+  const discountNum = product.discount_price ? Number(product.discount_price) : null;
+  const currentPriceNum = Number(selectedVariant?.price_override || product.discount_price || product.price);
 
-  const allImages = product.images.length > 0
-    ? product.images
-    : [{ id: 0, image: "/placeholder-product.png", alt_text: product.name, is_feature: true }];
+  const allImages = product.images;
 
   const handleAddToCart = async () => {
     if (addState !== "idle") return;
@@ -54,7 +52,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
       return acc;
     }, []);
 
-  const imageSource = formatImageUrl(allImages[activeImg]?.image);
+  const imageSource = allImages.length > 0 ? formatImageUrl(allImages[activeImg]?.image) : "";
   const imageAlt = allImages[activeImg]?.alt_text || product.name;
 
   return (
@@ -63,14 +61,21 @@ export default function ProductHero({ product }: ProductHeroProps) {
 
         {/* LEFT: Product Gallery */}
         <div className="flex flex-col gap-[15px]">
-          <div className="relative aspect-[814/491] w-full overflow-hidden bg-sokoline-gray/20">
-            <Image
-              src={imageSource}
-              alt={imageAlt}
-              fill
-              className="object-cover"
-              priority
-            />
+          <div className="relative aspect-[814/491] w-full overflow-hidden bg-zinc-50 rounded-sm">
+            {imageSource ? (
+              <Image
+                src={imageSource}
+                alt={imageAlt}
+                fill
+                className="object-cover"
+                priority
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+            ) : (
+              <div className="flex items-center justify-center h-full text-black/10">
+                <ShoppingCart size={80} strokeWidth={1} />
+              </div>
+            )}
           </div>
 
           <div className="flex flex-wrap gap-[15px_18px]">
@@ -79,11 +84,17 @@ export default function ProductHero({ product }: ProductHeroProps) {
                 key={img.id}
                 onClick={() => setActiveImg(i)}
                 type="button"
-                className={`relative w-[188px] aspect-[400/267] overflow-hidden bg-sokoline-gray/40 transition-all ${
+                className={`relative w-[188px] aspect-[400/267] overflow-hidden bg-zinc-100 transition-all rounded-sm ${
                   activeImg === i ? "ring-2 ring-black" : "opacity-80 hover:opacity-100"
                 }`}
               >
-                <Image src={formatImageUrl(img.image)} alt={img.alt_text || product.name} fill className="object-cover" />
+                <Image 
+                  src={formatImageUrl(img.image)} 
+                  alt={img.alt_text || product.name} 
+                  fill 
+                  className="object-cover"
+                  sizes="188px"
+                />
               </button>
             ))}
           </div>
@@ -97,7 +108,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
             </h1>
             
             <div className="flex items-center gap-2">
-              <div className="w-[44px] h-[43px] rounded-full bg-sokoline-gray/30 overflow-hidden shrink-0" />
+              <div className="w-[44px] h-[43px] rounded-full bg-zinc-100 overflow-hidden shrink-0" />
               <p className="font-sans text-[14px] text-black leading-relaxed">
                 Handmade {product.category?.name || "item"}. Genuine materials.<br />
                 Made with love for you.
@@ -110,21 +121,21 @@ export default function ProductHero({ product }: ProductHeroProps) {
                   <Star size={14} className="fill-black text-black" />
                   <span>{product.average_rating.toFixed(1)} Stars</span>
                 </div>
-                <span>132 Reviews</span>
+                <span>{product.review_count} Reviews</span>
               </div>
               
               <div className="flex gap-2 items-baseline font-logo">
-                {product.discount_price && (
+                {discountNum && (
                   <span className="text-[12px] text-black/50 line-through">
-                    KSH. {product.price}
+                    KSH. {priceNum}
                   </span>
                 )}
                 <span className="text-[16px] text-black font-bold">
-                  KSh. {currentPrice}
+                  KSh. {currentPriceNum}
                 </span>
-                {product.discount_price && (
+                {discountNum && (
                   <span className="text-[16px] text-black">
-                    -{Math.round(((product.price - product.discount_price) / product.price) * 100)}%
+                    -{Math.round(((priceNum - discountNum) / priceNum) * 100)}%
                   </span>
                 )}
               </div>
