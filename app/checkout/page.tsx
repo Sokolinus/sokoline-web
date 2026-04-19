@@ -8,7 +8,45 @@ import { useToast } from "@/components/providers/ToastProvider";
 import { checkoutCart, getOrderPaymentStatus } from "@/lib/api";
 import { CheckCircle2, ArrowLeft, Loader2, Phone, XCircle, ShieldCheck } from "lucide-react";
 import Link from 'next/link';
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+
+function CheckoutSuccess() {
+  const prefersReduced = useReducedMotion();
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-[70vh] text-center px-6">
+      <motion.div
+        initial={{ scale: prefersReduced ? 1 : 0.5, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.05 }}
+        className="relative mb-8"
+      >
+        {!prefersReduced && (
+          <motion.span
+            initial={{ scale: 1, opacity: 0.4 }}
+            animate={{ scale: 1.8, opacity: 0 }}
+            transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
+            className="absolute inset-0 rounded-2xl bg-emerald-200 block"
+          />
+        )}
+        <div className="relative h-20 w-20 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-500 border border-emerald-100 shadow-sm">
+          <CheckCircle2 size={44} />
+        </div>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: prefersReduced ? 0 : 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.3 }}
+      >
+        <h1 className="text-3xl font-bold text-gray-900 mb-3 tracking-tight">Payment confirmed</h1>
+        <p className="text-gray-500 max-w-sm text-base">
+          Your order has been placed. Redirecting to your orders…
+        </p>
+      </motion.div>
+    </div>
+  );
+}
 
 export default function CheckoutPage() {
   const { cart, refreshCart } = useCart();
@@ -97,39 +135,7 @@ export default function CheckoutPage() {
   };
 
   if (isSuccess) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[70vh] text-center px-6">
-        {/* Animated success icon */}
-        <motion.div
-          initial={{ scale: 0.5, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.05 }}
-          className="relative mb-8"
-        >
-          {/* Outer ring pulse */}
-          <motion.span
-            initial={{ scale: 1, opacity: 0.5 }}
-            animate={{ scale: 1.8, opacity: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-            className="absolute inset-0 rounded-2xl bg-emerald-200 block"
-          />
-          <div className="relative h-20 w-20 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-500 border border-emerald-100 shadow-sm">
-            <CheckCircle2 size={44} />
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.3 }}
-        >
-          <h1 className="text-3xl font-bold text-gray-900 mb-3 tracking-tight">Payment confirmed</h1>
-          <p className="text-gray-500 max-w-sm text-base">
-            Your order has been placed. Redirecting to your orders…
-          </p>
-        </motion.div>
-      </div>
-    );
+    return <CheckoutSuccess />;
   }
 
   if (!cart || cart.items.length === 0) {

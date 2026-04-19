@@ -44,13 +44,19 @@ function ToastItem({ t, onDismiss }: { t: ToastItem; onDismiss: (id: string) => 
 
   useEffect(() => {
     const start = Date.now();
-    const raf = requestAnimationFrame(function tick() {
+    let frameId: number;
+
+    const tick = () => {
       const elapsed = Date.now() - start;
       const remaining = Math.max(0, 100 - (elapsed / DURATION_MS) * 100);
       setProgress(remaining);
-      if (remaining > 0) requestAnimationFrame(tick);
-    });
-    return () => cancelAnimationFrame(raf);
+      if (remaining > 0) {
+        frameId = requestAnimationFrame(tick);
+      }
+    };
+
+    frameId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frameId);
   }, []);
 
   return (
