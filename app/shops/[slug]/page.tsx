@@ -40,7 +40,7 @@ export default async function ShopPage({ params }: { params: Promise<{ slug: str
           <div className="flex flex-col md:flex-row gap-12 items-start md:items-center relative z-10">
             {shop.logo ? (
                <div className="relative h-40 w-40 rounded-[40px] overflow-hidden border-4 border-white bg-white shrink-0 shadow-2xl shadow-black/10">
-                 <Image src={formatImageUrl(shop.logo)} alt={shop.name} fill className="object-cover" />
+                 <Image src={formatImageUrl(shop.logo)} alt={shop.name} fill className="object-cover" sizes="160px" />
                </div>
             ) : (
               <div className="h-40 w-40 rounded-[40px] bg-white border border-black/5 flex items-center justify-center text-black/5 shrink-0 shadow-sm">

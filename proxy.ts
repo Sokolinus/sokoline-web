@@ -2,7 +2,8 @@ import { clerkMiddleware } from '@clerk/nextjs/server'
 
 export default clerkMiddleware(async (auth, req) => {
   const authData = await auth();
-  console.log(`[Clerk Middleware] Path: ${req.nextUrl.pathname}, User: ${authData.userId || 'Guest'}`);
+  const { pathname } = req.nextUrl;
+  console.log(`[Middleware] ${req.method} ${pathname} (Slash: ${pathname.endsWith('/')}) | User: ${authData.userId || 'Guest'}`);
 })
 
 export const config = {

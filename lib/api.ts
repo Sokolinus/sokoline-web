@@ -6,9 +6,6 @@ import { Product, Review, Cart, Order, Shop, Category } from "./types";
  * On the server: use the absolute production URL.
  */
 export const getApiBaseUrl = () => {
-  if (typeof window !== "undefined") {
-    return "/remote-proxy";
-  }
   const envUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.sokoline.app";
   return envUrl.replace(/\/$/, "");
 };
@@ -24,26 +21,31 @@ export function formatImageUrl(url: string | null | undefined): string {
   return `${baseUrl}${url.startsWith("/") ? "" : "/"}${url}`;
 }
 
-/**
- * Core fetch wrapper with trailing slash enforcement and auth handling.
- */
 async function apiRequest(endpoint: string, options: RequestInit = {}, token?: string | null) {
   const baseUrl = getApiBaseUrl();
   
-  // 1. Ensure path starts with /api/
-  let path = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
-  if (!path.startsWith("/api/")) {
-    path = `/api${path}`;
+  // 1. Clean the endpoint
+  let cleanEndpoint = endpoint.startsWith("/") ? endpoint.slice(1) : endpoint;
+  
+  // 2. Add /api/ if missing
+  if (!cleanEndpoint.startsWith("api/")) {
+    cleanEndpoint = `api/${cleanEndpoint}`;
   }
 
-  // 2. Enforce trailing slash for Django
-  const [basePath, query] = path.split("?");
-  const cleanPath = basePath.endsWith("/") ? basePath : `${basePath}/`;
-  const finalUrl = `${baseUrl}${cleanPath}${query ? `?${query}` : ""}`;
+  // 3. Handle query params and trailing slash
+  const [basePath, query] = cleanEndpoint.split("?");
+  const pathWithSlash = basePath.endsWith("/") ? basePath : `${basePath}/`;
+  
+  // 4. Build final URL
+  const finalUrl = `${baseUrl}/${pathWithSlash}${query ? `?${query}` : ""}`;
 
-  const headers = {
+  if (typeof window !== "undefined") {
+    console.log(`🚀 [API] ${options.method || 'GET'} -> ${finalUrl}`);
+  }
+
+  const headers: Record<string, string> = {
     "Content-Type": "application/json",
-    ...options.headers,
+    ...(options.headers as Record<string, string> || {}),
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 

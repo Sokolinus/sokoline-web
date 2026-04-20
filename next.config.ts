@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   /* config options here */
   allowedDevOrigins: ["192.168.100.17", "localhost:3000"],
   images: {
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     remotePatterns: [
       {
         protocol: "https",
@@ -35,14 +38,6 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
-  },
-  async rewrites() {
-    return [
-      {
-        source: "/remote-proxy/:path*",
-        destination: "https://api.sokoline.app/:path*",
-      },
-    ];
   },
 };
 

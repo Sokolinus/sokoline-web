@@ -25,6 +25,7 @@ export default async function ShopsPage() {
                     alt={shop.name} 
                     fill 
                     className="object-cover transition-transform duration-700 group-hover:scale-105" 
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
                   />
                 ) : (
                   <div className="flex items-center justify-center h-full text-black/10">

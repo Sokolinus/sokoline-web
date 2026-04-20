@@ -33,6 +33,7 @@ const Navbar = () => {
               fill
               className="object-contain"
               priority
+              sizes="224px"
             />
           </Link>
           <div className="hidden md:flex items-center gap-12">
@@ -70,6 +71,7 @@ const Navbar = () => {
               width={84} 
               height={83} 
               className="object-contain"
+              unoptimized
             />
             {cartItemCount > 0 && (
               <span className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full bg-black text-[12px] font-bold text-white">

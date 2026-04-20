@@ -36,7 +36,7 @@ export default function CartPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-8 text-center px-6">
         <div className="relative h-32 w-32 opacity-20">
-          <Image src="/CartIcon.svg" alt="Empty Cart" fill className="object-contain grayscale" />
+          <Image src="/CartIcon.svg" alt="Empty Cart" fill className="object-contain grayscale" sizes="128px" unoptimized />
         </div>
         <div>
           <h1 className="text-5xl font-black tracking-tighter font-logo">Cart is Empty</h1>
@@ -63,7 +63,7 @@ export default function CartPage() {
              <div key={item.id} className="group flex gap-8 items-center p-8 bg-gray-50 rounded-[32px] border border-black/5 transition-all hover:bg-white hover:shadow-2xl hover:shadow-black/5 hover:border-black/10">
                <div className="relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-[24px] bg-white border border-black/5 shadow-sm">
                   <div className="flex items-center justify-center h-full text-black/10">
-                    <Image src="/CartIcon.svg" alt="Product" width={48} height={48} className="opacity-20 grayscale" />
+                    <Image src="/CartIcon.svg" alt="Product" width={48} height={48} className="opacity-20 grayscale" unoptimized />
                   </div>
                </div>
                

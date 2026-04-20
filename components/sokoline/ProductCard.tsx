@@ -63,6 +63,7 @@ export default function ProductCard({ product, className = "" }: ProductCardProp
               alt={product.name}
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           ) : (
             <div className="flex items-center justify-center h-full text-black/10">
@@ -126,6 +127,7 @@ export default function ProductCard({ product, className = "" }: ProductCardProp
               width={30} 
               height={30} 
               className="object-contain"
+              unoptimized
             />
             Add to Cart
           </>

@@ -108,7 +108,7 @@ export default function InventoryPage() {
                       <div className="flex items-center gap-3">
                         <div className="relative h-10 w-10 rounded border border-zinc-200 overflow-hidden bg-zinc-50 shrink-0">
                            {product.images?.[0] ? (
-                              <Image src={formatImageUrl(product.images[0].image)} alt={product.name} fill className="object-cover" />
+                              <Image src={formatImageUrl(product.images[0].image)} alt={product.name} fill className="object-cover" sizes="40px" />
                            ) : (
                              <div className="flex items-center justify-center h-full text-zinc-300"><Package size={16} /></div>
                            )}

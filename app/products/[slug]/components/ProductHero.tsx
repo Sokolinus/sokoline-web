@@ -187,6 +187,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
                       width={18} 
                       height={18} 
                       className="object-contain"
+                      unoptimized
                     />
                     <span>Add to cart</span>
                   </div>
