@@ -73,10 +73,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const errorMsg = "Could not add item to cart. Please try again.";
     try {
       const token = await getToken();
+      console.log("[Cart] Token obtained:", !!token);
       if (token) {
-        // Log payload internally for debugging
         console.log(`[Cart] Adding product ID: ${productId}, quantity: ${quantity}`);
         const result = await addToCart(token, productId, quantity);
+        console.log("[Cart] Result:", result);
         if (result.success) {
           await refreshCart();
           toast("Added to cart!", "success");

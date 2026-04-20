@@ -76,7 +76,7 @@ export async function getProducts(params?: Record<string, string>): Promise<Prod
 export async function getProduct(slug: string): Promise<Product | null> {
   try {
     const res = await apiRequest(`products/${slug}`);
-    return res.ok ? res.json() : null;
+    return res.ok ? await res.json() : null;
   } catch {
     return null;
   }
@@ -85,7 +85,7 @@ export async function getProduct(slug: string): Promise<Product | null> {
 export async function getRelatedProducts(productId: number): Promise<Product[]> {
   try {
     const res = await apiRequest(`products/${productId}/related_products`);
-    return res.ok ? res.json() : [];
+    return res.ok ? await res.json() : [];
   } catch {
     return [];
   }
@@ -120,7 +120,7 @@ export async function getShops(): Promise<Shop[]> {
 export async function getShop(slug: string): Promise<Shop | null> {
   try {
     const res = await apiRequest(`shops/${slug}`);
-    return res.ok ? res.json() : null;
+    return res.ok ? await res.json() : null;
   } catch {
     return null;
   }
@@ -151,7 +151,7 @@ export async function createShop(token: string, data: FormData | any): Promise<S
       body: isFormData ? data : JSON.stringify(data),
     }, token);
 
-    return res.ok ? res.json() : null;
+    return res.ok ? await res.json() : null;
   } catch {
     return null;
   }
@@ -168,7 +168,7 @@ export async function updateShop(token: string, slug: string, data: FormData | a
       body: isFormData ? data : JSON.stringify(data),
     }, token);
 
-    return res.ok ? res.json() : null;
+    return res.ok ? await res.json() : null;
   } catch {
     return null;
   }
@@ -185,7 +185,7 @@ export async function createProduct(token: string, data: FormData | any): Promis
       body: isFormData ? data : JSON.stringify(data),
     }, token);
 
-    return res.ok ? res.json() : null;
+    return res.ok ? await res.json() : null;
   } catch {
     return null;
   }
@@ -194,7 +194,7 @@ export async function createProduct(token: string, data: FormData | any): Promis
 export async function fetchCart(token: string): Promise<Cart | null> {
   try {
     const res = await apiRequest("cart/my_cart", { cache: 'no-store' }, token);
-    return res.ok ? res.json() : null;
+    return res.ok ? await res.json() : null;
   } catch {
     return null;
   }
@@ -338,5 +338,5 @@ export async function submitReview(token: string, productId: number, rating: num
 
 export async function getOrderPaymentStatus(token: string, orderId: number) {
   const res = await apiRequest(`orders/${orderId}/payment_status`, {}, token);
-  return res.ok ? res.json() : null;
+  return res.ok ? await res.json() : null;
 }
