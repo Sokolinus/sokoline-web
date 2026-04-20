@@ -87,6 +87,11 @@ export default function CheckoutPage() {
   const [orderId, setOrderId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pollingStatus, setPollingStatus] = useState<string>("waiting");
+  const pollingStatusRef = React.useRef(pollingStatus);
+
+  useEffect(() => {
+    pollingStatusRef.current = pollingStatus;
+  }, [pollingStatus]);
 
   // Handle M-Pesa Polling
   useEffect(() => {
@@ -99,7 +104,8 @@ export default function CheckoutPage() {
       
       // Safety timeout to prevent infinite loading
       timeout = setTimeout(() => {
-        if (pollingStatus === "pending") {
+        // Use Ref to check the LATEST status, not the one from the closure
+        if (pollingStatusRef.current === "pending") {
           console.log("[Checkout] Polling timed out.");
           setPollingStatus("failed");
           setIsProcessing(false);
