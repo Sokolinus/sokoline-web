@@ -96,6 +96,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }
 
       toast("Please sign in again to continue.", "info");
+      return false;
     } catch (error) {
       console.error("Failed to add item:", error);
       toast(errorMsg, "error");
