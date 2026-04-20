@@ -64,36 +64,61 @@ export default function CheckoutPage() {
   // Handle M-Pesa Polling
   useEffect(() => {
     let interval: NodeJS.Timeout;
+    let timeout: NodeJS.Timeout;
+    const POLL_LIMIT = 60000; // 60 seconds
 
     if (orderId && pollingStatus === "pending") {
+      console.log(`[Checkout] Starting poll for Order ${orderId}...`);
+      
+      // Safety timeout to prevent infinite loading
+      timeout = setTimeout(() => {
+        if (pollingStatus === "pending") {
+          console.log("[Checkout] Polling timed out.");
+          setPollingStatus("failed");
+          setIsProcessing(false);
+          setError("Payment timed out. If you already paid, check your orders in a few minutes.");
+          clearInterval(interval);
+        }
+      }, POLL_LIMIT);
+
       interval = setInterval(async () => {
-        const token = await getToken();
-        if (token) {
-          const statusData = await getOrderPaymentStatus(token, orderId);
-          if (statusData) {
-            if (statusData.payment_status === "SUCCESS") {
-              setPollingStatus("success");
-              setIsSuccess(true);
-              await refreshCart();
-              clearInterval(interval);
-              toast("Payment successful! Your order is confirmed. 🎉", "success");
-              setTimeout(() => {
-                router.push("/orders");
-              }, 3000);
-            } else if (statusData.payment_status === "FAILED") {
-              setPollingStatus("failed");
-              setIsProcessing(false);
-              setError("Payment failed. Please try again or check your M-Pesa balance.");
-              toast("Payment failed. Please try again.", "error");
-              clearInterval(interval);
+        try {
+          const token = await getToken();
+          if (token) {
+            const statusData = await getOrderPaymentStatus(token, orderId);
+            console.log(`[Checkout] Status for ${orderId}:`, statusData?.payment_status);
+            
+            if (statusData) {
+              if (statusData.payment_status === "SUCCESS") {
+                setPollingStatus("success");
+                setIsSuccess(true);
+                await refreshCart();
+                clearInterval(interval);
+                clearTimeout(timeout);
+                toast("Payment successful! Your order is confirmed. 🎉", "success");
+                setTimeout(() => {
+                  router.push("/orders");
+                }, 3000);
+              } else if (statusData.payment_status === "FAILED") {
+                setPollingStatus("failed");
+                setIsProcessing(false);
+                setError("Payment failed. Please try again or check your M-Pesa balance.");
+                toast("Payment failed. Please try again.", "error");
+                clearInterval(interval);
+                clearTimeout(timeout);
+              }
+              // If PENDING, just continue interval
             }
           }
+        } catch (err) {
+          console.error("[Checkout] Polling error:", err);
         }
       }, 3000);
     }
 
     return () => {
       if (interval) clearInterval(interval);
+      if (timeout) clearTimeout(timeout);
     };
   }, [orderId, pollingStatus, getToken, refreshCart, router, toast]);
 
