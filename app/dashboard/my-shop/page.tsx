@@ -60,7 +60,7 @@ export default function MyShopPage() {
     try {
       const token = await getToken();
       if (token) {
-        const updated = await updateShop(token, shop.id, formData);
+        const updated = await updateShop(token, shop.slug, formData);
         if (updated) {
           setShop(updated);
           toast("Shop settings saved.", "success");

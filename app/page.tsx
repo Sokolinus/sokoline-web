@@ -1,7 +1,6 @@
 import HeroSection from "@/components/HeroSection";
 import Link from "next/link";
 import { getProducts, getCategories } from "@/lib/api";
-import { mockProducts } from "@/lib/mockProducts";
 import ProductCard from "@/components/sokoline/ProductCard";
 
 export default async function Home() {
@@ -10,7 +9,7 @@ export default async function Home() {
     getCategories()
   ]);
   
-  const newestItems = products.length > 0 ? products : mockProducts.slice(0, 6);
+  const newestItems = products;
 
   return (
     <main className="max-w-7xl mx-auto px-6 mb-20 font-sans">

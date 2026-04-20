@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
-import { createShop, FALLBACK_CATEGORIES } from "@/lib/api";
+import { createShop, getCategories } from "@/lib/api";
 import { useShop } from "@/components/providers/ShopProvider";
 import { useToast } from "@/components/providers/ToastProvider";
+import { Category } from "@/lib/types";
 import { Store, Loader2, ArrowRight, ArrowLeft, Phone, Hash, Check, Upload, X, Image as ImageIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
@@ -32,6 +33,7 @@ export default function CreateShopPage() {
   const [error, setError] = useState<string | null>(null);
   const [slugEdited, setSlugEdited] = useState(false);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -44,6 +46,14 @@ export default function CreateShopPage() {
   });
 
   const [paymentType, setPaymentType] = useState<"phone" | "paybill">("phone");
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      const cats = await getCategories();
+      setCategories(cats);
+    };
+    loadCategories();
+  }, []);
 
   const requirements = [
     { 
@@ -244,7 +254,7 @@ export default function CreateShopPage() {
                         required
                       >
                         <option value="" disabled>Select category</option>
-                        {FALLBACK_CATEGORIES.map((cat) => (
+                        {categories.map((cat) => (
                           <option key={cat.id} value={cat.name}>{cat.name}</option>
                         ))}
                       </select>

@@ -74,6 +74,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     try {
       const token = await getToken();
       if (token) {
+        // Log payload internally for debugging
+        console.log(`[Cart] Adding product ID: ${productId}, quantity: ${quantity}`);
         const result = await addToCart(token, productId, quantity);
         if (result.success) {
           await refreshCart();

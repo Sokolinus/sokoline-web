@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Product } from "@/lib/types";
 import { formatImageUrl } from "@/lib/api";
 import { useCart } from "@/components/providers/CartProvider";
-import { Loader2, Check } from "lucide-react";
+import { Loader2, Check, ShoppingBag } from "lucide-react";
 
 interface ProductCardProps {
   product: Product;
@@ -41,11 +41,9 @@ export default function ProductCard({ product, className = "" }: ProductCardProp
     setIsAdding(true);
     try {
       // Use main product ID as expected by backend CartItem model
-      const success = await addItem(product.id, 1);
-      if (success) {
-        setIsDone(true);
-        setTimeout(() => setIsDone(false), 2000);
-      }
+      await addItem(product.id, 1);
+      setIsDone(true);
+      setTimeout(() => setIsDone(false), 2000);
     } catch (error) {
       console.error("Failed to add to cart:", error);
     } finally {
@@ -59,20 +57,26 @@ export default function ProductCard({ product, className = "" }: ProductCardProp
     >
       <Link href={`/products/${product.slug}`} className="w-full flex flex-col items-center gap-[18px]">
         <div className="bg-white w-full aspect-[427/628] rounded-sm overflow-hidden relative">
-          <Image
-            src={mainImage}
-            alt={product.name}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-          />
+          {mainImage ? (
+            <Image
+              src={mainImage}
+              alt={product.name}
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full text-black/10">
+              <ShoppingBag size={64} strokeWidth={1} />
+            </div>
+          )}
         </div>
 
-        <div className="w-full flex flex-col items-center">
-          <h3 className="font-logo text-[32px] text-black text-center truncate w-full">
+        <div className="w-full flex flex-col items-center text-center">
+          <h3 className="font-logo text-[32px] text-black truncate w-full leading-tight">
             {product.name}
           </h3>
-          <p className="font-sans text-[14px] text-black opacity-60 text-center">
-            {product.shop_name}
+          <p className="font-sans text-[14px] text-black opacity-60">
+            {product.shop_name || "Student Venture"}
           </p>
         </div>
 

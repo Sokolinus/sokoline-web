@@ -1,7 +1,6 @@
 import React from 'react';
 import { notFound } from "next/navigation";
 import { getProduct } from "@/lib/api";
-import { mockProducts } from "@/lib/mockProducts";
 import ProductHero from './components/ProductHero';
 import ProductInfoTabs from './components/ProductInfoTabs';
 import ReviewSection from './components/ReviewSection';
@@ -14,8 +13,7 @@ interface ProductPageProps {
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
-  const fetchedProduct = await getProduct(slug);
-  const product = fetchedProduct || mockProducts.find((item) => item.slug === slug) || null;
+  const product = await getProduct(slug);
 
   if (!product) {
     return notFound();

@@ -30,11 +30,7 @@ export default function ReviewModal({ isOpen, onClose, product, onSuccess }: Rev
     try {
       const token = await getToken();
       if (token) {
-        await submitReview(token, {
-          product: product.id,
-          rating,
-          comment
-        });
+        await submitReview(token, product.id, rating, comment);
         onSuccess();
         onClose();
       }
