@@ -6,7 +6,7 @@ import { useCart } from "@/components/providers/CartProvider";
 import { useAuth } from "@clerk/nextjs";
 import { useToast } from "@/components/providers/ToastProvider";
 import { checkoutCart, getOrderPaymentStatus } from "@/lib/api";
-import { CheckCircle2, ArrowLeft, Loader2, Phone, XCircle, ShieldCheck } from "lucide-react";
+import { CheckCircle2, ArrowLeft, Loader2, Phone, XCircle, ShieldCheck, Check, ShoppingBag } from "lucide-react";
 import Link from 'next/link';
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
@@ -25,12 +25,6 @@ function CheckoutSuccess() {
               transition={{ duration: 0.8, ease: "easeOut" }}
               className="absolute inset-0 rounded-full bg-emerald-400/20"
             />
-            <motion.div
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: [1, 2], opacity: [0.3, 0] }}
-              transition={{ duration: 1, delay: 0.1, ease: "easeOut" }}
-              className="absolute inset-0 rounded-full bg-emerald-400/10"
-            />
           </>
         )}
         
@@ -46,30 +40,36 @@ function CheckoutSuccess() {
           }}
           className="relative h-28 w-28 rounded-[32px] bg-emerald-500 flex items-center justify-center text-white shadow-2xl shadow-emerald-500/20"
         >
-          <motion.div
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 1 }}
-            transition={{ duration: 0.4, delay: 0.4 }}
-          >
-            <CheckCircle2 size={56} strokeWidth={2.5} />
-          </motion.div>
+          <CheckCircle2 size={56} strokeWidth={2.5} />
         </motion.div>
       </div>
 
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6, duration: 0.4 }}
+        transition={{ delay: 0.4, duration: 0.4 }}
+        className="flex flex-col items-center"
       >
         <h1 className="text-4xl font-black text-gray-900 mb-4 tracking-tighter font-logo">Order Confirmed!</h1>
-        <div className="space-y-2">
-          <p className="text-gray-500 max-w-sm text-lg font-medium leading-relaxed">
-            Your payment was successful and the student vendor has been notified.
-          </p>
-          <p className="text-emerald-600 font-bold text-sm uppercase tracking-widest pt-4">
+        <p className="text-gray-500 max-w-sm text-lg font-medium leading-relaxed mb-10">
+          Your payment was successful and the student vendor has been notified.
+        </p>
+
+        {/* This button copies the "Add to Cart" success design exactly */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+          className="w-full max-w-xs"
+        >
+          <div className="w-full py-[20px] rounded-[12px] font-logo text-[20px] bg-emerald-500 text-white flex items-center justify-center gap-4 shadow-xl">
+            <Check size={24} strokeWidth={3} />
+            Paid!
+          </div>
+          <p className="text-black/30 font-bold text-[10px] uppercase tracking-[0.2em] mt-6">
             Redirecting to your orders...
           </p>
-        </div>
+        </motion.div>
       </motion.div>
     </div>
   );
