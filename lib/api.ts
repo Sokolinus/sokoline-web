@@ -36,9 +36,9 @@ async function apiRequest(endpoint: string, options: RequestInit = {}, token?: s
     path = `/api${path}`;
   }
 
-  // 2. Enforce trailing slash for Django (before query params)
+  // 2. Enforce trailing slash for Django
   const [basePath, query] = path.split("?");
-  let cleanPath = basePath.endsWith("/") ? basePath : `${basePath}/`;
+  const cleanPath = basePath.endsWith("/") ? basePath : `${basePath}/`;
   const finalUrl = `${baseUrl}${cleanPath}${query ? `?${query}` : ""}`;
 
   const headers = {
@@ -299,7 +299,7 @@ export async function checkoutCart(token: string, phoneNumber: string): Promise<
     const err = await res.json();
     throw new Error(err.error || "Checkout failed");
   }
-  return res.json();
+  return await res.json();
 }
 
 export async function fetchOrders(token: string): Promise<Order[]> {
@@ -330,6 +330,7 @@ export async function submitReview(token: string, productId: number, rating: num
       method: "POST",
       body: JSON.stringify({ product: productId, rating, comment }),
     }, token);
+
     return res.ok;
   } catch {
     return false;
