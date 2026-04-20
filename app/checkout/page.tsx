@@ -15,34 +15,61 @@ function CheckoutSuccess() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] text-center px-6">
-      <motion.div
-        initial={{ scale: prefersReduced ? 1 : 0.5, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.05 }}
-        className="relative mb-8"
-      >
+      <div className="relative mb-10">
+        {/* Satisfying background "pop" circles */}
         {!prefersReduced && (
-          <motion.span
-            initial={{ scale: 1, opacity: 0.4 }}
-            animate={{ scale: 1.8, opacity: 0 }}
-            transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
-            className="absolute inset-0 rounded-2xl bg-emerald-200 block"
-          />
+          <>
+            <motion.div
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: [1, 1.5], opacity: [0.5, 0] }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="absolute inset-0 rounded-full bg-emerald-400/20"
+            />
+            <motion.div
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: [1, 2], opacity: [0.3, 0] }}
+              transition={{ duration: 1, delay: 0.1, ease: "easeOut" }}
+              className="absolute inset-0 rounded-full bg-emerald-400/10"
+            />
+          </>
         )}
-        <div className="relative h-20 w-20 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-500 border border-emerald-100 shadow-sm">
-          <CheckCircle2 size={44} />
-        </div>
-      </motion.div>
+        
+        {/* Main Icon with Spring Bounce */}
+        <motion.div
+          initial={{ scale: 0, rotate: -20 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ 
+            type: "spring", 
+            stiffness: 400, 
+            damping: 15,
+            delay: 0.1 
+          }}
+          className="relative h-28 w-28 rounded-[32px] bg-emerald-500 flex items-center justify-center text-white shadow-2xl shadow-emerald-500/20"
+        >
+          <motion.div
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={{ pathLength: 1, opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.4 }}
+          >
+            <CheckCircle2 size={56} strokeWidth={2.5} />
+          </motion.div>
+        </motion.div>
+      </div>
 
       <motion.div
-        initial={{ opacity: 0, y: prefersReduced ? 0 : 10 }}
+        initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.3 }}
+        transition={{ delay: 0.6, duration: 0.4 }}
       >
-        <h1 className="text-3xl font-bold text-gray-900 mb-3 tracking-tight">Payment confirmed</h1>
-        <p className="text-gray-500 max-w-sm text-base">
-          Your order has been placed. Redirecting to your orders…
-        </p>
+        <h1 className="text-4xl font-black text-gray-900 mb-4 tracking-tighter font-logo">Order Confirmed!</h1>
+        <div className="space-y-2">
+          <p className="text-gray-500 max-w-sm text-lg font-medium leading-relaxed">
+            Your payment was successful and the student vendor has been notified.
+          </p>
+          <p className="text-emerald-600 font-bold text-sm uppercase tracking-widest pt-4">
+            Redirecting to your orders...
+          </p>
+        </div>
       </motion.div>
     </div>
   );
