@@ -245,16 +245,71 @@ export async function fetchCart(token: string): Promise<Cart | null> {
   }
 }
 
-export async function addToCart(token: string, productId: number, quantity: number = 1): Promise<boolean> {
+export interface AddToCartResult {
+  success: boolean;
+  status?: number;
+  message?: string;
+}
+
+function extractApiErrorMessage(errorData: unknown): string | undefined {
+  if (typeof errorData === "string") {
+    return errorData;
+  }
+
+  if (Array.isArray(errorData)) {
+    const first = errorData[0];
+    return typeof first === "string" ? first : undefined;
+  }
+
+  if (errorData && typeof errorData === "object") {
+    const errorObj = errorData as Record<string, unknown>;
+
+    if (typeof errorObj.detail === "string") {
+      return errorObj.detail;
+    }
+
+    const firstValue = Object.values(errorObj)[0];
+    if (typeof firstValue === "string") {
+      return firstValue;
+    }
+    if (Array.isArray(firstValue) && typeof firstValue[0] === "string") {
+      return firstValue[0];
+    }
+  }
+
+  return undefined;
+}
+
+export async function addToCart(token: string, productId: number, quantity: number = 1): Promise<AddToCartResult> {
   try {
     const response = await authenticatedFetch("cart-items/", token, {
       method: "POST",
       body: JSON.stringify({ product: productId, quantity }),
     });
-    return response.ok;
+
+    if (response.ok) {
+      return { success: true };
+    }
+
+    let message: string | undefined;
+    try {
+      const errorData = await response.json();
+      message = extractApiErrorMessage(errorData);
+    } catch {
+      message = undefined;
+    }
+
+    return {
+      success: false,
+      status: response.status,
+      message,
+    };
   } catch (error) {
     console.error("Error adding to cart:", error);
-    return false;
+    return {
+      success: false,
+      message: "Could not add item to cart. Please try again.",
+    };
   }
 }
 
