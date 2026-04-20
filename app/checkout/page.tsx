@@ -184,6 +184,35 @@ export default function CheckoutPage() {
                       <p className="text-gray-500 text-sm mt-1">Enter your M-Pesa PIN to complete the transaction.</p>
                     </div>
                   </motion.div>
+                ) : pollingStatus === "failed" ? (
+                  <motion.div
+                    key="failed"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="flex flex-col items-center text-center gap-5 py-8"
+                  >
+                    <div className="h-16 w-16 rounded-2xl bg-red-50 flex items-center justify-center text-red-500 border border-red-100">
+                      <XCircle size={32} />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-900">Payment Failed</h3>
+                      <p className="text-gray-500 text-sm mt-1 max-w-[280px]">
+                        The transaction was declined or timed out. Please check your phone and try again.
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setPollingStatus("waiting");
+                        setError(null);
+                        setOrderId(null);
+                      }}
+                      className="mt-2 bg-black text-white px-8 py-3 rounded-xl font-bold text-sm hover:bg-gray-800 transition-colors"
+                    >
+                      Try Again
+                    </button>
+                  </motion.div>
                 ) : (
                   <motion.form
                     key="form"
