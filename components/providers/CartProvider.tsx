@@ -74,15 +74,29 @@ export function CartProvider({ children }: { children: ReactNode }) {
     try {
       const token = await getToken();
       if (token) {
-        const success = await addToCart(token, productId, quantity);
-        if (success) {
+        const result = await addToCart(token, productId, quantity);
+        if (result.success) {
           await refreshCart();
           toast("Added to cart!", "success");
           return true;
-        } else {
-          toast(errorMsg, "error");
         }
+
+        if (result.status === 401 || result.status === 403) {
+          toast("Your session has expired. Please sign in again.", "info");
+          return false;
+        }
+
+        if (result.status === 400) {
+          toast(result.message || "Invalid add-to-cart request.", "error");
+          return false;
+        }
+
+        toast(result.message || errorMsg, "error");
+        return false;
       }
+
+      toast("Please sign in again to continue.", "info");
+      return false;
     } catch (error) {
       console.error("Failed to add item:", error);
       toast(errorMsg, "error");
