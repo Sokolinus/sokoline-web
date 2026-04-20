@@ -22,25 +22,20 @@ export function formatImageUrl(url: string | null | undefined): string {
 }
 
 async function apiRequest(endpoint: string, options: RequestInit = {}, token?: string | null) {
-  const baseUrl = getApiBaseUrl();
+  // FORCE absolute production URL to bypass local proxy issues
+  const baseUrl = "https://api.sokoline.app";
   
-  // 1. Clean the endpoint
   let cleanEndpoint = endpoint.startsWith("/") ? endpoint.slice(1) : endpoint;
-  
-  // 2. Add /api/ if missing
   if (!cleanEndpoint.startsWith("api/")) {
     cleanEndpoint = `api/${cleanEndpoint}`;
   }
 
-  // 3. Handle query params and trailing slash
   const [basePath, query] = cleanEndpoint.split("?");
   const pathWithSlash = basePath.endsWith("/") ? basePath : `${basePath}/`;
-  
-  // 4. Build final URL
   const finalUrl = `${baseUrl}/${pathWithSlash}${query ? `?${query}` : ""}`;
 
   if (typeof window !== "undefined") {
-    console.log(`🚀 [API] ${options.method || 'GET'} -> ${finalUrl}`);
+    console.log(`[API V3] ${options.method || 'GET'} -> ${finalUrl}`);
   }
 
   const headers: Record<string, string> = {
@@ -49,7 +44,13 @@ async function apiRequest(endpoint: string, options: RequestInit = {}, token?: s
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
-  return fetch(finalUrl, { ...options, headers });
+  const res = await fetch(finalUrl, { ...options, headers });
+  
+  if (typeof window !== "undefined") {
+    console.log(`[API V3] Response: ${res.status} ${res.statusText}`);
+  }
+  
+  return res;
 }
 
 export async function getCategories(): Promise<Category[]> {

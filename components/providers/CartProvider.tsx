@@ -33,21 +33,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
     try {
       const token = await getToken();
       if (token) {
-        // Add timestamp to avoid browser caching
         const data = await fetchCart(token);
+        console.log("[Cart] Raw data from API:", data);
         
         // Robust parsing for DRF responses
         let actualCart = null;
         if (Array.isArray(data)) {
           actualCart = data[0];
-        } else if (data && typeof data === 'object') {
-          if ('results' in data && Array.isArray(data.results)) {
-            actualCart = data.results[0];
+        } else if (data && typeof data === 'object' && data !== null) {
+          if ('results' in data && Array.isArray((data as any).results)) {
+            actualCart = (data as any).results[0];
           } else if ('items' in data) {
             actualCart = data;
           }
         }
         
+        console.log("[Cart] Parsed cart object:", actualCart);
         setCart(actualCart || null);
       }
     } catch (error) {
