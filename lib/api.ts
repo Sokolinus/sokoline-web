@@ -344,3 +344,14 @@ export async function getOrderPaymentStatus(token: string, orderId: number) {
   const res = await apiRequest(`orders/${orderId}/payment_status`, {}, token);
   return res.ok ? await res.json() : null;
 }
+
+export async function completeOrder(token: string, orderId: number): Promise<boolean> {
+  try {
+    const res = await apiRequest(`orders/${orderId}/complete`, {
+      method: "POST",
+    }, token);
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
