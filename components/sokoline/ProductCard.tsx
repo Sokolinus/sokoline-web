@@ -109,7 +109,7 @@ export default function ProductCard({ product, className = "" }: ProductCardProp
         onClick={handleAddToCart}
         disabled={isAdding || isDone}
         className={`flex w-full items-center justify-center gap-2 rounded-xl py-3 font-logo text-base text-black transition-all active:scale-[0.98] sm:gap-3 sm:py-4 sm:text-lg ${
-          isDone ? "bg-emerald-500 text-white" : "bg-sokoline-tertiary hover:opacity-90"
+          isDone ? "bg-emerald-500 text-white" : "bg-[#BEFDB1] hover:opacity-90"
         }`}
       >
         {isAdding ? (

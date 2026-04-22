@@ -17,7 +17,7 @@ export default async function Home() {
       
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         {/* Newest Items Section */}
-        <div className="mt-8 rounded-3xl border border-black/5 bg-gradient-to-b from-sokoline-tertiary/25 to-gray-50 px-4 py-8 sm:mt-12 sm:px-6 sm:py-12">
+        <div className="mt-8 rounded-3xl border border-black/5 bg-gradient-to-b from-[#BEFDB140] to-gray-50 px-4 py-8 sm:mt-12 sm:px-6 sm:py-12">
           <h2 className="mb-8 text-center font-logo text-3xl font-bold sm:mb-12 sm:text-[36px]">Newest items</h2>
 
           <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-3">

@@ -64,8 +64,13 @@
 
 ::selection {
   background-color: #dffccd;
-  background-color: color-mix(in srgb, var(--color-sokoline-tertiary) 70%, white);
   color: var(--foreground);
+}
+
+@supports (background-color: color-mix(in srgb, red 50%, white)) {
+  ::selection {
+    background-color: color-mix(in srgb, var(--color-sokoline-tertiary) 70%, white);
+  }
 }
 
 /* Squircle Mask Utility */
