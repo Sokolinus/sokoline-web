@@ -44,11 +44,20 @@ function Button({
   className,
   variant = "default",
   size = "default",
+  render,
+  nativeButton,
   ...props
 }: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+  // If a render prop is provided, we should set nativeButton to false 
+  // to avoid the "Base UI: A component that acts as a button expected a native <button>" error.
+  const isCustomRender = render !== undefined;
+  const shouldBeNative = nativeButton !== undefined ? nativeButton : !isCustomRender;
+
   return (
     <ButtonPrimitive
       data-slot="button"
+      render={render}
+      nativeButton={shouldBeNative}
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     />

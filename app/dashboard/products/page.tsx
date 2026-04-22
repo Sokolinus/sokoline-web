@@ -51,27 +51,27 @@ export default function InventoryPage() {
   if (!isLoaded || loading) {
     return (
       <div className="flex items-center justify-center min-h-[40vh]">
-        <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-zinc-300"></div>
+        <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-[#8484F6]"></div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto">
+    <div className="space-y-8 max-w-6xl mx-auto pb-10">
       {/* Header */}
       <div className="flex justify-between items-center border-b border-zinc-200 pb-6">
         <div>
-          <h1 className="text-2xl font-semibold text-foreground">Products</h1>
+          <h1 className="text-2xl font-bold text-foreground font-logo">Inventory</h1>
           <p className="text-zinc-500 text-sm mt-1">
             Manage your listings and track stock levels.
           </p>
         </div>
         <Button 
           render={<Link href="/dashboard/products/new" />} 
-          className="bg-sokoline-accent hover:bg-sokoline-accent/90"
+          className="bg-[#8484F6] hover:bg-[#7373e5] text-white font-bold rounded-xl h-10 px-6 shadow-md shadow-[#8484F6]/20"
         >
-          <Plus size={16} className="mr-2" />
-          Add product
+          <Plus size={18} className="mr-2" />
+          Add Item
         </Button>
       </div>
 
