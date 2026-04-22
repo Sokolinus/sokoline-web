@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Store, Package, ArrowLeft, ShoppingCart, Plus, ChevronRight } from "lucide-react";
+import { LayoutDashboard, Store, Package, ArrowLeft, ShoppingCart, Plus, ChevronRight, Menu } from "lucide-react";
 import { useShop } from "@/components/providers/ShopProvider";
 import { Loader2 } from "lucide-react";
 
