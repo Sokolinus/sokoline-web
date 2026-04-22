@@ -77,7 +77,7 @@ export default function HeroSection() {
         </div>
 
         {/* Content (Bottom on Mobile, Right on Desktop) */}
-         <div className="order-1 z-20 space-y-5 text-center lg:order-2 lg:-ml-20 lg:text-left md:space-y-8">
+         <div className="order-1 z-20 space-y-5 text-center md:space-y-8 lg:order-2 lg:-ml-20 lg:text-left">
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
