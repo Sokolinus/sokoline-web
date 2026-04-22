@@ -53,9 +53,9 @@ export default function ProductCard({ product, className = "" }: ProductCardProp
 
   return (
     <div 
-      className={`group bg-sokoline-card-bg rounded-[11px] p-[35px] flex flex-col gap-[18px] items-center transition-all hover:shadow-lg ${className}`}
+      className={`group flex flex-col items-center gap-4 rounded-2xl border border-black/5 bg-sokoline-card-bg p-4 transition-all hover:shadow-lg sm:gap-[18px] sm:p-6 lg:p-[30px] ${className}`}
     >
-      <Link href={`/products/${product.slug}`} className="w-full flex flex-col items-center gap-[18px]">
+      <Link href={`/products/${product.slug}`} className="flex w-full flex-col items-center gap-4 sm:gap-[18px]">
         <div className="bg-white w-full aspect-[427/628] rounded-sm overflow-hidden relative">
           {mainImage ? (
             <Image
@@ -72,31 +72,31 @@ export default function ProductCard({ product, className = "" }: ProductCardProp
           )}
         </div>
 
-        <div className="w-full flex flex-col items-center text-center">
-          <h3 className="font-logo text-[32px] text-black truncate w-full leading-tight">
+        <div className="flex w-full flex-col items-center text-center">
+          <h3 className="w-full truncate font-logo text-2xl leading-tight text-black sm:text-[30px] lg:text-[32px]">
             {product.name}
           </h3>
-          <p className="font-sans text-[14px] text-black opacity-60">
+          <p className="font-sans text-xs text-black opacity-60 sm:text-[14px]">
             {product.shop_name || "Student Venture"}
           </p>
         </div>
 
-        <div className="w-full flex items-center justify-between gap-4 mt-auto">
-          <p className="font-logo font-bold text-[20px] text-black">
+        <div className="mt-auto flex w-full items-center justify-between gap-3 sm:gap-4">
+          <p className="font-logo text-lg font-bold text-black sm:text-[20px]">
             Ksh. {product.price}
           </p>
           
           {uniqueColors.length > 0 && (
-            <div className="flex gap-1 items-center">
+            <div className="flex items-center gap-1">
               {uniqueColors.slice(0, 4).map((color, i) => (
                 <div 
                   key={i} 
-                  className="w-[26px] h-[23px] border border-black/10" 
+                  className="h-4 w-4 rounded-[4px] border border-black/10 sm:h-[23px] sm:w-[26px]" 
                   style={{ backgroundColor: color }}
                 />
               ))}
               {uniqueColors.length > 4 && (
-                <span className="font-logo text-[20px] text-black">
+                <span className="font-logo text-base text-black sm:text-[20px]">
                   +{uniqueColors.length - 4}
                 </span>
               )}
@@ -108,15 +108,15 @@ export default function ProductCard({ product, className = "" }: ProductCardProp
       <button 
         onClick={handleAddToCart}
         disabled={isAdding || isDone}
-        className={`w-full py-[20px] rounded-[12px] font-logo text-[20px] text-black transition-all active:scale-[0.98] flex items-center justify-center gap-4 ${
-          isDone ? "bg-emerald-500 text-white" : "bg-sokoline-secondary hover:opacity-90"
+        className={`flex w-full items-center justify-center gap-2 rounded-xl py-3 font-logo text-base text-black transition-all active:scale-[0.98] sm:gap-3 sm:py-4 sm:text-lg ${
+          isDone ? "bg-emerald-500 text-white" : "bg-sokoline-tertiary hover:opacity-90"
         }`}
       >
         {isAdding ? (
-          <Loader2 size={24} className="animate-spin" />
+          <Loader2 size={20} className="animate-spin sm:size-6" />
         ) : isDone ? (
           <>
-            <Check size={24} />
+            <Check size={20} className="sm:size-6" />
             Added!
           </>
         ) : (
@@ -124,8 +124,8 @@ export default function ProductCard({ product, className = "" }: ProductCardProp
             <Image 
               src="/CartIcon.svg" 
               alt="Cart" 
-              width={30} 
-              height={30} 
+              width={22} 
+              height={22} 
               className="object-contain"
               unoptimized
             />

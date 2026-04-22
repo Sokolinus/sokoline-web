@@ -22,11 +22,11 @@ const Breadcrumbs = () => {
   ];
 
   return (
-    <nav className="w-full bg-white flex items-center justify-center px-[10px] py-[24px]">
-      <ol className="flex items-center gap-2 font-sans text-[24px] text-black">
+    <nav className="w-full border-b border-black/5 bg-white/95 px-4 py-4 backdrop-blur sm:px-6 sm:py-5">
+      <ol className="mx-auto flex w-full max-w-7xl items-center gap-2 overflow-x-auto whitespace-nowrap font-sans text-base text-black sm:text-lg md:text-xl">
         {breadcrumbs.map((path, index) => (
           <li key={index} className="flex items-center gap-2">
-            {index > 0 && <span className="opacity-60">{`>`}</span>}
+            {index > 0 && <span className="opacity-40">{`/`}</span>}
             <Link
               href={path.link}
               className={`hover:text-black/60 transition-colors ${

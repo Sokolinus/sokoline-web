@@ -12,7 +12,7 @@ import {
 } from "@clerk/nextjs";
 import { useCart } from "@/components/providers/CartProvider";
 import { useShop } from "@/components/providers/ShopProvider";
-import { ShoppingBag, Menu, X, Store } from "lucide-react";
+import { Menu, X, Store } from "lucide-react";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -35,9 +35,9 @@ const Navbar = () => {
   // Determine navbar styles based on page and scroll position
   const navClasses = isHome
     ? scrolled
-      ? "sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 transition-all duration-300"
+      ? "sticky top-0 z-50 w-full bg-white/85 backdrop-blur-md border-b border-gray-100/90 transition-all duration-300"
       : "absolute top-0 z-50 w-full bg-transparent border-none transition-all duration-300"
-    : "sticky top-0 z-50 w-full bg-white border-b border-gray-100";
+    : "sticky top-0 z-50 w-full bg-white/95 backdrop-blur border-b border-gray-100";
 
   const linkClasses = isHome && !scrolled
     ? "text-base font-bold text-white hover:text-white/70 transition-colors"
@@ -45,11 +45,11 @@ const Navbar = () => {
 
   return (
     <nav className={navClasses}>
-      <div className="mx-auto flex h-24 max-w-7xl items-center justify-between px-6">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 md:h-24">
 
         {/* LEFT: Logo + Nav Links */}
-        <div className="flex items-center gap-10">
-          <Link href="/" className="relative h-12 w-48 transition-opacity hover:opacity-90">
+        <div className="flex items-center gap-4 md:gap-10">
+          <Link href="/" className="relative h-10 w-36 transition-opacity hover:opacity-90 sm:h-11 sm:w-40 md:h-12 md:w-48">
             <Image
               src="/logo.svg"
               alt="Sokoline"
@@ -73,11 +73,11 @@ const Navbar = () => {
         </div>
 
         {/* RIGHT: Actions */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-3 sm:gap-4 md:gap-6">
           {/* Cart */}
           <Link
             href="/cart"
-            className="relative flex h-10 w-10 items-center justify-center transition-transform hover:scale-105"
+            className={`relative flex h-9 w-9 items-center justify-center rounded-full transition-transform hover:scale-105 sm:h-10 sm:w-10 ${isHome && !scrolled ? "hover:bg-white/10" : "hover:bg-gray-50"}`}
           >
             <Image 
               src="/CartIcon.svg" 
@@ -87,7 +87,7 @@ const Navbar = () => {
               unoptimized
             />
             {cartItemCount > 0 && (
-              <span className={`absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold z-10 ${isHome && !scrolled ? 'bg-white text-[#8484F6]' : 'bg-black text-white'}`}>
+              <span className={`absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold z-10 ring-2 ring-white ${isHome && !scrolled ? 'bg-white text-[#8484F6]' : 'bg-black text-white'}`}>
                 {cartItemCount}
               </span>
             )}
@@ -113,7 +113,7 @@ const Navbar = () => {
                 </Link>
               )
             )}
-            <div className="flex items-center justify-center ml-2">
+            <div className="flex items-center justify-center ml-1 md:ml-2">
               <UserButton
                 appearance={{
                   elements: {
@@ -142,7 +142,7 @@ const Navbar = () => {
 
           {/* Mobile toggle */}
           <button
-            className={`flex h-10 w-10 items-center justify-center rounded-lg transition-colors md:hidden ${isHome && !scrolled ? 'text-white hover:bg-white/10' : 'text-black hover:bg-gray-50'}`}
+            className={`flex h-10 w-10 items-center justify-center rounded-xl transition-colors md:hidden ${isHome && !scrolled ? 'text-white hover:bg-white/10' : 'text-black hover:bg-gray-50'}`}
             onClick={() => setMobileOpen((prev) => !prev)}
             aria-label="Toggle menu"
           >
@@ -153,14 +153,21 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="border-t border-gray-100 bg-white px-4 py-6 md:hidden shadow-xl animate-in slide-in-from-top duration-300">
-          <div className="flex flex-col gap-2">
+        <div className="border-t border-gray-100 bg-white/95 backdrop-blur px-4 pb-6 pt-4 md:hidden shadow-xl animate-in slide-in-from-top duration-300">
+          <div className="flex flex-col gap-1.5">
+            <Link
+              href="/"
+              className="rounded-xl px-4 py-3 text-base font-bold text-gray-800 hover:bg-gray-50 transition-colors"
+              onClick={() => setMobileOpen(false)}
+            >
+              Home
+            </Link>
             <Link
               href="/products"
               className="rounded-xl px-4 py-3 text-base font-bold text-gray-800 hover:bg-gray-50 transition-colors"
               onClick={() => setMobileOpen(false)}
             >
-              Browse
+              Explore
             </Link>
             <Link
               href="/shops"
@@ -182,7 +189,7 @@ const Navbar = () => {
               ) : (
                 <Link
                   href="/dashboard/my-shop/new"
-                  className="mt-2 flex items-center justify-center gap-2 rounded-xl bg-[#8484F6] px-4 py-3 text-base font-bold text-white shadow-lg"
+                  className="mt-2 flex items-center justify-center gap-2 rounded-xl bg-[#8484F6] px-4 py-3 text-base font-bold text-white shadow-lg hover:opacity-90 transition-opacity"
                   onClick={() => setMobileOpen(false)}
                 >
                   <Store size={18} />
@@ -192,7 +199,7 @@ const Navbar = () => {
             </Show>
 
             <Show when="signed-out">
-              <div className="mt-4 flex flex-col gap-3 border-t border-gray-100 pt-4 px-2">
+              <div className="mt-4 flex flex-col gap-3 border-t border-gray-100 pt-4 px-1">
                 <SignInButton mode="modal">
                   <button className="w-full rounded-xl border-2 border-gray-100 py-3 text-base font-bold text-gray-800 hover:bg-gray-50 transition-colors">
                     Log in

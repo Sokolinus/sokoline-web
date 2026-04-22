@@ -26,12 +26,12 @@ export default async function ProductsPage({
     : "Products";
 
   return (
-    <main className="w-full flex flex-col items-center py-[10px] bg-white">
-      <div className="w-full max-w-[2048px] px-[10px] space-y-[38px]">
+    <main className="flex w-full flex-col items-center bg-white py-2 sm:py-3">
+      <div className="w-full max-w-[2048px] space-y-8 px-3 sm:space-y-10 sm:px-4 md:px-6">
         {/* Page header */}
-        <div className="py-10 border-b border-black/5 flex flex-col items-center">
-          <h1 className="font-logo text-[48px] font-bold text-black">{title}</h1>
-          <p className="mt-2 font-sans text-sm text-black/60">
+        <div className="flex flex-col items-center border-b border-black/5 py-7 sm:py-10">
+          <h1 className="text-center font-logo text-3xl font-bold text-black sm:text-[42px] md:text-[48px]">{title}</h1>
+          <p className="mt-2 text-center font-sans text-sm text-black/60">
             {products.length} {products.length === 1 ? "item" : "items"} available
           </p>
         </div>
@@ -66,7 +66,7 @@ export default async function ProductsPage({
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[10px] pb-24">
+          <div className="grid grid-cols-1 gap-3 pb-16 sm:grid-cols-2 sm:gap-4 sm:pb-24 lg:grid-cols-4">
             {products.map((product: Product) => (
               <ProductCard key={product.id} product={product} />
             ))}
