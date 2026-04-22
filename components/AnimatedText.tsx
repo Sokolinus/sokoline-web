@@ -23,24 +23,27 @@ export default function AnimatedText() {
   const currentPhrase = phrases[index];
 
   return (
-    <div className="relative h-[1.5em] w-full overflow-hidden flex items-center">
+    <div className="relative h-[1.8em] w-full overflow-hidden flex items-center">
       <AnimatePresence mode="wait">
         <motion.div
           key={currentPhrase}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
           className="flex flex-wrap whitespace-nowrap gap-x-[0.3em]"
         >
           {currentPhrase.split(" ").map((word, i) => (
-            <div key={i} className="relative overflow-hidden py-2 px-1">
+            <div key={i} className="relative overflow-hidden py-1 px-1">
               <motion.span
                 initial={{ y: "100%" }}
                 animate={{ y: "0%" }}
-                exit={{ y: "-120%" }}
+                exit={{ y: "-100%" }}
                 transition={{
-                  duration: 0.8,
-                  delay: i * 0.08,
+                  duration: 0.6,
+                  delay: i * 0.05,
                   ease: [0.33, 1, 0.68, 1],
                 }}
-                className="inline-block"
+                className="inline-block leading-none"
               >
                 {word}
               </motion.span>
