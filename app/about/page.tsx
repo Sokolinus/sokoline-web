@@ -19,7 +19,7 @@ export default function AboutPage() {
             About <span className="text-[#8484F6]">SOKOLINE</span>
           </h1>
           <p className="text-lg italic leading-relaxed text-gray-600 sm:text-xl md:text-2xl">
-            &ldquo;Empowering the next generation of campus entrepreneurs.&rdquo;
+            “Empowering the next generation of campus entrepreneurs.”
           </p>
           <div className="space-y-4 text-base leading-relaxed text-gray-500 sm:space-y-6 sm:text-lg md:text-xl">
             <p>
