@@ -8,16 +8,16 @@ export default async function ShopsPage() {
   const shops = await getShops();
 
   return (
-    <main className="max-w-7xl mx-auto px-6 mb-20 font-sans">
-      <div className="mt-6 flex flex-wrap justify-between items-center gap-4 py-8 border-b border-black/5">
-         <h1 className="text-[48px] font-black font-logo tracking-tighter text-black leading-none">Campus Vendors</h1>
-         <p className="text-black/40 font-bold uppercase tracking-[0.2em] text-xs">Verified Student Ventures</p>
+    <main className="mx-auto mb-16 max-w-7xl px-4 font-sans sm:mb-20 sm:px-6">
+      <div className="mt-4 flex flex-wrap items-end justify-between gap-3 border-b border-black/5 py-6 sm:mt-6 sm:gap-4 sm:py-8">
+         <h1 className="font-logo text-3xl leading-none font-black tracking-tighter text-black sm:text-[48px]">Campus Vendors</h1>
+         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/40 sm:text-xs">Verified Student Ventures</p>
       </div>
 
-      <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="mt-8 grid grid-cols-1 gap-4 sm:mt-10 sm:gap-6 md:mt-12 md:grid-cols-3 md:gap-8">
         {shops.map((shop: Shop) => (
           <div key={shop.id} className="group flex flex-col">
-            <Link href={`/shops/${shop.slug}`} className="flex-1 flex flex-col bg-gray-50 rounded-[40px] border border-black/5 overflow-hidden transition-all hover:bg-white hover:shadow-2xl hover:shadow-black/5 hover:border-black/10">
+            <Link href={`/shops/${shop.slug}`} className="flex flex-1 flex-col overflow-hidden rounded-[28px] border border-black/5 bg-gray-50 transition-all hover:border-black/10 hover:bg-white hover:shadow-2xl hover:shadow-black/5 sm:rounded-[40px]">
               <div className="relative aspect-video w-full overflow-hidden bg-white border-b border-black/5">
                 {shop.logo ? (
                   <Image 
@@ -34,15 +34,15 @@ export default async function ShopsPage() {
                 )}
               </div>
 
-              <div className="p-10 flex flex-col flex-1">
+              <div className="flex flex-1 flex-col p-5 sm:p-7 md:p-10">
                 <div className="flex justify-between items-start mb-4">
-                  <h2 className="text-2xl font-black font-logo text-black tracking-tight leading-tight group-hover:text-black/60 transition-colors">{shop.name}</h2>
+                  <h2 className="font-logo text-xl font-black leading-tight tracking-tight text-black transition-colors group-hover:text-black/60 sm:text-2xl">{shop.name}</h2>
                   <div className="flex items-center justify-center w-10 h-10 rounded-full bg-black text-white group-hover:bg-sokoline-accent group-hover:text-black transition-all">
                     <ArrowRight size={20} strokeWidth={3} />
                   </div>
                 </div>
                 
-                <p className="text-black/50 text-sm font-medium line-clamp-3 mb-8 leading-relaxed flex-1">
+                <p className="mb-6 flex-1 line-clamp-3 text-sm leading-relaxed text-black/50 sm:mb-8">
                   {shop.description || "Campus-verified student venture providing high-quality services and products within the university ecosystem."}
                 </p>
                 

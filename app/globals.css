@@ -15,6 +15,7 @@
   /* SOKOLINE Redesign Colors */
   --color-sokoline-accent: #8484F6;
   --color-sokoline-secondary: #cdb4db;
+  --color-sokoline-tertiary: #BEFDB1;
 
   /* Shadcn UI Colors */
   --color-primary: var(--primary);
@@ -51,12 +52,24 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply antialiased bg-background text-foreground font-sans;
+    @apply antialiased bg-background text-foreground font-sans leading-relaxed;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
+    text-rendering: optimizeLegibility;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply tracking-tight font-semibold font-logo;
+  }
+}
+
+::selection {
+  background-color: #dffccd;
+  color: var(--foreground);
+}
+
+@supports (background-color: color-mix(in srgb, red 50%, white)) {
+  ::selection {
+    background-color: color-mix(in srgb, var(--color-sokoline-tertiary) 70%, white);
   }
 }
 

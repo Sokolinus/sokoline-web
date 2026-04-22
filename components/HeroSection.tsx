@@ -1,15 +1,13 @@
 "use client";
 
-import Image from "next/image";
 import AnimatedText from "./AnimatedText";
 import { motion } from "framer-motion";
 import { ArrowRight, Crown } from "lucide-react";
 import Link from "next/link";
-import { Show } from "@clerk/nextjs";
 
 export default function HeroSection() {
   return (
-    <section className="w-full bg-[#8484F6] py-16 md:py-32 relative flex items-center text-white min-h-screen md:min-h-[900px] overflow-hidden">
+    <section className="relative flex min-h-[820px] w-full items-center overflow-hidden bg-[#8484F6] py-20 pt-28 text-white sm:min-h-[880px] sm:pt-32 md:min-h-[900px] md:py-28">
       {/* Decorative SVG Accents */}
       <div className="absolute top-10 md:top-20 left-10 opacity-20 pointer-events-none">
         <svg width="200" height="200" className="md:w-[300px] md:h-[300px]" viewBox="0 0 100 100" fill="white">
@@ -25,10 +23,10 @@ export default function HeroSection() {
         </svg>
       </div>
 
-      <div className="max-w-7xl mx-auto w-full px-6 md:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 items-center relative z-10">
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 sm:gap-12 sm:px-6 md:gap-16 md:px-8 lg:grid-cols-2">
         
         {/* Phone Mockup (Top on Mobile, Left on Desktop) */}
-        <div className="relative flex justify-center items-center h-[450px] md:h-[750px] order-2 lg:order-1">
+        <div className="relative order-2 flex h-[390px] items-center justify-center sm:h-[450px] md:h-[650px] lg:order-1 lg:h-[750px]">
           
           <motion.div 
             initial={{ opacity: 0, scale: 0.8, x: -30, rotate: 0 }}
@@ -79,7 +77,7 @@ export default function HeroSection() {
         </div>
 
         {/* Content (Bottom on Mobile, Right on Desktop) */}
-        <div className="space-y-6 md:space-y-10 z-20 order-1 lg:order-2 lg:-ml-20 text-center lg:text-left">
+         <div className="order-1 z-20 space-y-5 text-center md:space-y-8 lg:order-2 lg:-ml-20 lg:text-left">
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -91,15 +89,15 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: -20, rotate: -15 }}
               animate={{ opacity: 1, y: 0, rotate: -8 }}
               transition={{ delay: 0.8, duration: 0.6 }}
-              className="absolute -top-8 md:-top-12 left-[62%] md:left-[62%] text-yellow-300 drop-shadow-lg z-30"
+               className="absolute -top-7 left-[62%] z-30 text-yellow-300 drop-shadow-lg md:-top-12 md:left-[62%]"
             >
               <Crown className="w-8 h-8 md:w-[60px] md:h-[60px]" fill="currentColor" strokeWidth={1} />
             </motion.div>
 
-            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-9xl font-black tracking-tight font-logo leading-[0.85] drop-shadow-sm">
+            <h1 className="font-logo text-5xl leading-[0.85] font-black tracking-tight drop-shadow-sm sm:text-6xl md:text-7xl lg:text-9xl">
               SOKOLINE
             </h1>
-            <div className="text-lg md:text-2xl lg:text-3xl text-white/90 italic font-medium tracking-tight h-[1.8em]">
+            <div className="h-[1.8em] text-base italic tracking-tight text-white/90 sm:text-lg md:text-2xl lg:text-3xl">
               <AnimatedText />
             </div>
           </motion.div>
@@ -108,17 +106,17 @@ export default function HeroSection() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
-            className="text-base md:text-xl lg:text-2xl text-white/80 max-w-xl mx-auto lg:mx-0 leading-snug font-medium"
+             className="mx-auto max-w-xl text-sm leading-snug text-white/85 sm:text-base md:text-xl lg:mx-0 lg:text-2xl"
           >
             Support student entrepreneurs. Every item here is owned and operated by students within the campus ecosystem.
           </motion.p>
 
-          <div className="flex flex-wrap justify-center lg:justify-start gap-4 md:gap-6 pt-2 md:pt-4 font-logo">
-            <Link href="/products" className="px-6 md:px-10 py-3 md:py-5 text-base md:text-xl font-bold bg-white text-[#8484F6] rounded-2xl md:rounded-[2rem] hover:bg-black hover:text-white transition-all shadow-xl flex items-center gap-2 md:gap-3 group border-2 border-white">
-              Browse Items <ArrowRight className="w-4 h-4 md:w-6 md:h-6 transition-transform group-hover:translate-x-1" />
+          <div className="flex flex-wrap justify-center gap-3 pt-2 font-logo sm:gap-4 md:gap-6 md:pt-4 lg:justify-start">
+            <Link href="/products" className="group flex items-center gap-2 rounded-2xl border-2 border-white bg-white px-5 py-3 text-sm font-bold text-[#8484F6] shadow-xl transition-all hover:bg-black hover:text-white sm:px-6 sm:text-base md:gap-3 md:rounded-[2rem] md:px-10 md:py-5 md:text-xl">
+              Browse Items <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 md:h-6 md:w-6" />
             </Link>
             
-            <Link href="/about" className="px-6 md:px-10 py-3 md:py-5 text-base md:text-xl font-bold bg-white/10 backdrop-blur-md text-white border-2 border-white/20 rounded-2xl md:rounded-[2rem] hover:bg-white hover:text-[#8484F6] transition-all shadow-lg">
+            <Link href="/about" className="rounded-2xl border-2 border-white/20 bg-white/10 px-5 py-3 text-sm font-bold text-white shadow-lg backdrop-blur-md transition-all hover:bg-white hover:text-[#8484F6] sm:px-6 sm:text-base md:rounded-[2rem] md:px-10 md:py-5 md:text-xl">
               About Us
             </Link>
           </div>
