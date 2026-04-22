@@ -1,6 +1,6 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
-import { Montserrat, Quicksand } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -9,13 +9,8 @@ import { ShopProvider } from "@/components/providers/ShopProvider";
 import { ToastProvider } from "@/components/providers/ToastProvider";
 import ChatSheet from "@/components/ChatSheet";
 
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
-  subsets: ["latin"],
-});
-
-const quicksand = Quicksand({
-  variable: "--font-quicksand",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
@@ -35,7 +30,10 @@ export default function RootLayout({
         <CartProvider>
           <ShopProvider>
             <html lang="en" className="antialiased">
-              <body className={`${montserrat.variable} ${quicksand.variable} font-sans`}>
+              <head>
+                <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&display=swap" rel="stylesheet" />
+              </head>
+              <body className={`${inter.variable} font-sans min-h-screen bg-white`}>
                 <Navbar />
                 <Breadcrumbs />
                 <main>

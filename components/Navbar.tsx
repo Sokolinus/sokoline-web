@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import {
   SignInButton,
   SignUpButton,
@@ -14,45 +15,58 @@ import { useShop } from "@/components/providers/ShopProvider";
 import { ShoppingBag, Menu, X, Store } from "lucide-react";
 
 const Navbar = () => {
+  const pathname = usePathname();
+  const isHome = pathname === "/";
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const { cart } = useCart();
   const { hasShop, loading: shopLoading } = useShop();
   const cartItemCount = cart?.items.reduce((acc, item) => acc + item.quantity, 0) || 0;
 
+  // Determine navbar styles based on page and scroll position
+  const navClasses = isHome
+    ? scrolled
+      ? "sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 transition-all duration-300"
+      : "absolute top-0 z-50 w-full bg-transparent border-none transition-all duration-300"
+    : "sticky top-0 z-50 w-full bg-white border-b border-gray-100";
+
+  const linkClasses = isHome && !scrolled
+    ? "text-base font-bold text-white hover:text-white/70 transition-colors"
+    : "text-base font-bold text-black hover:text-[#8484F6] transition-colors";
+
   return (
-    <nav className="sticky top-0 z-50 w-full bg-white border-b border-gray-100 font-logo">
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6">
+    <nav className={navClasses}>
+      <div className="mx-auto flex h-24 max-w-7xl items-center justify-between px-6">
 
         {/* LEFT: Logo + Nav Links */}
-        <div className="flex items-center gap-12">
-          <Link href="/" className="relative h-16 w-56 transition-opacity hover:opacity-90">
+        <div className="flex items-center gap-10">
+          <Link href="/" className="relative h-12 w-48 transition-opacity hover:opacity-90">
             <Image
               src="/logo.svg"
               alt="Sokoline"
               fill
-              className="object-contain"
+              className={`object-contain transition-all ${isHome && !scrolled ? 'brightness-0 invert' : ''}`}
               priority
-              sizes="224px"
+              sizes="192px"
             />
           </Link>
-          <div className="hidden md:flex items-center gap-12">
-            <Link
-              href="/"
-              className="text-[36px] font-medium text-black hover:text-gray-600 transition-colors"
-            >
+          <div className="hidden md:flex items-center gap-8 font-logo">
+            <Link href="/" className={linkClasses}>
               Home
             </Link>
-            <Link
-              href="/shops"
-              className="text-[36px] font-medium text-black hover:text-gray-600 transition-colors"
-            >
+            <Link href="/shops" className={linkClasses}>
               Shops
             </Link>
-            <Link
-              href="/products"
-              className="text-[36px] font-medium text-black hover:text-gray-600 transition-colors"
-            >
+            <Link href="/products" className={linkClasses}>
               Explore
             </Link>
           </div>
@@ -63,18 +77,17 @@ const Navbar = () => {
           {/* Cart */}
           <Link
             href="/cart"
-            className="relative flex h-14 w-14 items-center justify-center transition-transform hover:scale-105"
+            className="relative flex h-10 w-10 items-center justify-center transition-transform hover:scale-105"
           >
             <Image 
               src="/CartIcon.svg" 
               alt="Cart" 
-              width={84} 
-              height={83} 
-              className="object-contain"
+              fill
+              className={`object-contain ${isHome && !scrolled ? 'brightness-0 invert' : ''}`}
               unoptimized
             />
             {cartItemCount > 0 && (
-              <span className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full bg-black text-[12px] font-bold text-white">
+              <span className={`absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold z-10 ${isHome && !scrolled ? 'bg-white text-[#8484F6]' : 'bg-black text-white'}`}>
                 {cartItemCount}
               </span>
             )}
@@ -86,14 +99,14 @@ const Navbar = () => {
               hasShop ? (
                 <Link
                   href="/dashboard"
-                  className="hidden md:flex items-center h-10 px-6 rounded-lg bg-black text-white text-sm font-bold hover:bg-gray-800 transition-colors"
+                  className={`hidden md:flex items-center h-11 px-6 rounded-xl text-sm font-bold transition-all ${isHome && !scrolled ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}
                 >
                   Dashboard
                 </Link>
               ) : (
                 <Link
                   href="/dashboard/my-shop/new"
-                  className="hidden md:flex items-center h-10 px-6 rounded-lg bg-sokoline-accent text-black text-sm font-bold hover:opacity-90 transition-colors"
+                  className={`hidden md:flex items-center h-11 px-6 rounded-xl text-sm font-bold transition-all shadow-sm ${isHome && !scrolled ? 'bg-white text-[#8484F6] hover:bg-gray-100' : 'bg-[#8484F6] text-white hover:opacity-90'}`}
                 >
                   <Store size={16} className="mr-2" />
                   Open a Shop
@@ -104,7 +117,7 @@ const Navbar = () => {
               <UserButton
                 appearance={{
                   elements: {
-                    userButtonAvatarBox: "w-9 h-9",
+                    userButtonAvatarBox: "w-10 h-10 border-2 border-transparent hover:border-white/50 transition-all",
                   },
                 }}
               />
@@ -115,12 +128,12 @@ const Navbar = () => {
           <Show when="signed-out">
             <div className="hidden md:flex items-center gap-3">
               <SignInButton mode="modal">
-                <button className="h-10 px-6 rounded-lg text-sm font-bold text-black hover:bg-gray-100 transition-colors">
+                <button className={`h-11 px-6 rounded-xl text-sm font-bold transition-colors ${isHome && !scrolled ? 'text-white hover:bg-white/10' : 'text-black hover:bg-gray-100'}`}>
                   Log in
                 </button>
               </SignInButton>
               <SignUpButton mode="modal">
-                <button className="h-10 px-6 rounded-lg bg-black text-white text-sm font-bold hover:bg-gray-800 transition-colors">
+                <button className={`h-11 px-6 rounded-xl text-sm font-bold transition-all ${isHome && !scrolled ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}>
                   Sign up
                 </button>
               </SignUpButton>
@@ -129,7 +142,7 @@ const Navbar = () => {
 
           {/* Mobile toggle */}
           <button
-            className="flex h-10 w-10 items-center justify-center rounded-lg text-black hover:bg-gray-50 transition-colors md:hidden"
+            className={`flex h-10 w-10 items-center justify-center rounded-lg transition-colors md:hidden ${isHome && !scrolled ? 'text-white hover:bg-white/10' : 'text-black hover:bg-gray-50'}`}
             onClick={() => setMobileOpen((prev) => !prev)}
             aria-label="Toggle menu"
           >
@@ -140,18 +153,18 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="border-t border-gray-100 bg-white px-4 py-4 md:hidden">
-          <div className="flex flex-col gap-1">
+        <div className="border-t border-gray-100 bg-white px-4 py-6 md:hidden shadow-xl animate-in slide-in-from-top duration-300">
+          <div className="flex flex-col gap-2">
             <Link
               href="/products"
-              className="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              className="rounded-xl px-4 py-3 text-base font-bold text-gray-800 hover:bg-gray-50 transition-colors"
               onClick={() => setMobileOpen(false)}
             >
               Browse
             </Link>
             <Link
               href="/shops"
-              className="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              className="rounded-xl px-4 py-3 text-base font-bold text-gray-800 hover:bg-gray-50 transition-colors"
               onClick={() => setMobileOpen(false)}
             >
               Shops
@@ -161,7 +174,7 @@ const Navbar = () => {
               {hasShop ? (
                 <Link
                   href="/dashboard"
-                  className="rounded-lg px-3 py-2.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 transition-colors"
+                  className="rounded-xl px-4 py-3 text-base font-bold text-gray-900 hover:bg-gray-50 transition-colors"
                   onClick={() => setMobileOpen(false)}
                 >
                   Dashboard
@@ -169,24 +182,24 @@ const Navbar = () => {
               ) : (
                 <Link
                   href="/dashboard/my-shop/new"
-                  className="mt-1 flex items-center justify-center gap-2 rounded-lg bg-violet-600 px-3 py-2.5 text-sm font-semibold text-white"
+                  className="mt-2 flex items-center justify-center gap-2 rounded-xl bg-[#8484F6] px-4 py-3 text-base font-bold text-white shadow-lg"
                   onClick={() => setMobileOpen(false)}
                 >
-                  <Store size={14} />
+                  <Store size={18} />
                   Open a Shop
                 </Link>
               )}
             </Show>
 
             <Show when="signed-out">
-              <div className="mt-2 flex flex-col gap-2 border-t border-gray-100 pt-3">
+              <div className="mt-4 flex flex-col gap-3 border-t border-gray-100 pt-4 px-2">
                 <SignInButton mode="modal">
-                  <button className="w-full rounded-lg border border-gray-200 py-2.5 text-sm font-semibold text-gray-800 hover:bg-gray-50 transition-colors">
+                  <button className="w-full rounded-xl border-2 border-gray-100 py-3 text-base font-bold text-gray-800 hover:bg-gray-50 transition-colors">
                     Log in
                   </button>
                 </SignInButton>
                 <SignUpButton mode="modal">
-                  <button className="w-full rounded-lg bg-gray-900 py-2.5 text-sm font-semibold text-white hover:bg-gray-800 transition-colors">
+                  <button className="w-full rounded-xl bg-black py-3 text-base font-bold text-white hover:bg-gray-800 transition-colors shadow-md">
                     Sign up
                   </button>
                 </SignUpButton>
