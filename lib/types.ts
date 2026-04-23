@@ -95,6 +95,7 @@ export interface OrderItem {
   product_name: string;
   quantity: number;
   price: string;
+  status: 'PENDING' | 'COMPLETED' | 'CANCELLED';
 }
 
 export interface Order {
@@ -103,6 +104,7 @@ export interface Order {
   items: OrderItem[];
   total_price: string;
   status: 'PENDING' | 'COMPLETED' | 'CANCELLED';
+  seller_status?: 'PENDING' | 'COMPLETED' | 'CANCELLED';
   payment_status: 'PENDING' | 'SUCCESS' | 'FAILED';
   mpesa_receipt_number?: string;
   phone_number?: string;

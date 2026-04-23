@@ -123,69 +123,72 @@ export default function ShopOrdersPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {orders.map((order) => (
-                  <TableRow key={order.id} className="hover:bg-zinc-50/30 transition-colors border-zinc-100">
-                    <TableCell className="font-bold text-zinc-900">
-                      #SKL-{order.id.toString().padStart(5, '0')}
-                    </TableCell>
-                    <TableCell className="text-zinc-500 text-sm">
-                      {new Date(order.created_at).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell className="text-zinc-900 font-medium">
-                      Student #{order.user}
-                    </TableCell>
-                    <TableCell>
-                       <Badge 
-                         variant={order.payment_status === 'SUCCESS' ? "default" : "secondary"}
-                         className={`border font-bold shadow-none ${
-                           order.payment_status === 'SUCCESS' 
-                             ? "bg-green-50 text-green-700 border-green-100 hover:bg-green-50" 
-                             : order.payment_status === 'FAILED'
-                             ? "bg-red-50 text-red-700 border-red-100 hover:bg-red-50"
-                             : "bg-orange-50 text-orange-700 border-orange-100 hover:bg-orange-50"
-                         }`}
-                       >
-                         {order.payment_status}
-                       </Badge>
-                    </TableCell>
-                    <TableCell>
-                       <Badge 
-                         variant="outline"
-                         className={`font-bold shadow-none border ${
-                           order.status === 'COMPLETED' 
-                             ? "bg-blue-50 text-blue-700 border-blue-100" 
-                             : "bg-zinc-100 text-zinc-600 border-zinc-200"
-                         }`}
-                       >
-                         {order.status}
-                       </Badge>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      {order.status === 'PENDING' && order.payment_status === 'SUCCESS' ? (
-                        <Button
-                          size="sm"
-                          disabled={completingId === order.id}
-                          onClick={() => handleCompleteOrder(order.id)}
-                          className="bg-[#8484F6] hover:bg-[#7373e5] text-white font-bold rounded-xl h-8 px-4"
-                        >
-                          {completingId === order.id ? (
-                            <div className="animate-spin rounded-full h-3 w-3 border-t-2 border-white"></div>
-                          ) : (
-                            <>Complete <Check size={14} className="ml-1" /></>
-                          )}
-                        </Button>
-                      ) : order.status === 'COMPLETED' ? (
-                        <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest flex items-center justify-end gap-1">
-                          Fulfilled <CheckCircle2 size={12} className="text-green-500" />
-                        </span>
-                      ) : (
-                        <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">
-                          Awaiting Payment
-                        </span>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {orders.map((order) => {
+                  const displayStatus = order.seller_status || order.status;
+                  return (
+                    <TableRow key={order.id} className="hover:bg-zinc-50/30 transition-colors border-zinc-100">
+                      <TableCell className="font-bold text-zinc-900">
+                        #SKL-{order.id.toString().padStart(5, '0')}
+                      </TableCell>
+                      <TableCell className="text-zinc-500 text-sm">
+                        {new Date(order.created_at).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell className="text-zinc-900 font-medium">
+                        Student #{order.user}
+                      </TableCell>
+                      <TableCell>
+                         <Badge 
+                           variant={order.payment_status === 'SUCCESS' ? "default" : "secondary"}
+                           className={`border font-bold shadow-none ${
+                             order.payment_status === 'SUCCESS' 
+                               ? "bg-green-50 text-green-700 border-green-100 hover:bg-green-50" 
+                               : order.payment_status === 'FAILED'
+                               ? "bg-red-50 text-red-700 border-red-100 hover:bg-red-50"
+                               : "bg-orange-50 text-orange-700 border-orange-100 hover:bg-orange-50"
+                           }`}
+                         >
+                           {order.payment_status}
+                         </Badge>
+                      </TableCell>
+                      <TableCell>
+                         <Badge 
+                           variant="outline"
+                           className={`font-bold shadow-none border ${
+                             displayStatus === 'COMPLETED' 
+                               ? "bg-blue-50 text-blue-700 border-blue-100" 
+                               : "bg-zinc-100 text-zinc-600 border-zinc-200"
+                           }`}
+                         >
+                           {displayStatus}
+                         </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {displayStatus === 'PENDING' && order.payment_status === 'SUCCESS' ? (
+                          <Button
+                            size="sm"
+                            disabled={completingId === order.id}
+                            onClick={() => handleCompleteOrder(order.id)}
+                            className="bg-[#8484F6] hover:bg-[#7373e5] text-white font-bold rounded-xl h-8 px-4"
+                          >
+                            {completingId === order.id ? (
+                              <div className="animate-spin rounded-full h-3 w-3 border-t-2 border-white"></div>
+                            ) : (
+                              <>Complete <Check size={14} className="ml-1" /></>
+                            )}
+                          </Button>
+                        ) : displayStatus === 'COMPLETED' ? (
+                          <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest flex items-center justify-end gap-1">
+                            Fulfilled <CheckCircle2 size={12} className="text-green-500" />
+                          </span>
+                        ) : (
+                          <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">
+                            Awaiting Payment
+                          </span>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           )}
