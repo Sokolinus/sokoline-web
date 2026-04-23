@@ -71,7 +71,8 @@ export async function getProducts(params?: Record<string, string>): Promise<Prod
     if (!res.ok) return [];
     const data = await res.json();
     return data.results || data;
-  } catch {
+  } catch (error) {
+    console.error("Error fetching products:", error);
     return [];
   }
 }
@@ -80,7 +81,8 @@ export async function getProduct(slug: string): Promise<Product | null> {
   try {
     const res = await apiRequest(`products/${slug}`);
     return res.ok ? await res.json() : null;
-  } catch {
+  } catch (error) {
+    console.error(`Error fetching product ${slug}:`, error);
     return null;
   }
 }

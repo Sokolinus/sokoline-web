@@ -17,6 +17,7 @@ import Link from "next/link";
 import { fetchShopOrders } from "@/lib/api";
 import { useShop } from "@/components/providers/ShopProvider";
 import { Order } from "@/lib/types";
+import { calculateSellerRevenue, get7DayChartData, getTopProducts } from "@/lib/analytics";
 import { 
   BarChart, 
   Bar, 
@@ -58,17 +59,8 @@ export default function DashboardOverview() {
     }
   }, [authLoaded, isSignedIn, getToken]);
 
-  // Helper to calculate seller-specific revenue from an order
-  const getSellerRevenue = (order: Order) => {
-    if (order.payment_status !== "SUCCESS") return 0;
-    // We only sum up items that belong to the current shop
-    // Note: The backend already filters the orders, but we should sum items
-    // just in case of multi-vendor overlaps in the order object
-    return order.items.reduce((sum, item) => sum + (Number(item.price) * item.quantity), 0);
-  };
-
   const totalRevenue = useMemo(() => {
-    return orders.reduce((acc, order) => acc + getSellerRevenue(order), 0);
+    return orders.reduce((acc, order) => acc + calculateSellerRevenue(order), 0);
   }, [orders]);
 
   const activeOrdersCount = useMemo(() => {
@@ -76,50 +68,10 @@ export default function DashboardOverview() {
   }, [orders]);
 
   // Process data for the 7-day chart
-  const chartData = useMemo(() => {
-    const days = [];
-    const now = new Date();
-    
-    for (let i = 6; i >= 0; i--) {
-      const date = new Date(now);
-      date.setDate(date.getDate() - i);
-      const dateStr = date.toISOString().split('T')[0];
-      const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
-      
-      const dayRevenue = orders
-        .filter(o => o.created_at.split('T')[0] === dateStr)
-        .reduce((sum, o) => sum + getSellerRevenue(o), 0);
-        
-      days.push({
-        name: dayName,
-        revenue: dayRevenue,
-        fullDate: dateStr
-      });
-    }
-    return days;
-  }, [orders]);
+  const chartData = useMemo(() => get7DayChartData(orders), [orders]);
 
   // Process data for Top Products
-  const topProducts = useMemo(() => {
-    const productMap: Record<string, { name: string, quantity: number, revenue: number }> = {};
-    
-    orders.forEach(order => {
-      if (order.payment_status === "SUCCESS") {
-        order.items.forEach(item => {
-          const key = item.product_name;
-          if (!productMap[key]) {
-            productMap[key] = { name: key, quantity: 0, revenue: 0 };
-          }
-          productMap[key].quantity += item.quantity;
-          productMap[key].revenue += Number(item.price) * item.quantity;
-        });
-      }
-    });
-    
-    return Object.values(productMap)
-      .sort((a, b) => b.revenue - a.revenue)
-      .slice(0, 4);
-  }, [orders]);
+  const topProducts = useMemo(() => getTopProducts(orders), [orders]);
 
   if (!authLoaded || loading) {
     return (
@@ -328,7 +280,7 @@ export default function DashboardOverview() {
                         {new Date(order.created_at).toLocaleDateString()}
                       </td>
                       <td className="px-6 py-4 text-right text-sm font-bold text-gray-900">
-                        KES {getSellerRevenue(order).toLocaleString()}
+                        KES {calculateSellerRevenue(order).toLocaleString()}
                       </td>
                     </tr>
                   );
