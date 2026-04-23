@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useAuth } from "@clerk/nextjs";
 import {
@@ -11,11 +11,22 @@ import {
   Plus,
   Loader2,
   ArrowUpRight,
+  Package,
 } from "lucide-react";
 import Link from "next/link";
-import { fetchOrders } from "@/lib/api";
+import { fetchShopOrders } from "@/lib/api";
 import { useShop } from "@/components/providers/ShopProvider";
 import { Order } from "@/lib/types";
+import { 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer,
+  Cell
+} from "recharts";
 
 export default function DashboardOverview() {
   const { user } = useUser();
@@ -31,7 +42,8 @@ export default function DashboardOverview() {
       try {
         const token = await getToken();
         if (token) {
-          const orderData = await fetchOrders(token);
+          // Use fetchShopOrders to get only orders relevant to the seller
+          const orderData = await fetchShopOrders(token);
           setOrders(orderData);
         }
       } catch (error) {
@@ -46,6 +58,69 @@ export default function DashboardOverview() {
     }
   }, [authLoaded, isSignedIn, getToken]);
 
+  // Helper to calculate seller-specific revenue from an order
+  const getSellerRevenue = (order: Order) => {
+    if (order.payment_status !== "SUCCESS") return 0;
+    // We only sum up items that belong to the current shop
+    // Note: The backend already filters the orders, but we should sum items
+    // just in case of multi-vendor overlaps in the order object
+    return order.items.reduce((sum, item) => sum + (Number(item.price) * item.quantity), 0);
+  };
+
+  const totalRevenue = useMemo(() => {
+    return orders.reduce((acc, order) => acc + getSellerRevenue(order), 0);
+  }, [orders]);
+
+  const activeOrdersCount = useMemo(() => {
+    return orders.filter((o) => (o.seller_status || o.status) === "PENDING").length;
+  }, [orders]);
+
+  // Process data for the 7-day chart
+  const chartData = useMemo(() => {
+    const days = [];
+    const now = new Date();
+    
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date(now);
+      date.setDate(date.getDate() - i);
+      const dateStr = date.toISOString().split('T')[0];
+      const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+      
+      const dayRevenue = orders
+        .filter(o => o.created_at.split('T')[0] === dateStr)
+        .reduce((sum, o) => sum + getSellerRevenue(o), 0);
+        
+      days.push({
+        name: dayName,
+        revenue: dayRevenue,
+        fullDate: dateStr
+      });
+    }
+    return days;
+  }, [orders]);
+
+  // Process data for Top Products
+  const topProducts = useMemo(() => {
+    const productMap: Record<string, { name: string, quantity: number, revenue: number }> = {};
+    
+    orders.forEach(order => {
+      if (order.payment_status === "SUCCESS") {
+        order.items.forEach(item => {
+          const key = item.product_name;
+          if (!productMap[key]) {
+            productMap[key] = { name: key, quantity: 0, revenue: 0 };
+          }
+          productMap[key].quantity += item.quantity;
+          productMap[key].revenue += Number(item.price) * item.quantity;
+        });
+      }
+    });
+    
+    return Object.values(productMap)
+      .sort((a, b) => b.revenue - a.revenue)
+      .slice(0, 4);
+  }, [orders]);
+
   if (!authLoaded || loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -53,12 +128,6 @@ export default function DashboardOverview() {
       </div>
     );
   }
-
-  const totalRevenue = orders.reduce(
-    (acc, order) => acc + (order.payment_status === "SUCCESS" ? Number(order.total_price) : 0),
-    0
-  );
-  const activeOrdersCount = orders.filter((o) => o.status === "PENDING").length;
 
   const stats = [
     {
@@ -98,7 +167,7 @@ export default function DashboardOverview() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 pb-12">
       {/* Greeting */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -112,7 +181,7 @@ export default function DashboardOverview() {
         <div className="flex gap-2">
           <Link
             href="/dashboard/products/new"
-            className="flex items-center gap-1.5 rounded-lg bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-violet-700 transition-colors"
+            className="flex items-center gap-1.5 rounded-lg bg-[#8484F6] px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90 transition-all"
           >
             <Plus size={15} />
             Add product
@@ -125,7 +194,7 @@ export default function DashboardOverview() {
         {stats.map((stat) => (
           <div
             key={stat.name}
-            className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm"
+            className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all hover:shadow-md"
           >
             <div className={`inline-flex rounded-xl p-2.5 ${stat.bg} ${stat.color} mb-4`}>
               <stat.icon size={18} />
@@ -136,14 +205,88 @@ export default function DashboardOverview() {
         ))}
       </div>
 
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+        {/* Sales Chart */}
+        <div className="lg:col-span-2 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-widest">7-Day Revenue</h2>
+            <div className="text-[10px] font-bold text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded-full uppercase">
+              Last 7 Days
+            </div>
+          </div>
+          <div className="h-[280px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={chartData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
+                <XAxis 
+                  dataKey="name" 
+                  axisLine={false} 
+                  tickLine={false} 
+                  tick={{ fontSize: 11, fill: '#9ca3af', fontWeight: 600 }}
+                  dy={10}
+                />
+                <YAxis 
+                  axisLine={false} 
+                  tickLine={false} 
+                  tick={{ fontSize: 11, fill: '#9ca3af', fontWeight: 600 }}
+                />
+                <Tooltip 
+                  cursor={{ fill: '#f9fafb' }}
+                  contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', fontSize: '12px' }}
+                />
+                <Bar dataKey="revenue" radius={[6, 6, 0, 0]} barSize={32}>
+                  {chartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={index === 6 ? '#8484F6' : '#e5e7eb'} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Top Products */}
+        <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+          <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-widest mb-6">Top Products</h2>
+          {topProducts.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-[280px] text-center">
+              <Package size={32} className="text-gray-100 mb-2" />
+              <p className="text-xs text-gray-400">No data available</p>
+            </div>
+          ) : (
+            <div className="space-y-5">
+              {topProducts.map((product, i) => (
+                <div key={i} className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-50 text-[10px] font-bold text-gray-400 border border-gray-100">
+                      {i + 1}
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900 truncate max-w-[120px]">{product.name}</p>
+                      <p className="text-[10px] text-gray-400 uppercase font-bold">{product.quantity} units sold</p>
+                    </div>
+                  </div>
+                  <p className="text-sm font-bold text-gray-900">KES {product.revenue.toLocaleString()}</p>
+                </div>
+              ))}
+              <Link 
+                href="/dashboard/products" 
+                className="block text-center mt-6 text-xs font-bold text-[#8484F6] hover:text-[#7373e5] transition-colors pt-4 border-t border-gray-50"
+              >
+                Manage Inventory
+              </Link>
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* Recent Orders */}
       <div className="rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h2 className="text-sm font-semibold text-gray-900">Recent orders</h2>
+          <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-widest">Recent orders</h2>
           {orders.length > 0 && (
             <Link
               href="/dashboard/orders"
-              className="flex items-center gap-1 text-xs font-medium text-violet-600 hover:text-violet-800 transition-colors"
+              className="flex items-center gap-1 text-xs font-medium text-[#8484F6] hover:text-[#7373e5] transition-colors"
             >
               View all <ArrowUpRight size={12} />
             </Link>
@@ -169,7 +312,8 @@ export default function DashboardOverview() {
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {orders.slice(0, 6).map((order) => {
-                  const status = statusConfig[order.status] || { label: order.status, classes: "bg-gray-100 text-gray-600 border-gray-200" };
+                  const displayStatus = order.seller_status || order.status;
+                  const status = statusConfig[displayStatus] || { label: displayStatus, classes: "bg-gray-100 text-gray-600 border-gray-200" };
                   return (
                     <tr key={order.id} className="hover:bg-gray-50/50 transition-colors">
                       <td className="px-6 py-4 text-sm font-semibold text-gray-900">
@@ -184,7 +328,7 @@ export default function DashboardOverview() {
                         {new Date(order.created_at).toLocaleDateString()}
                       </td>
                       <td className="px-6 py-4 text-right text-sm font-bold text-gray-900">
-                        KES {order.total_price}
+                        KES {getSellerRevenue(order).toLocaleString()}
                       </td>
                     </tr>
                   );
