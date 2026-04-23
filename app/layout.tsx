@@ -25,7 +25,39 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={{
+        layout: {
+          socialButtonsVariant: "blockButton",
+          logoPlacement: "inside",
+        },
+        variables: {
+          colorPrimary: "#8484F6",
+          colorText: "#111827",
+          colorTextSecondary: "#6b7280",
+          colorBackground: "#ffffff",
+          colorInputBackground: "#f9fafb",
+          colorInputText: "#111827",
+          borderRadius: "0.75rem",
+          fontFamily: "var(--font-inter), sans-serif",
+        },
+        elements: {
+          formButtonPrimary: 
+            "!bg-[#8484F6] hover:opacity-90 transition-all text-sm font-bold rounded-xl h-11 shadow-md shadow-[#8484F6]/20",
+          card: "shadow-xl border border-black/5 rounded-[2rem]",
+          headerTitle: "font-logo text-2xl font-black tracking-tight",
+          headerSubtitle: "text-gray-500 font-medium",
+          socialButtonsBlockButton: 
+            "border-2 border-gray-100 hover:bg-gray-50 transition-colors rounded-xl h-11 font-bold",
+          formFieldLabel: "text-xs font-bold uppercase tracking-widest text-gray-400 mb-1.5",
+          formFieldInput: 
+            "bg-gray-50 border-gray-100 focus:border-[#8484F6] focus:ring-0 rounded-xl h-11 transition-all",
+          footerActionLink: "text-[#8484F6] hover:text-[#7373e5] font-bold",
+          userButtonAvatarBox: "w-10 h-10 rounded-xl",
+          userButtonPopoverCard: "shadow-2xl border border-black/5 rounded-[1.5rem]",
+        },
+      }}
+    >
       <ToastProvider>
         <CartProvider>
           <ShopProvider>
