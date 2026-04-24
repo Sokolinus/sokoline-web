@@ -8,6 +8,7 @@ import { CartProvider } from "@/components/providers/CartProvider";
 import { ShopProvider } from "@/components/providers/ShopProvider";
 import { ToastProvider } from "@/components/providers/ToastProvider";
 import ChatSheet from "@/components/ChatSheet";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -72,6 +73,7 @@ export default function RootLayout({
                   {children}
                 </main>
                 <ChatSheet />
+                <SpeedInsights />
               </body>
             </html>
           </ShopProvider>
