@@ -7,21 +7,7 @@ import Link from "next/link";
 
 export default function ChatSheet() {
   const [isOpen, setIsOpen] = useState(false);
-  const [inputValue, setInputValue] = useState("");
-  const { messages, sendMessage, status } = useChat();
-  
-  const isLoading = status === 'streaming';
-
-  const handleSubmitForm = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (inputValue.trim() && !isLoading) {
-      sendMessage({
-        role: "user",
-        content: inputValue.trim()
-      } as any);
-      setInputValue("");
-    }
-  };
+  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat();
 
   return (
     <>
@@ -82,11 +68,11 @@ export default function ChatSheet() {
                         ? 'bg-sokoline-accent text-white rounded-tr-none shadow-sm' 
                         : 'bg-white text-zinc-800 rounded-tl-none border border-zinc-200 shadow-sm'
                     }`}>
-                      {(m as any).content}
+                      {m.content}
                     </div>
                     
                     {/* Tool Results Rendering */}
-                    {(m as any).toolInvocations?.map((toolInvocation: any) => {
+                    {m.toolInvocations?.map((toolInvocation: any) => {
                       const { toolName, toolCallId, state } = toolInvocation;
                       if (state === 'result' && toolName === 'searchProducts') {
                         return (
@@ -132,16 +118,16 @@ export default function ChatSheet() {
 
           {/* Input Area */}
           <div className="p-4 bg-white border-t border-zinc-200">
-             <form onSubmit={handleSubmitForm} className="relative">
+             <form onSubmit={handleSubmit} className="relative">
                <input 
-                 value={inputValue}
-                 onChange={(e) => setInputValue(e.target.value)}
+                 value={input}
+                 onChange={handleInputChange}
                  placeholder="How can we help?"
                  className="w-full bg-zinc-100 border border-transparent rounded-md py-2.5 pl-4 pr-10 text-xs focus:bg-white focus:border-zinc-300 outline-none transition-all placeholder:text-zinc-500"
                />
                <button 
                  type="submit"
-                 disabled={!inputValue.trim() || isLoading}
+                 disabled={!input.trim() || isLoading}
                  className="absolute right-1.5 top-1/2 -translate-y-1/2 h-7 w-7 text-zinc-400 hover:text-zinc-900 transition-colors disabled:opacity-30"
                >
                  <Send size={14} />
