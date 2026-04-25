@@ -318,9 +318,17 @@ export async function fetchOrders(token: string): Promise<Order[]> {
   }
 }
 
-export async function fetchShopOrders(token: string): Promise<Order[]> {
+export async function fetchShopOrders(token: string, startDate?: string, endDate?: string): Promise<Order[]> {
   try {
-    const res = await apiRequest("orders/shop_orders", {}, token);
+    let endpoint = "orders/shop_orders";
+    const params = new URLSearchParams();
+    if (startDate) params.append("start_date", startDate);
+    if (endDate) params.append("end_date", endDate);
+    
+    const queryString = params.toString();
+    if (queryString) endpoint += `?${queryString}`;
+
+    const res = await apiRequest(endpoint, {}, token);
     if (!res.ok) return [];
     const data = await res.json();
     return data.results || data;
