@@ -155,7 +155,7 @@ export default function DashboardOverview() {
           <div className="flex gap-2">
             <Link
               href="/dashboard/products/new"
-              className="flex items-center gap-2 rounded-xl bg-black px-5 py-3 text-sm font-bold text-white hover:bg-gray-800 transition-all shadow-lg shadow-black/5"
+              className="flex items-center gap-2 rounded-xl bg-sokoline-accent px-5 py-3 text-sm font-bold text-white hover:bg-[#7373e5] transition-all shadow-lg shadow-sokoline-accent/20"
             >
               <Plus size={16} strokeWidth={3} />
               New Product
@@ -301,7 +301,7 @@ export default function DashboardOverview() {
               {topProducts.map((product, i) => (
                 <div key={i} className="flex items-center justify-between group">
                   <div className="flex items-center gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-50 text-xs font-black text-gray-400 border border-gray-100 group-hover:bg-black group-hover:text-white transition-colors">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-50 text-xs font-black text-gray-400 border border-gray-100 group-hover:bg-sokoline-accent group-hover:text-white transition-colors">
                       {i + 1}
                     </div>
                     <div>
@@ -334,7 +334,7 @@ export default function DashboardOverview() {
           {orders.length > 0 && (
             <Link
               href="/dashboard/orders"
-              className="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest text-gray-400 bg-gray-50 hover:bg-black hover:text-white transition-all"
+              className="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest text-gray-400 bg-gray-50 hover:bg-sokoline-accent hover:text-white transition-all"
             >
               All Orders
             </Link>

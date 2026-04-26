@@ -145,7 +145,7 @@ export default function InfluencerDashboard() {
         <div className="flex flex-col items-center">
           <button
             onClick={() => setShowContract(true)}
-            className="group inline-flex items-center gap-3 rounded-[1.5rem] bg-black px-12 py-5 text-lg font-bold text-white shadow-2xl hover:bg-gray-800 transition-all active:scale-95"
+            className="group inline-flex items-center gap-3 rounded-[1.5rem] bg-sokoline-accent px-12 py-5 text-lg font-bold text-white shadow-2xl shadow-sokoline-accent/25 hover:bg-[#7373e5] transition-all active:scale-95"
           >
             Review Partnership Contract
             <ChevronRight size={20} className="transition-transform group-hover:translate-x-1" />
@@ -159,12 +159,12 @@ export default function InfluencerDashboard() {
   if (!profile && showContract) {
     return (
       <div className="max-w-3xl mx-auto py-12 px-6">
-         <button onClick={() => setShowContract(false)} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-black mb-8 transition-colors">
+         <button onClick={() => setShowContract(false)} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-sokoline-accent mb-8 transition-colors">
             <ArrowLeft size={14} /> Back
          </button>
          
          <div className="rounded-[2.5rem] border border-gray-100 bg-white shadow-2xl overflow-hidden">
-            <div className="px-10 py-10 bg-zinc-900 text-white flex items-center justify-between">
+            <div className="px-10 py-10 bg-gradient-to-br from-gray-800 to-gray-900 text-white flex items-center justify-between">
                <div>
                   <h1 className="text-2xl font-black font-logo uppercase tracking-tighter">Affiliate Contract</h1>
                   <p className="text-xs font-bold text-white/40 uppercase tracking-widest mt-1">Sokoline Partner Program v1.0</p>
@@ -203,7 +203,7 @@ export default function InfluencerDashboard() {
                <button
                   onClick={handleRegister}
                   disabled={registering}
-                  className="w-full py-5 rounded-[1.5rem] bg-black text-white font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-zinc-800 transition-all active:scale-95 disabled:opacity-50"
+                  className="w-full py-5 rounded-[1.5rem] bg-sokoline-accent text-white font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-sokoline-accent/20 hover:bg-[#7373e5] transition-all active:scale-95 disabled:opacity-50"
                >
                   {registering ? <Loader2 size={20} className="animate-spin" /> : "Sign & Accept Contract"}
                </button>
@@ -230,11 +230,11 @@ export default function InfluencerDashboard() {
              <h1 className="text-3xl font-black tracking-tight text-gray-900 font-logo uppercase">Partner Dashboard</h1>
              <span className="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-600 text-[10px] font-black uppercase tracking-widest border border-emerald-100">Verified Ambassador</span>
            </div>
-           <p className="text-sm text-gray-400 font-medium tracking-tight">Your referral handle: <span className="text-black font-black">@{profile.referral_code}</span></p>
+           <p className="text-sm text-gray-400 font-medium tracking-tight">Your referral handle: <span className="text-sokoline-accent font-black">@{profile.referral_code}</span></p>
         </div>
         <button 
            onClick={() => copyRefLink()}
-           className="flex items-center gap-2 rounded-xl bg-black px-6 py-3 text-xs font-black uppercase tracking-[0.1em] text-white hover:bg-zinc-800 transition-all shadow-lg active:scale-95"
+           className="flex items-center gap-2 rounded-xl bg-sokoline-accent px-6 py-3 text-xs font-black uppercase tracking-[0.1em] text-white hover:bg-[#7373e5] transition-all shadow-lg shadow-sokoline-accent/20 active:scale-95"
         >
            <Copy size={16} />
            Global Invite Link
@@ -287,11 +287,11 @@ export default function InfluencerDashboard() {
                        <div className="mt-6 flex items-center gap-2">
                           <button 
                              onClick={() => copyRefLink(shop.slug)}
-                             className="flex-1 py-3 rounded-xl bg-black text-white text-[10px] font-black uppercase tracking-widest hover:bg-zinc-800 transition-all flex items-center justify-center gap-2"
+                             className="flex-1 py-3 rounded-xl bg-sokoline-accent text-white text-[10px] font-black uppercase tracking-widest hover:bg-[#7373e5] transition-all flex items-center justify-center gap-2"
                           >
                              <Copy size={12} /> Get Link
                           </button>
-                          <Link href={`/shops/${shop.slug}`} target="_blank" className="p-3 rounded-xl bg-white border border-gray-100 text-gray-400 hover:text-black transition-all">
+                          <Link href={`/shops/${shop.slug}`} target="_blank" className="p-3 rounded-xl bg-white border border-gray-100 text-gray-400 hover:text-sokoline-accent transition-all">
                              <ExternalLink size={14} />
                           </Link>
                        </div>
@@ -327,7 +327,7 @@ export default function InfluencerDashboard() {
 
          {/* Sidebar: Payouts */}
          <div className="space-y-6">
-            <div className="rounded-[2.5rem] bg-gray-900 text-white p-10 shadow-2xl relative overflow-hidden">
+            <div className="rounded-[2.5rem] bg-gradient-to-br from-gray-800 to-gray-900 text-white p-10 shadow-2xl relative overflow-hidden">
                <div className="absolute top-0 right-0 p-8 opacity-10">
                   <Rocket size={120} />
                </div>

@@ -159,12 +159,12 @@ export default function MyShopPage() {
         <div className="flex flex-col items-center gap-6">
           <Link
             href="/dashboard/my-shop/new"
-            className="group inline-flex items-center gap-3 rounded-[1.5rem] bg-black px-12 py-5 text-lg font-bold text-white shadow-2xl hover:bg-gray-800 transition-all active:scale-95"
+            className="group inline-flex items-center gap-3 rounded-[1.5rem] bg-sokoline-accent px-12 py-5 text-lg font-bold text-white shadow-2xl shadow-sokoline-accent/25 hover:bg-[#7373e5] transition-all active:scale-95"
           >
             Create My Shop
             <ChevronRight size={20} className="transition-transform group-hover:translate-x-1" />
           </Link>
-          <Link href="/" className="text-sm font-bold text-gray-400 hover:text-black transition-colors">
+          <Link href="/" className="text-sm font-bold text-gray-400 hover:text-sokoline-accent transition-colors">
             Maybe later
           </Link>
         </div>
@@ -182,7 +182,7 @@ export default function MyShopPage() {
             <h1 className="text-3xl font-black tracking-tight text-gray-900 font-logo">{shop.name}</h1>
             <span className="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-600 text-[10px] font-black uppercase tracking-widest border border-emerald-100">Live</span>
           </div>
-          <p className="text-sm text-gray-400 font-medium">Storefront URL: <span className="text-black">sokoline.app/shops/{shop.slug}</span></p>
+          <p className="text-sm text-gray-400 font-medium">Storefront URL: <span className="text-sokoline-accent">sokoline.app/shops/{shop.slug}</span></p>
         </div>
         <div className="flex items-center gap-3">
           <Link
@@ -195,7 +195,7 @@ export default function MyShopPage() {
           <Link
             href={`/shops/${shop.slug}`}
             target="_blank"
-            className="flex items-center gap-2 rounded-xl bg-black px-5 py-3 text-sm font-bold text-white hover:bg-gray-800 transition-all shadow-lg"
+            className="flex items-center gap-2 rounded-xl bg-sokoline-accent px-5 py-3 text-sm font-bold text-white hover:bg-[#7373e5] transition-all shadow-lg shadow-sokoline-accent/20"
           >
             <ExternalLink size={18} />
             Visit Shop
@@ -255,7 +255,7 @@ export default function MyShopPage() {
           </div>
 
           {/* User Journey / Steps Summary */}
-          <div className="p-8 rounded-[2rem] bg-gray-900 text-white shadow-2xl relative overflow-hidden">
+          <div className="p-8 rounded-[2rem] bg-gradient-to-br from-gray-800 to-gray-900 text-white shadow-2xl relative overflow-hidden">
              <div className="absolute top-0 right-0 p-8 opacity-10">
                 <Rocket size={120} />
              </div>
@@ -408,7 +408,7 @@ export default function MyShopPage() {
             <button
               type="submit"
               disabled={saving}
-              className="w-full flex items-center justify-center gap-2 rounded-2xl bg-black py-4 text-xs font-black uppercase tracking-[0.2em] text-white hover:bg-gray-800 transition-all disabled:opacity-60 active:scale-95 shadow-xl shadow-black/10"
+              className="w-full flex items-center justify-center gap-2 rounded-2xl bg-sokoline-accent py-4 text-xs font-black uppercase tracking-[0.2em] text-white hover:bg-[#7373e5] transition-all disabled:opacity-60 active:scale-95 shadow-xl shadow-sokoline-accent/20"
             >
               {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
               {saving ? "Saving..." : "Save Changes"}

@@ -211,9 +211,9 @@ export default function CreateShopPage() {
               <div key={req.step} className="flex gap-6">
                 <div className={`flex-shrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center font-logo font-bold transition-all ${
                   step === req.step 
-                    ? "border-black bg-black text-white shadow-xl" 
+                    ? "border-sokoline-accent bg-sokoline-accent text-white shadow-xl" 
                     : step > req.step 
-                      ? "border-sokoline-accent bg-sokoline-accent text-black"
+                      ? "border-sokoline-accent bg-sokoline-accent text-white"
                       : "border-black/5 bg-gray-50 text-black/20"
                 }`}>
                   {step > req.step ? <Check size={18} strokeWidth={3} /> : req.step}
@@ -410,7 +410,7 @@ export default function CreateShopPage() {
                           onClick={() => setPaymentType("phone")}
                           className={`p-8 rounded-[30px] border transition-all text-left flex flex-col gap-4 ${
                             paymentType === "phone" 
-                              ? "border-black bg-black text-white shadow-2xl scale-[1.05]" 
+                              ? "border-sokoline-accent bg-sokoline-accent text-white shadow-2xl scale-[1.05]" 
                               : "border-black/5 bg-gray-50 text-black/40 hover:border-black/10"
                           }`}
                         >
@@ -425,7 +425,7 @@ export default function CreateShopPage() {
                           onClick={() => setPaymentType("paybill")}
                           className={`p-8 rounded-[30px] border transition-all text-left flex flex-col gap-4 ${
                             paymentType === "paybill" 
-                              ? "border-black bg-black text-white shadow-2xl scale-[1.05]" 
+                              ? "border-sokoline-accent bg-sokoline-accent text-white shadow-2xl scale-[1.05]" 
                               : "border-black/5 bg-gray-50 text-black/40 hover:border-black/10"
                           }`}
                         >
@@ -496,7 +496,7 @@ export default function CreateShopPage() {
                   <button
                     type="button"
                     onClick={handleNext}
-                    className="flex-[2] flex items-center justify-center gap-3 rounded-[24px] bg-black py-6 text-[10px] font-black text-white hover:bg-black/90 transition-all shadow-2xl font-logo uppercase tracking-[0.2em]"
+                    className="flex-[2] flex items-center justify-center gap-3 rounded-[24px] bg-sokoline-accent py-6 text-[10px] font-black text-white hover:bg-[#7373e5] transition-all shadow-2xl shadow-sokoline-accent/20 font-logo uppercase tracking-[0.2em]"
                   >
                     Next Step
                     <ArrowRight size={16} strokeWidth={3} />
@@ -516,7 +516,7 @@ export default function CreateShopPage() {
                     type="submit"
                     disabled={isSubmitting}
                     whileTap={{ scale: 0.97 }}
-                    className="flex-[2] flex items-center justify-center gap-3 rounded-[24px] bg-sokoline-accent py-6 text-[10px] font-black text-black hover:opacity-90 transition-all shadow-2xl font-logo uppercase tracking-[0.2em]"
+                    className="flex-[2] flex items-center justify-center gap-3 rounded-[24px] bg-sokoline-accent py-6 text-[10px] font-black text-white hover:opacity-90 transition-all shadow-2xl font-logo uppercase tracking-[0.2em]"
                   >
                     {isSubmitting ? (
                       <Loader2 size={20} className="animate-spin" />
