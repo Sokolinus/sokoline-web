@@ -120,6 +120,6 @@ export interface Shop {
   logo?: string;
   owner: number;
   products?: any[];
-  mpesa_phone?: string;
+  payment_phone_number?: string;
   paybill_number?: string;
 }

@@ -7,7 +7,7 @@ import { createShop, getCategories } from "@/lib/api";
 import { useShop } from "@/components/providers/ShopProvider";
 import { useToast } from "@/components/providers/ToastProvider";
 import { Category } from "@/lib/types";
-import { Store, Loader2, ArrowRight, ArrowLeft, Phone, Hash, Check, Upload, X, Image as ImageIcon } from "lucide-react";
+import { Store, Loader2, ArrowRight, ArrowLeft, Phone, Hash, Check, Upload, X, Image as ImageIcon, Info } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
@@ -40,7 +40,7 @@ export default function CreateShopPage() {
     description: "",
     slug: "",
     category: "",
-    phone_number: "",
+    payment_phone_number: "",
     paybill_number: "",
     logo: null as File | null,
   });
@@ -76,6 +76,13 @@ export default function CreateShopPage() {
       name: value,
       slug: slugEdited ? prev.slug : slugify(value),
     }));
+  };
+
+  const handleSlugChange = (value: string) => {
+    setSlugEdited(true);
+    // Real-time validation: only lowercase, numbers, and hyphens
+    const sanitized = value.toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-");
+    setFormData((prev) => ({ ...prev, slug: sanitized }));
   };
 
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -118,6 +125,17 @@ export default function CreateShopPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Final check for payment
+    if (paymentType === "phone" && !formData.payment_phone_number) {
+        setError("Please provide a phone number to receive payments.");
+        return;
+    }
+    if (paymentType === "paybill" && !formData.paybill_number) {
+        setError("Please provide a Paybill or Till number.");
+        return;
+    }
+
     setIsSubmitting(true);
     setError(null);
 
@@ -130,9 +148,9 @@ export default function CreateShopPage() {
         data.append("category", formData.category);
         data.append("slug", formData.slug);
         
-        if (paymentType === "phone" && formData.phone_number) {
-          data.append("phone_number", formData.phone_number);
-        } else if (paymentType === "paybill" && formData.paybill_number) {
+        if (paymentType === "phone") {
+          data.append("payment_phone_number", formData.payment_phone_number);
+        } else if (paymentType === "paybill") {
           data.append("paybill_number", formData.paybill_number);
         }
 
@@ -144,9 +162,9 @@ export default function CreateShopPage() {
         if (shop) {
           await refetchShop();
           toast("Shop created successfully!", "success");
-          router.push(`/dashboard/my-shop/success?shop=${shop.slug}`);
+          router.push(`/dashboard/my-shop`);
         } else {
-          setError("Failed to create shop. Please check your details and try again.");
+          setError("Failed to create shop. This URL handle might already be taken.");
         }
       }
     } catch (err: unknown) {
@@ -244,6 +262,33 @@ export default function CreateShopPage() {
                     </div>
 
                     <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-black/40 font-logo">
+                            Shop URL Handle
+                        </label>
+                        <div className="group relative">
+                            <Info size={14} className="text-black/20" />
+                            <div className="absolute bottom-full right-0 mb-2 w-64 p-4 rounded-2xl bg-black text-white text-[10px] leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 shadow-2xl">
+                                This is your unique web address. 
+                                <br/><br/>
+                                <span className="text-sokoline-accent">Example:</span> if you enter "cool-gear", your shop will be at sokoline.app/shops/cool-gear
+                            </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 bg-gray-50 rounded-2xl border border-black/5 px-6">
+                         <span className="text-sm font-bold text-black/20">sokoline.app/shops/</span>
+                         <input
+                            type="text"
+                            value={formData.slug}
+                            onChange={(e) => handleSlugChange(e.target.value)}
+                            className="flex-1 py-5 text-lg font-bold text-gray-900 outline-none bg-transparent"
+                            placeholder="handle"
+                            required
+                          />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
                       <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-black/40 font-logo">
                         Which category fits best?
                       </label>
@@ -267,7 +312,7 @@ export default function CreateShopPage() {
                       <textarea
                         value={formData.description}
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                        className="w-full rounded-2xl border border-black/5 bg-gray-50 px-6 py-5 text-lg font-bold text-gray-900 outline-none transition-all focus:border-black focus:bg-white focus:ring-8 focus:ring-black/5 min-h-[160px] resize-none"
+                        className="w-full rounded-2xl border border-black/5 bg-gray-50 px-6 py-5 text-lg font-bold text-gray-900 outline-none transition-all focus:border-black focus:bg-white focus:ring-8 focus:ring-black/5 min-h-[140px] resize-none"
                         placeholder="Tell shoppers why they should buy from you..."
                         required
                       />
@@ -325,7 +370,7 @@ export default function CreateShopPage() {
                   <div className="space-y-8">
                     <div className="space-y-4">
                       <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-black/40 font-logo text-center">
-                        Choose your payout method
+                        Choose how you want to be paid
                       </label>
                       <div className="grid grid-cols-2 gap-4">
                         <button
@@ -340,7 +385,7 @@ export default function CreateShopPage() {
                           <Phone size={24} />
                           <div>
                             <p className="font-logo font-bold text-sm uppercase tracking-wider">Phone</p>
-                            <p className="text-[10px] opacity-60 uppercase font-bold mt-1 tracking-widest">STK Pushes</p>
+                            <p className="text-[10px] opacity-60 uppercase font-bold mt-1 tracking-widest">Personal Account</p>
                           </div>
                         </button>
                         <button
@@ -355,7 +400,7 @@ export default function CreateShopPage() {
                           <Hash size={24} />
                           <div>
                             <p className="font-logo font-bold text-sm uppercase tracking-wider">Paybill</p>
-                            <p className="text-[10px] opacity-60 uppercase font-bold mt-1 tracking-widest">Business</p>
+                            <p className="text-[10px] opacity-60 uppercase font-bold mt-1 tracking-widest">Business Till</p>
                           </div>
                         </button>
                       </div>
@@ -369,8 +414,8 @@ export default function CreateShopPage() {
                           </label>
                           <input
                             type="tel"
-                            value={formData.phone_number}
-                            onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
+                            value={formData.payment_phone_number}
+                            onChange={(e) => setFormData({ ...formData, payment_phone_number: e.target.value })}
                             className="w-full rounded-2xl border border-black/5 bg-gray-50 px-6 py-5 text-lg font-bold text-gray-900 outline-none transition-all focus:border-black focus:bg-white focus:ring-8 focus:ring-black/5"
                             placeholder="2547XXXXXXXX"
                           />
