@@ -77,13 +77,40 @@ export default function InventoryPage() {
             Manage your listings and track stock levels.
           </p>
         </div>
-        <Link 
-          href="/dashboard/products/new" 
-          className="bg-[#8484F6] hover:bg-[#7373e5] text-white font-bold rounded-xl h-10 px-6 shadow-md shadow-[#8484F6]/20 flex items-center justify-center gap-2 transition-all"
-        >
-          <Plus size={18} />
-          Add Item
-        </Link>
+        <div className="flex items-center gap-3">
+          <Button
+            variant="outline"
+            onClick={async () => {
+              if (confirm("This will delete all your products that have no images. Proceed?")) {
+                try {
+                  const token = await getToken();
+                  if (token) {
+                    const res = await apiRequest("products/cleanup_products/", { method: "DELETE" }, token);
+                    if (res.ok) {
+                      toast("Cleanup successful!", "success");
+                      window.location.reload();
+                    } else {
+                      toast("Cleanup failed.", "error");
+                    }
+                  }
+                } catch (error) {
+                  toast("Error during cleanup", "error");
+                }
+              }
+            }}
+            className="rounded-xl border-red-200 text-red-500 font-bold hover:bg-red-50 gap-2 h-10 px-4"
+          >
+            <Trash2 size={16} />
+            Cleanup Items
+          </Button>
+          <Link 
+            href="/dashboard/products/new" 
+            className="bg-[#8484F6] hover:bg-[#7373e5] text-white font-bold rounded-xl h-10 px-6 shadow-md shadow-[#8484F6]/20 flex items-center justify-center gap-2 transition-all"
+          >
+            <Plus size={18} />
+            Add Item
+          </Link>
+        </div>
       </div>
 
       {/* Table Section */}

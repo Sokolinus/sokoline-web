@@ -45,6 +45,25 @@ export default async function Home() {
           </div>
         </div>
 
+        {/* Affiliate CTA Section */}
+        <div className="mt-8 relative overflow-hidden rounded-[2.5rem] bg-zinc-900 px-6 py-12 sm:mt-12 sm:px-12 sm:py-20 text-center flex flex-col items-center gap-6">
+           <div className="absolute top-0 right-0 w-64 h-64 bg-[#8484F6]/20 blur-[120px]" />
+           <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#BEFDB1]/20 blur-[120px]" />
+           
+           <h2 className="text-4xl sm:text-6xl font-black text-white tracking-tighter leading-none font-logo relative z-10">
+              Get Paid to <span className="text-sokoline-accent">Promote.</span>
+           </h2>
+           <p className="text-white/60 text-lg sm:text-xl font-medium max-w-lg mx-auto relative z-10 leading-relaxed">
+              Are you a campus influencer? Share links to your favorite student shops and earn <span className="text-white">5% commission</span> on every sale.
+           </p>
+           <Link 
+              href="/dashboard/influencer"
+              className="mt-4 px-10 py-5 bg-white text-black rounded-[1.5rem] font-black text-lg shadow-2xl hover:scale-105 active:scale-95 transition-all relative z-10"
+           >
+              Join the Squad
+           </Link>
+        </div>
+
         <footer className="mt-8 flex flex-col justify-between rounded-3xl bg-black px-5 py-8 text-white sm:mt-12 sm:px-8 sm:py-12 md:flex-row md:px-10">
           <div className="mb-8 w-full md:mb-0 md:w-2/3 md:pr-10">
             <h3 className="mb-5 font-logo font-bold text-white/50 uppercase tracking-widest text-[10px]">About</h3>
