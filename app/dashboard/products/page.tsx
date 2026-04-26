@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
-import { fetchMyShop, getProducts, formatImageUrl } from "@/lib/api";
+import { fetchMyShop, getProducts, formatImageUrl, apiRequest } from "@/lib/api";
 import { Product } from "@/lib/types";
 import { Plus, Edit2, Trash2, ExternalLink, Package, Share2, Check } from "lucide-react";
 import Link from "next/link";
