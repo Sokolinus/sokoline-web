@@ -43,9 +43,16 @@ export async function apiRequest(endpoint: string, options: RequestInit = {}, to
     ...(options.headers as Record<string, string> || {}),
   };
 
-  // Only set Content-Type to JSON if not sending FormData
-  if (!(options.body instanceof FormData) && !headers["Content-Type"]) {
+  // Logic: If it's FormData, we MUST NOT set Content-Type manually.
+  // The browser needs to set 'multipart/form-data; boundary=...' automatically.
+  if (options.body instanceof FormData) {
+    delete headers["Content-Type"];
+  } else if (!headers["Content-Type"]) {
     headers["Content-Type"] = "application/json";
+  }
+
+  if (typeof window !== "undefined") {
+    console.log(`[API V3] Headers:`, headers);
   }
 
   const res = await fetch(finalUrl, { ...options, headers });
