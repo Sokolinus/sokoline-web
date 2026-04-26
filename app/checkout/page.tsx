@@ -6,6 +6,7 @@ import { useCart } from "@/components/providers/CartProvider";
 import { useAuth } from "@clerk/nextjs";
 import { useToast } from "@/components/providers/ToastProvider";
 import { checkoutCart, getOrderPaymentStatus } from "@/lib/api";
+import { getCookie } from "@/lib/utils";
 import { CheckCircle2, ArrowLeft, Loader2, Phone, XCircle, ShieldCheck, Check, ShoppingBag } from "lucide-react";
 import Link from 'next/link';
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
@@ -161,17 +162,23 @@ export default function CheckoutPage() {
 
   const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     const formattedPhone = validateAndFormatPhone(phoneNumber);
+    
     if (!formattedPhone) {
       setError("Enter a valid M-Pesa number");
       return;
     }
+
+    const referralCode = getCookie("sokoline_ref");
+
     setIsProcessing(true);
     setError(null);
+
     try {
       const token = await getToken();
       if (token) {
-        const order = await checkoutCart(token, formattedPhone);
+        const order = await checkoutCart(token, formattedPhone, referralCode);
         if (order) {
           setOrderId(order.id);
           setPollingStatus("pending");

@@ -12,7 +12,7 @@ import {
 } from "@clerk/nextjs";
 import { useCart } from "@/components/providers/CartProvider";
 import { useShop } from "@/components/providers/ShopProvider";
-import { Menu, X, Store } from "lucide-react";
+import { Menu, X, Store, Sparkles } from "lucide-react";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -68,6 +68,9 @@ const Navbar = () => {
             </Link>
             <Link href="/products" className={linkClasses}>
               Explore
+            </Link>
+            <Link href="/dashboard/influencer" className={linkClasses}>
+              Partners
             </Link>
           </div>
         </div>
@@ -175,6 +178,14 @@ const Navbar = () => {
               onClick={() => setMobileOpen(false)}
             >
               Shops
+            </Link>
+            <Link
+              href="/dashboard/influencer"
+              className="rounded-xl px-4 py-3 text-base font-bold text-[#8484F6] bg-[#8484F6]/5 flex items-center gap-2 transition-colors"
+              onClick={() => setMobileOpen(false)}
+            >
+              <Sparkles size={16} />
+              Partners
             </Link>
 
             <Show when="signed-in">

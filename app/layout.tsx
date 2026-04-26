@@ -8,6 +8,8 @@ import { CartProvider } from "@/components/providers/CartProvider";
 import { ShopProvider } from "@/components/providers/ShopProvider";
 import { ToastProvider } from "@/components/providers/ToastProvider";
 import ChatSheet from "@/components/ChatSheet";
+import ReferralTracker from "@/components/ReferralTracker";
+import { Suspense } from "react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({
@@ -69,6 +71,9 @@ export default function RootLayout({
               <body className={`${inter.variable} font-sans min-h-screen bg-white`}>
                 <Navbar />
                 <Breadcrumbs />
+                <Suspense fallback={null}>
+                  <ReferralTracker />
+                </Suspense>
                 <main>
                   {children}
                 </main>
