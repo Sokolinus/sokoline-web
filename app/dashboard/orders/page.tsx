@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { fetchShopOrders, completeOrder } from "@/lib/api";
 import { Order } from "@/lib/types";
-import { Package, Clock, CheckCircle2, XCircle, DollarSign, Check } from "lucide-react";
+import { Package, Clock, CheckCircle2, XCircle, DollarSign, Check, Download } from "lucide-react";
 import { useToast } from "@/components/providers/ToastProvider";
 
 import {
@@ -88,15 +88,34 @@ export default function ShopOrdersPage() {
             Track incoming orders and verify student payments.
           </p>
         </div>
-        <Card className="shadow-none bg-[#8484F6]/5 border-[#8484F6]/10">
-           <CardContent className="py-2 px-4 flex items-center gap-2">
-             <DollarSign size={16} className="text-[#8484F6]" />
-             <span className="text-sm font-semibold text-zinc-900">
-               ${totalRevenue} 
-               <span className="text-zinc-400 font-normal ml-1 text-xs">Total Revenue</span>
-             </span>
-           </CardContent>
-        </Card>
+        <div className="flex items-center gap-3">
+          <Button
+            variant="outline"
+            onClick={async () => {
+              try {
+                const token = await getToken();
+                if (!token) return;
+                // Use token in query param for browser-native download
+                window.location.href = `https://api.sokoline.app/api/orders/download_report/?token=${token}`;
+              } catch (error) {
+                toast("Failed to download report", "error");
+              }
+            }}
+            className="rounded-xl border-zinc-200 font-bold text-zinc-600 hover:bg-zinc-50 gap-2"
+          >
+            <Download size={16} />
+            Download CSV
+          </Button>
+          <Card className="shadow-none bg-[#8484F6]/5 border-[#8484F6]/10">
+             <CardContent className="py-2 px-4 flex items-center gap-2">
+               <DollarSign size={16} className="text-[#8484F6]" />
+               <span className="text-sm font-semibold text-zinc-900">
+                 KES {totalRevenue} 
+                 <span className="text-zinc-400 font-normal ml-1 text-xs">Total Revenue</span>
+               </span>
+             </CardContent>
+          </Card>
+        </div>
       </div>
 
       {/* Orders Table */}
