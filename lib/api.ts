@@ -135,7 +135,7 @@ export async function getShop(slug: string): Promise<Shop | null> {
 
 export async function fetchMyShop(token: string): Promise<Shop | null> {
   try {
-    const res = await apiRequest("shops", {}, token);
+    const res = await apiRequest("shops?my_shop=true", {}, token);
     if (!res.ok) return null;
     const data = await res.json();
     const list = data.results || data;
