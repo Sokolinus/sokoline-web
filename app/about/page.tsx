@@ -10,7 +10,7 @@ export default function AboutPage() {
             src="/hero-image.jpg" 
             alt="About Sokoline" 
             fill 
-            className="object-cover"
+            className="object-cover object-top"
           />
         </div>
         
