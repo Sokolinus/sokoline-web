@@ -25,15 +25,14 @@ export default function HeroSection() {
 
       <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-6 md:gap-16 md:px-8 lg:grid-cols-2">
         
-        {/* Phone Mockup + Buttons - Ultra-Thin Modern Bezels */}
+        {/* Phone Mockup - Ultra-Thin Modern Bezels */}
         <div className="relative order-2 flex flex-col items-center justify-center lg:order-1">
           
-          <div className="relative z-10 rotate-[5deg] mb-12 lg:mb-16">
-            {/* Outer Hardware Frame - Thinner padding (p-[3px] md:p-[4px]) */}
+          <div className="relative z-10 rotate-[5deg] mb-4">
+            {/* Outer Hardware Frame */}
             <div 
               className="relative p-[3px] md:p-[4px] bg-[#fdfdfd] shadow-[-10px_30px_80px_rgba(0,0,0,0.4)] border border-white/20"
               style={{
-                /* Supersized mobile size (110vmin), desktop (85vmin) */
                 width: 'calc(var(--phone-size, 110vmin) / 2.525)',
                 height: 'calc(2.15 * (var(--phone-size, 110vmin) / 2.525))',
                 borderRadius: 'calc((var(--phone-size, 110vmin) / 2.525) / 5)',
@@ -49,7 +48,7 @@ export default function HeroSection() {
                 }
               `}</style>
 
-              {/* Inner White Bezel & Screen - Thinner border (border-[2px] md:border-[3px]) */}
+              {/* Inner White Bezel & Screen */}
               <div className="relative w-full h-full bg-white rounded-[calc((var(--phone-size,110vmin)/2.525)/5.4)] overflow-hidden shadow-inner border-[2px] md:border-[3px] border-white">
                 
                 {/* Minimalist Ear Speaker */}
@@ -60,7 +59,7 @@ export default function HeroSection() {
                    <div className="w-0.5 md:w-1 h-0.5 md:h-1 bg-[#1a1a1a] rounded-full" />
                 </div>
                 
-                {/* Screen Content - Max ratio display */}
+                {/* Screen Content */}
                 <div className="relative w-full h-full overflow-hidden rounded-[calc((var(--phone-size,110vmin)/2.525)/6.2)]">
                   <video 
                     src="/hero-video-optimized.mp4" 
@@ -78,17 +77,6 @@ export default function HeroSection() {
             </div>
             
             <div className="absolute inset-0 bg-white/10 blur-3xl -z-10 scale-150" />
-          </div>
-
-          {/* Buttons */}
-          <div className="flex flex-wrap justify-center gap-4 font-logo w-full">
-            <Link href="/products" className="group flex items-center gap-2 rounded-2xl border-2 border-[#BEFDB1] bg-[#BEFDB1] px-6 py-3.5 text-base font-bold text-black shadow-xl transition-all hover:bg-black hover:text-[#BEFDB1] hover:border-black md:gap-3 md:rounded-[2rem] md:px-10 md:py-5 md:text-xl">
-              Browse Items <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1 md:h-6 md:w-6" />
-            </Link>
-            
-            <Link href="/about" className="rounded-2xl border-2 border-white/20 bg-white/10 px-6 py-3.5 text-base font-bold text-white shadow-lg backdrop-blur-md transition-all hover:bg-white hover:text-[#8484F6] md:rounded-[2rem] md:px-10 md:py-5 md:text-xl">
-              About Us
-            </Link>
           </div>
         </div>
 
@@ -111,6 +99,17 @@ export default function HeroSection() {
           <p className="mx-auto max-w-xl text-base leading-snug text-white/85 sm:text-lg md:text-xl lg:mx-0 lg:text-2xl">
             Support student entrepreneurs. Every item here is owned and operated by students within the campus ecosystem.
           </p>
+
+          {/* Buttons moved here */}
+          <div className="flex flex-wrap justify-center lg:justify-start gap-4 font-logo w-full pt-4">
+            <Link href="/products" className="group flex items-center gap-2 rounded-2xl border-2 border-[#BEFDB1] bg-[#BEFDB1] px-6 py-3.5 text-base font-bold text-black shadow-xl transition-all hover:bg-black hover:text-[#BEFDB1] hover:border-black md:gap-3 md:rounded-[2rem] md:px-10 md:py-5 md:text-xl">
+              Browse Items <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1 md:h-6 md:w-6" />
+            </Link>
+            
+            <Link href="/about" className="rounded-2xl border-2 border-white/20 bg-white/10 px-6 py-3.5 text-base font-bold text-white shadow-lg backdrop-blur-md transition-all hover:bg-white hover:text-[#8484F6] md:rounded-[2rem] md:px-10 md:py-5 md:text-xl">
+              About Us
+            </Link>
+          </div>
         </div>
 
       </div>
