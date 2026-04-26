@@ -39,10 +39,14 @@ export async function apiRequest(endpoint: string, options: RequestInit = {}, to
   }
 
   const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-    ...(options.headers as Record<string, string> || {}),
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(options.headers as Record<string, string> || {}),
   };
+
+  // Only set Content-Type to JSON if not sending FormData
+  if (!(options.body instanceof FormData) && !headers["Content-Type"]) {
+    headers["Content-Type"] = "application/json";
+  }
 
   const res = await fetch(finalUrl, { ...options, headers });
   
