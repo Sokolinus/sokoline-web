@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
-import { createShop, getCategories } from "@/lib/api";
+import { apiRequest, getCategories } from "@/lib/api";
 import { useShop } from "@/components/providers/ShopProvider";
 import { useToast } from "@/components/providers/ToastProvider";
 import { Category } from "@/lib/types";
@@ -144,7 +144,7 @@ export default function CreateShopPage() {
         const data = new FormData();
         data.append("name", formData.name);
         data.append("description", formData.description);
-        data.append("category", formData.category);
+        data.append("category_id", formData.category);
         data.append("slug", formData.slug);
         data.append("pickup_point", formData.pickup_point);
         
@@ -158,17 +158,29 @@ export default function CreateShopPage() {
           data.append("logo", formData.logo);
         }
 
-        const shop = await createShop(token, data);
-        if (shop) {
+        const res = await apiRequest("shops/", {
+          method: "POST",
+          body: data,
+        }, token);
+
+        if (res.ok) {
           await refetchShop();
           toast("Shop created successfully!", "success");
           router.push(`/dashboard/my-shop`);
         } else {
-          setError("Failed to create shop. This URL handle might already be taken.");
+          const errorData = await res.json();
+          // Extract specific validation errors if they exist
+          let errorMsg = "Failed to create shop.";
+          if (errorData.slug) errorMsg = `URL Error: ${errorData.slug[0]}`;
+          else if (errorData.name) errorMsg = `Name Error: ${errorData.name[0]}`;
+          else if (errorData.category_id) errorMsg = `Category Error: ${errorData.category_id[0]}`;
+          else if (errorData.detail) errorMsg = errorData.detail;
+          
+          setError(errorMsg);
         }
       }
     } catch (err: any) {
-      setError(err.message || "An error occurred.");
+      setError(err.message || "An unexpected error occurred.");
     } finally {
       setIsSubmitting(false);
     }
@@ -320,7 +332,7 @@ export default function CreateShopPage() {
                       >
                         <option value="" disabled>Select category</option>
                         {categories.map((cat) => (
-                          <option key={cat.id} value={cat.name}>{cat.name}</option>
+                          <option key={cat.id} value={cat.id}>{cat.name}</option>
                         ))}
                       </select>
                     </div>
@@ -332,7 +344,7 @@ export default function CreateShopPage() {
                       <textarea
                         value={formData.description}
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                        className="w-full rounded-2xl border border-black/5 bg-gray-50 px-6 py-5 text-lg font-bold text-gray-900 outline-none transition-all focus:border-black focus:bg-white focus:ring-8 focus:ring-black/5 min-h-[140px] resize-none"
+                        className="w-full rounded-2xl border border-black/5 bg-gray-50 px-6 py-5 text-lg font-bold text-gray-900 outline-none transition-all focus:border-black focus:bg-white focus:ring-8 focus:ring-black/5 min-h-[120px] resize-none"
                         placeholder="Tell shoppers why they should buy from you..."
                         required
                       />
