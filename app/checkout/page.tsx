@@ -16,7 +16,6 @@ function CheckoutSuccess() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] text-center px-6">
       <div className="relative mb-10">
-        {/* Satisfying background "pop" circles */}
         {!prefersReduced && (
           <>
             <motion.div
@@ -28,7 +27,6 @@ function CheckoutSuccess() {
           </>
         )}
         
-        {/* Main Icon with Spring Bounce */}
         <motion.div
           initial={{ scale: 0, rotate: -20 }}
           animate={{ scale: 1, rotate: 0 }}
@@ -55,7 +53,6 @@ function CheckoutSuccess() {
           Your payment was successful and the student vendor has been notified.
         </p>
 
-        {/* This button copies the "Add to Cart" success design exactly */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -93,20 +90,36 @@ export default function CheckoutPage() {
     pollingStatusRef.current = pollingStatus;
   }, [pollingStatus]);
 
-  // Handle M-Pesa Polling
+  const validateAndFormatPhone = (number: string): string | null => {
+    // Remove all non-digit characters including +
+    let cleaned = number.replace(/\D/g, "");
+
+    // Case 1: Already 254... (12 digits)
+    if (cleaned.startsWith("254") && cleaned.length === 12) {
+      return cleaned;
+    }
+
+    // Case 2: Starts with 07 or 01 (10 digits)
+    if ((cleaned.startsWith("07") || cleaned.startsWith("01")) && cleaned.length === 10) {
+      return "254" + cleaned.substring(1);
+    }
+
+    // Case 3: Starts with 7 or 1 (9 digits)
+    if ((cleaned.startsWith("7") || cleaned.startsWith("1")) && cleaned.length === 9) {
+      return "254" + cleaned;
+    }
+
+    return null;
+  };
+
   useEffect(() => {
     let interval: NodeJS.Timeout;
     let timeout: NodeJS.Timeout;
-    const POLL_LIMIT = 60000; // 60 seconds
+    const POLL_LIMIT = 60000;
 
     if (orderId && pollingStatus === "pending") {
-      console.log(`[Checkout] Starting poll for Order ${orderId}...`);
-      
-      // Safety timeout to prevent infinite loading
       timeout = setTimeout(() => {
-        // Use Ref to check the LATEST status, not the one from the closure
         if (pollingStatusRef.current === "pending") {
-          console.log("[Checkout] Polling timed out.");
           setPollingStatus("failed");
           setIsProcessing(false);
           setError("Payment timed out. If you already paid, check your orders in a few minutes.");
@@ -119,8 +132,6 @@ export default function CheckoutPage() {
           const token = await getToken();
           if (token) {
             const statusData = await getOrderPaymentStatus(token, orderId);
-            console.log(`[Checkout] Status for ${orderId}:`, statusData?.payment_status);
-            
             if (statusData) {
               if (statusData.payment_status === "SUCCESS") {
                 setPollingStatus("success");
@@ -128,19 +139,15 @@ export default function CheckoutPage() {
                 await refreshCart();
                 clearInterval(interval);
                 clearTimeout(timeout);
-                toast("Payment successful! Your order is confirmed. 🎉", "success");
-                setTimeout(() => {
-                  router.push("/orders");
-                }, 3000);
+                toast("Payment successful!", "success");
+                setTimeout(() => router.push("/orders"), 3000);
               } else if (statusData.payment_status === "FAILED") {
                 setPollingStatus("failed");
                 setIsProcessing(false);
-                setError("Payment failed. Please try again or check your M-Pesa balance.");
-                toast("Payment failed. Please try again.", "error");
+                setError("Payment failed. Please try again.");
                 clearInterval(interval);
                 clearTimeout(timeout);
               }
-              // If PENDING, just continue interval
             }
           }
         } catch (err) {
@@ -161,15 +168,18 @@ export default function CheckoutPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center">
         <h1 className="text-3xl font-bold text-gray-900">Sign in to checkout</h1>
-        <Link href="/sign-in" className="bg-violet-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-violet-700 transition-colors">Log In</Link>
+        <Link href="/sign-in" className="bg-black text-white px-8 py-3 rounded-xl font-bold hover:bg-gray-800 transition-colors">Log In</Link>
       </div>
     );
   }
 
   const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!phoneNumber) {
-      setError("Please enter your M-Pesa phone number");
+    
+    const formattedPhone = validateAndFormatPhone(phoneNumber);
+    
+    if (!formattedPhone) {
+      setError("Enter a valid M-Pesa number (e.g. 0712... or 0112...)");
       return;
     }
 
@@ -179,28 +189,25 @@ export default function CheckoutPage() {
     try {
       const token = await getToken();
       if (token) {
-        const order = await checkoutCart(token, phoneNumber);
+        const order = await checkoutCart(token, formattedPhone);
         if (order) {
           setOrderId(order.id);
           setPollingStatus("pending");
         }
       }
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Checkout failed. Please verify your phone number.";
-      setError(msg);
+    } catch (err: any) {
+      setError(err.message || "Checkout failed. Verify your number.");
       setIsProcessing(false);
     }
   };
 
-  if (isSuccess) {
-    return <CheckoutSuccess />;
-  }
+  if (isSuccess) return <CheckoutSuccess />;
 
   if (!cart || cart.items.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
-        <h1 className="text-xl font-bold text-gray-900">Your bag is empty</h1>
-        <Link href="/products" className="text-violet-600 font-bold hover:underline">Go shopping</Link>
+        <h1 className="text-xl font-bold text-gray-900 font-logo">Your bag is empty</h1>
+        <Link href="/products" className="text-black font-bold border-b-2 border-black">Go shopping</Link>
       </div>
     );
   }
@@ -215,162 +222,105 @@ export default function CheckoutPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mt-10">
-        {/* Payment Column */}
         <div className="lg:col-span-3">
-          <div className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-            <div className="px-8 py-6 border-b border-gray-100">
-              <h2 className="text-xl font-bold text-gray-900">Secure payment</h2>
-              <p className="text-sm text-gray-400 mt-0.5">Pay via M-Pesa STK push</p>
+          <div className="rounded-[2rem] border border-gray-100 bg-white shadow-sm overflow-hidden">
+            <div className="px-8 py-8 border-b border-gray-50">
+              <h2 className="text-2xl font-black text-gray-900 font-logo uppercase tracking-tighter">Secure payment</h2>
+              <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mt-1">Direct M-Pesa Settlement</p>
             </div>
 
             <div className="p-8">
               <AnimatePresence mode="wait">
                 {pollingStatus === "pending" ? (
-                  <motion.div
-                    key="pending"
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="flex flex-col items-center text-center gap-5 py-8"
-                  >
-                    <div className="h-16 w-16 rounded-2xl bg-violet-50 flex items-center justify-center">
-                      <Loader2 size={32} className="animate-spin text-violet-600" />
+                  <motion.div key="pending" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center text-center gap-6 py-12">
+                    <div className="h-20 w-20 rounded-[2rem] bg-gray-50 flex items-center justify-center border border-gray-100">
+                      <Loader2 size={32} className="animate-spin text-black" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-gray-900">Check your phone</h3>
-                      <p className="text-gray-500 text-sm mt-1">Enter your M-Pesa PIN to complete the transaction.</p>
+                      <h3 className="text-xl font-black text-gray-900 font-logo">Check your phone</h3>
+                      <p className="text-gray-400 text-sm font-medium mt-2 max-w-[240px]">We've sent an STK push. Enter your PIN to pay.</p>
                     </div>
                   </motion.div>
                 ) : pollingStatus === "failed" ? (
-                  <motion.div
-                    key="failed"
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="flex flex-col items-center text-center gap-5 py-8"
-                  >
-                    <div className="h-16 w-16 rounded-2xl bg-red-50 flex items-center justify-center text-red-500 border border-red-100">
+                  <motion.div key="failed" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center text-center gap-6 py-12">
+                    <div className="h-20 w-20 rounded-[2rem] bg-red-50 flex items-center justify-center text-red-500 border border-red-100">
                       <XCircle size={32} />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-gray-900">Payment Failed</h3>
-                      <p className="text-gray-500 text-sm mt-1 max-w-[280px]">
-                        The transaction was declined or timed out. Please check your phone and try again.
-                      </p>
+                      <h3 className="text-xl font-black text-gray-900 font-logo">Payment Failed</h3>
+                      <p className="text-gray-400 text-sm font-medium mt-2 max-w-[280px]">The transaction was declined or timed out.</p>
                     </div>
-                    <button
-                      onClick={() => {
-                        setPollingStatus("waiting");
-                        setError(null);
-                        setOrderId(null);
-                      }}
-                      className="mt-2 bg-black text-white px-8 py-3 rounded-xl font-bold text-sm hover:bg-gray-800 transition-colors"
-                    >
+                    <button onClick={() => { setPollingStatus("waiting"); setError(null); setOrderId(null); }} className="mt-4 bg-black text-white px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-gray-800 transition-all shadow-xl">
                       Try Again
                     </button>
                   </motion.div>
                 ) : (
-                  <motion.form
-                    key="form"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    onSubmit={handleCheckout}
-                    className="space-y-6"
-                  >
-                    <div className="space-y-2">
-                      <label htmlFor="phone" className="block text-xs font-semibold uppercase tracking-widest text-gray-400">
-                        M-Pesa phone number
+                  <motion.form key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} onSubmit={handleCheckout} className="space-y-8">
+                    <div className="space-y-3">
+                      <label htmlFor="phone" className="block text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 font-logo">
+                        M-Pesa number
                       </label>
                       <div className="relative">
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                        <div className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300">
                           <Phone size={18} />
                         </div>
                         <input
                           id="phone"
                           type="tel"
-                          placeholder="2547XXXXXXXX"
+                          placeholder="e.g. 0712 345 678"
                           value={phoneNumber}
                           onChange={(e) => setPhoneNumber(e.target.value)}
                           disabled={isProcessing}
-                          className="w-full rounded-xl border border-gray-200 bg-gray-50 py-3 pl-12 pr-4 text-sm font-medium text-gray-900 outline-none transition-all focus:border-violet-500 focus:bg-white focus:ring-2 focus:ring-violet-100 disabled:opacity-50"
+                          className="w-full rounded-2xl border border-gray-100 bg-gray-50 py-5 pl-14 pr-6 text-lg font-bold text-gray-900 outline-none transition-all focus:border-black focus:bg-white focus:ring-8 focus:ring-black/5 disabled:opacity-50"
                         />
                       </div>
-                      <p className="text-[11px] text-gray-400">Format: 254700000000</p>
+                      <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Supports 07..., 01..., and 254...</p>
                     </div>
 
-                    {/* Animated error banner */}
                     <AnimatePresence>
                       {error && (
-                        <motion.div
-                          initial={{ opacity: 0, y: -6, height: 0 }}
-                          animate={{ opacity: 1, y: 0, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.2 }}
-                          className="overflow-hidden"
-                        >
-                          <div className="flex items-center gap-2 rounded-xl bg-red-50 border border-red-100 px-4 py-3 text-sm text-red-600">
-                            <XCircle size={16} className="shrink-0" />
-                            {error}
-                          </div>
+                        <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} className="bg-red-50 border border-red-100 rounded-2xl px-6 py-4 flex items-center gap-3 text-red-600 text-xs font-bold uppercase tracking-tight">
+                          <XCircle size={16} />
+                          {error}
                         </motion.div>
                       )}
                     </AnimatePresence>
 
-                    <motion.button
-                      type="submit"
-                      disabled={isProcessing}
-                      whileTap={{ scale: 0.98 }}
-                      className="w-full rounded-xl bg-violet-600 py-4 text-sm font-semibold text-white hover:bg-violet-700 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-                    >
-                      {isProcessing ? (
-                        <>
-                          <Loader2 size={18} className="animate-spin" />
-                          Processing…
-                        </>
-                      ) : (
-                        "Pay now"
-                      )}
-                    </motion.button>
+                    <button type="submit" disabled={isProcessing} className="w-full rounded-2xl bg-black py-6 text-xs font-black uppercase tracking-[0.25em] text-white hover:bg-gray-800 transition-all disabled:opacity-50 flex items-center justify-center gap-3 shadow-2xl shadow-black/10 active:scale-95">
+                      {isProcessing ? <><Loader2 size={18} className="animate-spin" /> Processing...</> : "Pay now"}
+                    </button>
                   </motion.form>
                 )}
               </AnimatePresence>
             </div>
 
-            <div className="px-8 py-4 border-t border-gray-100 flex items-center justify-center gap-2 text-gray-400">
-              <ShieldCheck size={14} />
-              <span className="text-[11px] font-medium tracking-wide">Secured by Safaricom Daraja</span>
+            <div className="px-8 py-6 border-t border-gray-50 flex items-center justify-center gap-3 text-gray-300">
+              <ShieldCheck size={16} />
+              <span className="text-[10px] font-black uppercase tracking-widest">Secured by Safaricom Daraja</span>
             </div>
           </div>
         </div>
 
-        {/* Summary Column */}
         <div className="lg:col-span-2">
-          <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-6 sticky top-24">
-            <h2 className="text-base font-semibold text-gray-900 mb-5 border-b border-gray-100 pb-4">Order summary</h2>
+          <div className="rounded-[2rem] border border-gray-100 bg-white shadow-sm p-8 sticky top-24">
+            <h2 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-8 font-logo pb-4 border-b border-gray-50">Summary</h2>
 
-            <div className="space-y-3 mb-5">
+            <div className="space-y-4 mb-8">
               {cart.items.map(item => (
-                <div key={item.id} className="flex justify-between items-start gap-3">
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">{item.product_name}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">Qty: {item.quantity}</p>
+                <div key={item.id} className="flex justify-between items-start gap-4">
+                  <div className="min-w-0">
+                    <p className="text-sm font-bold text-gray-900 truncate">{item.product_name}</p>
+                    <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest mt-1">Qty: {item.quantity}</p>
                   </div>
-                  <span className="text-sm font-semibold text-gray-900 shrink-0">KES {item.total_price}</span>
+                  <span className="text-sm font-black text-gray-900 shrink-0">KES {item.total_price}</span>
                 </div>
               ))}
             </div>
 
-            <div className="border-t border-gray-100 pt-4 space-y-2">
-              <div className="flex justify-between text-sm text-gray-500">
-                <span>Subtotal</span>
-                <span className="font-medium text-gray-900">KES {cart.total_price}</span>
-              </div>
+            <div className="border-t border-gray-50 pt-6 space-y-3">
               <div className="flex justify-between items-baseline">
-                <span className="text-base font-bold text-gray-900">Total</span>
-                <span className="text-2xl font-bold text-gray-900">KES {cart.total_price}</span>
+                <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.15em]">Grand Total</span>
+                <span className="text-3xl font-black text-gray-900 tracking-tighter">KES {cart.total_price}</span>
               </div>
             </div>
           </div>
@@ -379,4 +329,3 @@ export default function CheckoutPage() {
     </main>
   );
 }
-
