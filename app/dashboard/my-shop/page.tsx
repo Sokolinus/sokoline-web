@@ -18,6 +18,7 @@ import {
   Rocket, 
   ChevronRight,
   Info,
+  MapPin,
   Check
 } from "lucide-react";
 import Link from "next/link";
@@ -35,6 +36,7 @@ export default function MyShopPage() {
     slug: "",
     payment_phone_number: "",
     paybill_number: "",
+    pickup_point: "",
   });
 
   const [paymentType, setPaymentType] = useState<"phone" | "paybill">("phone");
@@ -53,6 +55,7 @@ export default function MyShopPage() {
               slug: data.slug,
               payment_phone_number: data.payment_phone_number || "",
               paybill_number: data.paybill_number || "",
+              pickup_point: (data as any).pickup_point || "",
             });
             if (data.paybill_number) setPaymentType("paybill");
           }
@@ -89,7 +92,7 @@ export default function MyShopPage() {
           setShop(updated);
           toast("Shop settings saved.", "success");
         } else {
-          toast("Failed to save settings. Check URL requirements.", "error");
+          toast("Failed to save settings.", "error");
         }
       }
     } catch (error) {
@@ -201,7 +204,7 @@ export default function MyShopPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
-        {/* Main Products Control (User requested first thing they see is place to add products) */}
+        {/* Main Products Control */}
         <div className="lg:col-span-2 space-y-6">
           <div className="rounded-[2rem] bg-white border border-gray-100 p-8 shadow-sm">
              <div className="flex items-center justify-between mb-8">
@@ -242,9 +245,9 @@ export default function MyShopPage() {
                        </div>
                     </div>
                  ))}
-                 {shop.products?.length > 4 && (
+                 {(shop.products?.length ?? 0) > 4 && (
                    <Link href="/dashboard/products" className="sm:col-span-2 py-3 text-center text-xs font-black uppercase tracking-widest text-gray-300 hover:text-[#8484F6] transition-colors">
-                     View all {shop.products.length} products
+                     View all {shop.products?.length} products
                    </Link>
                  )}
                </div>
@@ -296,6 +299,25 @@ export default function MyShopPage() {
                     className="w-full rounded-xl border border-gray-100 bg-gray-50 px-4 py-3 text-sm font-bold text-gray-900 outline-none focus:bg-white focus:border-[#8484F6] transition-all"
                     required
                   />
+                </div>
+
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400">Pickup Point</label>
+                  </div>
+                  <div className="relative">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300">
+                      <MapPin size={14} />
+                    </div>
+                    <input
+                      type="text"
+                      value={formData.pickup_point}
+                      onChange={(e) => setFormData({ ...formData, pickup_point: e.target.value })}
+                      className="w-full rounded-xl border border-gray-100 bg-gray-50 pl-10 pr-4 py-3 text-sm font-bold text-gray-900 outline-none focus:bg-white focus:border-[#8484F6] transition-all"
+                      placeholder="e.g. Student Centre"
+                      required
+                    />
+                  </div>
                 </div>
 
                 <div className="space-y-1.5">

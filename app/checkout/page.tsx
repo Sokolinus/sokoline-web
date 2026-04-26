@@ -7,7 +7,7 @@ import { useAuth } from "@clerk/nextjs";
 import { useToast } from "@/components/providers/ToastProvider";
 import { checkoutCart, getOrderPaymentStatus } from "@/lib/api";
 import { getCookie } from "@/lib/utils";
-import { CheckCircle2, ArrowLeft, Loader2, Phone, XCircle, ShieldCheck, Check, ShoppingBag } from "lucide-react";
+import { CheckCircle2, ArrowLeft, Loader2, Phone, XCircle, ShieldCheck, Check, ShoppingBag, MapPin } from "lucide-react";
 import Link from 'next/link';
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
@@ -82,6 +82,7 @@ export default function CheckoutPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [deliveryInstructions, setDeliveryInstructions] = useState("");
   const [orderId, setOrderId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pollingStatus, setPollingStatus] = useState<string>("waiting");
@@ -162,9 +163,7 @@ export default function CheckoutPage() {
 
   const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     const formattedPhone = validateAndFormatPhone(phoneNumber);
-    
     if (!formattedPhone) {
       setError("Enter a valid M-Pesa number");
       return;
@@ -174,11 +173,10 @@ export default function CheckoutPage() {
 
     setIsProcessing(true);
     setError(null);
-
     try {
       const token = await getToken();
       if (token) {
-        const order = await checkoutCart(token, formattedPhone, referralCode);
+        const order = await checkoutCart(token, formattedPhone, referralCode, deliveryInstructions);
         if (order) {
           setOrderId(order.id);
           setPollingStatus("pending");
@@ -217,7 +215,7 @@ export default function CheckoutPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mt-6 sm:mt-10">
         
-        {/* Mobile Order Summary (Hidden on Desktop) */}
+        {/* Mobile Order Summary */}
         <div className="lg:hidden">
            <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
               <div className="flex justify-between items-center">
@@ -274,7 +272,7 @@ export default function CheckoutPage() {
                       </label>
                       <div className="relative">
                         <div className="absolute left-5 sm:left-6 top-1/2 -translate-y-1/2 text-gray-300">
-                          <Phone size={18} />
+                          <Phone size={16} sm:size={18} />
                         </div>
                         <input
                           id="phone"
@@ -286,7 +284,25 @@ export default function CheckoutPage() {
                           className="w-full rounded-2xl border border-gray-100 bg-gray-50 py-4 sm:py-5 pl-12 sm:pl-14 pr-6 text-base sm:text-lg font-bold text-gray-900 outline-none transition-all focus:border-black focus:bg-white focus:ring-4 sm:focus:ring-8 focus:ring-black/5 disabled:opacity-50"
                         />
                       </div>
-                      <p className="text-[9px] sm:text-[10px] text-gray-400 font-bold uppercase tracking-widest">Supports 07..., 01..., and 254...</p>
+                    </div>
+
+                    <div className="space-y-3">
+                        <label htmlFor="instructions" className="block text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 font-logo">
+                            Delivery Instructions (Optional)
+                        </label>
+                        <div className="relative">
+                            <div className="absolute left-5 sm:left-6 top-5 text-gray-300">
+                                <MapPin size={16} sm:size={18} />
+                            </div>
+                            <textarea
+                                id="instructions"
+                                placeholder="e.g. Leave at Student Centre, or Bring to Hostel 3 Room 4"
+                                value={deliveryInstructions}
+                                onChange={(e) => setDeliveryInstructions(e.target.value)}
+                                disabled={isProcessing}
+                                className="w-full rounded-2xl border border-gray-100 bg-gray-50 py-4 sm:py-5 pl-12 sm:pl-14 pr-6 text-sm font-medium text-gray-900 outline-none transition-all focus:border-black focus:bg-white focus:ring-4 sm:focus:ring-8 focus:ring-black/5 disabled:opacity-50 min-h-[100px] resize-none"
+                            />
+                        </div>
                     </div>
 
                     <AnimatePresence>

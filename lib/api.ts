@@ -294,12 +294,13 @@ export async function removeFromCart(token: string, itemId: number): Promise<boo
   }
 }
 
-export async function checkoutCart(token: string, phoneNumber: string, referralCode?: string | null): Promise<Order | null> {
+export async function checkoutCart(token: string, phoneNumber: string, referralCode?: string | null, deliveryInstructions?: string): Promise<Order | null> {
   const res = await apiRequest("cart/checkout", {
     method: "POST",
     body: JSON.stringify({ 
       phone_number: phoneNumber,
-      referral_code: referralCode
+      referral_code: referralCode,
+      delivery_instructions: deliveryInstructions
     }),
   }, token);
 

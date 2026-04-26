@@ -7,7 +7,7 @@ import { createShop, getCategories } from "@/lib/api";
 import { useShop } from "@/components/providers/ShopProvider";
 import { useToast } from "@/components/providers/ToastProvider";
 import { Category } from "@/lib/types";
-import { Store, Loader2, ArrowRight, ArrowLeft, Phone, Hash, Check, Upload, X, Image as ImageIcon, Info } from "lucide-react";
+import { Store, Loader2, ArrowRight, ArrowLeft, Phone, Hash, Check, Upload, X, Image as ImageIcon, Info, MapPin } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
@@ -42,6 +42,7 @@ export default function CreateShopPage() {
     category: "",
     payment_phone_number: "",
     paybill_number: "",
+    pickup_point: "",
     logo: null as File | null,
   });
 
@@ -59,14 +60,14 @@ export default function CreateShopPage() {
     { 
       step: 1, 
       title: "Shop Identity", 
-      desc: "Basic info about your brand.",
-      items: ["Shop Name", "Category", "Brief Pitch/Bio"]
+      desc: "Brand info and logistics.",
+      items: ["Shop Name", "Category", "Pickup Point"]
     },
     { 
       step: 2, 
       title: "Operations & Setup", 
-      desc: "How you'll run your venture.",
-      items: ["Shop Logo (Optional)", "Phone OR Paybill Number"]
+      desc: "How you'll receive money.",
+      items: ["Shop Logo", "M-Pesa Details"]
     }
   ];
 
@@ -80,7 +81,6 @@ export default function CreateShopPage() {
 
   const handleSlugChange = (value: string) => {
     setSlugEdited(true);
-    // Real-time validation: only lowercase, numbers, and hyphens
     const sanitized = value.toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-");
     setFormData((prev) => ({ ...prev, slug: sanitized }));
   };
@@ -104,8 +104,8 @@ export default function CreateShopPage() {
   };
 
   const validateStep1 = () => {
-    if (!formData.name.trim() || !formData.description.trim() || !formData.category) {
-      setError("Name, description, and category are required.");
+    if (!formData.name.trim() || !formData.description.trim() || !formData.category || !formData.pickup_point.trim()) {
+      setError("Name, description, category, and pickup point are required.");
       return false;
     }
     setError(null);
@@ -126,9 +126,8 @@ export default function CreateShopPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Final check for payment
     if (paymentType === "phone" && !formData.payment_phone_number) {
-        setError("Please provide a phone number to receive payments.");
+        setError("Please provide a phone number for payments.");
         return;
     }
     if (paymentType === "paybill" && !formData.paybill_number) {
@@ -147,6 +146,7 @@ export default function CreateShopPage() {
         data.append("description", formData.description);
         data.append("category", formData.category);
         data.append("slug", formData.slug);
+        data.append("pickup_point", formData.pickup_point);
         
         if (paymentType === "phone") {
           data.append("payment_phone_number", formData.payment_phone_number);
@@ -167,9 +167,8 @@ export default function CreateShopPage() {
           setError("Failed to create shop. This URL handle might already be taken.");
         }
       }
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "An error occurred.";
-      setError(msg);
+    } catch (err: any) {
+      setError(err.message || "An error occurred.");
     } finally {
       setIsSubmitting(false);
     }
@@ -181,7 +180,7 @@ export default function CreateShopPage() {
     <div className="min-h-screen flex items-center justify-center py-20 px-6 bg-white font-sans text-black">
       <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-5 gap-16 items-start">
         
-        {/* Left Column: Information & Progress */}
+        {/* Left Column: Information */}
         <div className="lg:col-span-2 space-y-12">
           <div>
             <div className="inline-flex h-16 w-16 items-center justify-center rounded-3xl bg-sokoline-accent text-black mb-8">
@@ -229,12 +228,12 @@ export default function CreateShopPage() {
           <div className="p-8 rounded-3xl bg-gray-50 border border-black/5 space-y-4">
             <h4 className="font-logo font-bold text-sm uppercase tracking-widest text-black/60">Preparation</h4>
             <p className="text-sm text-black/40 leading-relaxed">
-              Make sure you have your **M-Pesa details** ready and a **high-quality logo** (square format works best) to make your storefront stand out.
+              Make sure you have your **M-Pesa details** ready and a square **shop logo** to make your brand recognizable.
             </p>
           </div>
         </div>
 
-        {/* Right Column: Interactive Form */}
+        {/* Right Column: Form */}
         <div className="lg:col-span-3 bg-white p-2 md:p-10 border border-black/5 rounded-[40px] shadow-2xl shadow-black/5">
           <form onSubmit={handleSubmit} className="space-y-10">
             <AnimatePresence mode="wait">
@@ -262,18 +261,39 @@ export default function CreateShopPage() {
                     </div>
 
                     <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                            <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-black/40 font-logo">
+                                Pickup Point
+                            </label>
+                            <div className="group relative">
+                                <Info size={14} className="text-black/20" />
+                                <div className="absolute bottom-full right-0 mb-2 w-64 p-4 rounded-2xl bg-black text-white text-[10px] leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 shadow-2xl">
+                                    Tell students where to find you.
+                                    <br/><br/>
+                                    <span className="text-sokoline-accent">Examples:</span> "Student Centre", "Hostel 3 Lounge", or "Gate B".
+                                </div>
+                            </div>
+                        </div>
+                        <div className="relative">
+                            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-black/20">
+                                <MapPin size={20} />
+                            </div>
+                            <input
+                                type="text"
+                                value={formData.pickup_point}
+                                onChange={(e) => setFormData({ ...formData, pickup_point: e.target.value })}
+                                className="w-full rounded-2xl border border-black/5 bg-gray-50 px-6 py-5 pl-14 text-lg font-bold text-gray-900 outline-none transition-all focus:border-black focus:bg-white focus:ring-8 focus:ring-black/5"
+                                placeholder="e.g. Student Centre"
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-black/40 font-logo">
                             Shop URL Handle
                         </label>
-                        <div className="group relative">
-                            <Info size={14} className="text-black/20" />
-                            <div className="absolute bottom-full right-0 mb-2 w-64 p-4 rounded-2xl bg-black text-white text-[10px] leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 shadow-2xl">
-                                This is your unique web address. 
-                                <br/><br/>
-                                <span className="text-sokoline-accent">Example:</span> if you enter "cool-gear", your shop will be at sokoline.app/shops/cool-gear
-                            </div>
-                        </div>
                       </div>
                       <div className="flex items-center gap-3 bg-gray-50 rounded-2xl border border-black/5 px-6">
                          <span className="text-sm font-bold text-black/20">sokoline.app/shops/</span>
@@ -312,7 +332,7 @@ export default function CreateShopPage() {
                       <textarea
                         value={formData.description}
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                        className="w-full rounded-2xl border border-black/5 bg-gray-50 px-6 py-5 text-lg font-bold text-gray-900 outline-none transition-all focus:border-black focus:bg-white focus:ring-8 focus:ring-black/5 min-h-[140px] resize-none"
+                        className="w-full rounded-2xl border border-black/5 bg-gray-50 px-6 py-5 text-lg font-bold text-gray-900 outline-none transition-all focus:border-black focus:bg-white focus:ring-8 focus:ring-black/5 min-h-[120px] resize-none"
                         placeholder="Tell shoppers why they should buy from you..."
                         required
                       />
@@ -370,7 +390,7 @@ export default function CreateShopPage() {
                   <div className="space-y-8">
                     <div className="space-y-4">
                       <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-black/40 font-logo text-center">
-                        Choose how you want to be paid
+                        Choose payout method
                       </label>
                       <div className="grid grid-cols-2 gap-4">
                         <button
@@ -385,7 +405,7 @@ export default function CreateShopPage() {
                           <Phone size={24} />
                           <div>
                             <p className="font-logo font-bold text-sm uppercase tracking-wider">Phone</p>
-                            <p className="text-[10px] opacity-60 uppercase font-bold mt-1 tracking-widest">Personal Account</p>
+                            <p className="text-[10px] opacity-60 uppercase font-bold mt-1 tracking-widest">Personal</p>
                           </div>
                         </button>
                         <button
@@ -400,7 +420,7 @@ export default function CreateShopPage() {
                           <Hash size={24} />
                           <div>
                             <p className="font-logo font-bold text-sm uppercase tracking-wider">Paybill</p>
-                            <p className="text-[10px] opacity-60 uppercase font-bold mt-1 tracking-widest">Business Till</p>
+                            <p className="text-[10px] opacity-60 uppercase font-bold mt-1 tracking-widest">Business</p>
                           </div>
                         </button>
                       </div>

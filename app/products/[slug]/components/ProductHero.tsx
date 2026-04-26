@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Product, ProductVariant } from "@/lib/types";
 import { formatImageUrl } from "@/lib/api";
 import { useCart } from "@/components/providers/CartProvider";
-import { Check, Star, Loader2, ShoppingCart, Share2 } from "lucide-react";
+import { Check, Star, Loader2, ShoppingCart, Share2, MapPin } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import AssuranceBadge from "@/components/sokoline/AssuranceBadge";
 import { useToast } from "@/components/providers/ToastProvider";
@@ -25,7 +25,6 @@ export default function ProductHero({ product }: ProductHeroProps) {
   const [activeImg, setActiveImg] = useState(0);
   const [addState, setAddState] = useState<AddState>("idle");
 
-  // Type-safe number conversions for arithmetic
   const priceNum = Number(product.price);
   const discountNum = product.discount_price ? Number(product.discount_price) : null;
   const currentPriceNum = Number(selectedVariant?.price_override || product.discount_price || product.price);
@@ -122,6 +121,12 @@ export default function ProductHero({ product }: ProductHeroProps) {
             </div>
 
             <div className="flex flex-col gap-[12px] pt-4 border-t border-black/10">
+              {(product as any).shop_pickup_point && (
+                <div className="flex items-center gap-2 text-[12px] font-bold text-emerald-600 bg-emerald-50 w-fit px-3 py-1 rounded-full border border-emerald-100 mb-1">
+                   <MapPin size={12} />
+                   <span>Pickup: {(product as any).shop_pickup_point}</span>
+                </div>
+              )}
               <div className="flex gap-[22px] items-center font-sans text-[14px]">
                 <div className="flex items-center gap-1">
                   <Star size={14} className="fill-black text-black" />
