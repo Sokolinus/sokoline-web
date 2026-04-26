@@ -5,9 +5,10 @@ import Image from 'next/image';
 import { Product, ProductVariant } from "@/lib/types";
 import { formatImageUrl } from "@/lib/api";
 import { useCart } from "@/components/providers/CartProvider";
-import { Check, Star, Loader2, ShoppingCart } from "lucide-react";
+import { Check, Star, Loader2, ShoppingCart, Share2 } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import AssuranceBadge from "@/components/sokoline/AssuranceBadge";
+import { useToast } from "@/components/providers/ToastProvider";
 
 interface ProductHeroProps {
   product: Product;
@@ -17,6 +18,7 @@ type AddState = "idle" | "adding" | "done";
 
 export default function ProductHero({ product }: ProductHeroProps) {
   const { addItem } = useCart();
+  const { toast } = useToast();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
     product.variants.length > 0 ? product.variants[0] : null
   );
@@ -33,7 +35,6 @@ export default function ProductHero({ product }: ProductHeroProps) {
   const handleAddToCart = async () => {
     if (addState !== "idle") return;
     setAddState("adding");
-    // Use main product ID as expected by backend CartItem model
     const success = await addItem(product.id, 1);
     if (success) {
       setAddState("done");
@@ -41,6 +42,11 @@ export default function ProductHero({ product }: ProductHeroProps) {
     } else {
       setAddState("idle");
     }
+  };
+
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.href);
+    toast("Link copied! Ready for your status.", "success");
   };
 
   const uniqueColors = product.variants
@@ -57,7 +63,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
 
   return (
     <section className="bg-white py-10">
-      <div className="max-w-[1708px] mx-auto px-[63px] grid grid-cols-1 lg:grid-cols-2 gap-10">
+      <div className="max-w-[1708px] mx-auto px-4 md:px-[63px] grid grid-cols-1 lg:grid-cols-2 gap-10">
 
         {/* LEFT: Product Gallery */}
         <div className="flex flex-col gap-[15px]">
@@ -78,13 +84,13 @@ export default function ProductHero({ product }: ProductHeroProps) {
             )}
           </div>
 
-          <div className="flex flex-wrap gap-[15px_18px]">
+          <div className="flex flex-wrap gap-[10px] sm:gap-[15px_18px]">
             {allImages.map((img, i) => (
               <button
                 key={img.id}
                 onClick={() => setActiveImg(i)}
                 type="button"
-                className={`relative w-[188px] aspect-[400/267] overflow-hidden bg-zinc-100 transition-all rounded-sm ${
+                className={`relative w-[80px] sm:w-[188px] aspect-[400/267] overflow-hidden bg-zinc-100 transition-all rounded-sm ${
                   activeImg === i ? "ring-2 ring-black" : "opacity-80 hover:opacity-100"
                 }`}
               >
@@ -93,7 +99,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
                   alt={img.alt_text || product.name} 
                   fill 
                   className="object-cover"
-                  sizes="188px"
+                  sizes="(max-width: 640px) 80px, 188px"
                 />
               </button>
             ))}
@@ -101,16 +107,16 @@ export default function ProductHero({ product }: ProductHeroProps) {
         </div>
 
         {/* RIGHT: Product Info */}
-        <div className="flex flex-col pt-[48px] pl-[21px] pr-[29px]">
+        <div className="flex flex-col pt-6 lg:pt-[48px] lg:pl-[21px] lg:pr-[29px]">
           <div className="mb-8 space-y-4">
-            <h1 className="font-logo text-[32px] text-black leading-tight">
+            <h1 className="font-logo text-2xl sm:text-[32px] text-black leading-tight">
               {product.name}
             </h1>
             
             <div className="flex items-center gap-2">
               <div className="w-[44px] h-[43px] rounded-full bg-zinc-100 overflow-hidden shrink-0" />
               <p className="font-sans text-[14px] text-black leading-relaxed">
-                Handmade {product.category?.name || "item"}. Genuine materials.<br />
+                Handmade {product.category?.name || "item"}. Genuine materials.<br className="hidden sm:block" />
                 Made with love for you.
               </p>
             </div>
@@ -165,39 +171,50 @@ export default function ProductHero({ product }: ProductHeroProps) {
               </div>
             )}
 
-            <button
-              onClick={handleAddToCart}
-              disabled={addState !== "idle"}
-              className={`w-[146px] h-[30px] rounded-[2px] font-logo text-[14px] flex items-center justify-center gap-2 transition-all ${
-                addState === "done"
-                  ? "bg-emerald-500 text-white"
-                  : "bg-sokoline-accent text-black hover:opacity-90"
-              }`}
-            >
-              <AnimatePresence mode="wait" initial={false}>
-                {addState === "adding" ? (
-                  <Loader2 size={14} className="animate-spin" />
-                ) : addState === "done" ? (
-                  <Check size={14} />
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <Image 
-                      src="/CartIcon.svg" 
-                      alt="Cart" 
-                      width={18} 
-                      height={18} 
-                      className="object-contain"
-                      unoptimized
-                    />
-                    <span>Add to cart</span>
-                  </div>
-                )}
-              </AnimatePresence>
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleAddToCart}
+                disabled={addState !== "idle"}
+                className={`flex-1 sm:flex-none w-full sm:w-[146px] h-[40px] sm:h-[30px] rounded-[2px] font-logo text-[14px] flex items-center justify-center gap-2 transition-all ${
+                  addState === "done"
+                    ? "bg-emerald-500 text-white"
+                    : "bg-sokoline-accent text-black hover:opacity-90"
+                }`}
+              >
+                <AnimatePresence mode="wait" initial={false}>
+                  {addState === "adding" ? (
+                    <Loader2 size={14} className="animate-spin" />
+                  ) : addState === "done" ? (
+                    <Check size={14} />
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <Image 
+                        src="/CartIcon.svg" 
+                        alt="Cart" 
+                        width={18} 
+                        height={18} 
+                        className="object-contain"
+                        unoptimized
+                      />
+                      <span>Add to cart</span>
+                    </div>
+                  )}
+                </AnimatePresence>
+              </button>
+
+              <button
+                onClick={handleShare}
+                className="h-[40px] sm:h-[30px] px-6 rounded-[2px] border border-black/10 hover:bg-gray-50 transition-all flex items-center gap-2 text-[12px] font-logo text-black"
+                title="Share product link"
+              >
+                <Share2 size={14} />
+                <span>Share</span>
+              </button>
+            </div>
           </div>
 
           {/* Trust Badges */}
-          <div className="mt-12 grid grid-cols-2 gap-x-[104px] gap-y-[17px] w-fit">
+          <div className="mt-12 grid grid-cols-2 gap-x-[40px] sm:gap-x-[104px] gap-y-[17px] w-fit">
             <AssuranceBadge label="Secure Payments" />
             <AssuranceBadge label="Free Shipping" />
             <AssuranceBadge label="Free Returns" />
