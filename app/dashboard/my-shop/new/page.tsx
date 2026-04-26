@@ -228,7 +228,7 @@ export default function CreateShopPage() {
           <div className="p-8 rounded-3xl bg-gray-50 border border-black/5 space-y-4">
             <h4 className="font-logo font-bold text-sm uppercase tracking-widest text-black/60">Preparation</h4>
             <p className="text-sm text-black/40 leading-relaxed">
-              Make sure you have your **M-Pesa details** ready and a square **shop logo** to make your brand recognizable.
+              Make sure you have your M-Pesa details ready and a square shop logo to make your brand recognizable.
             </p>
           </div>
         </div>
