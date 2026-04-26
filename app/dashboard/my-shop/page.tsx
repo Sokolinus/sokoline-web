@@ -17,7 +17,8 @@ import {
   TrendingUp, 
   Rocket, 
   ChevronRight,
-  Info
+  Info,
+  Check
 } from "lucide-react";
 import Link from "next/link";
 
@@ -214,7 +215,7 @@ export default function MyShopPage() {
                </Link>
              </div>
              
-             {shop.products?.length === 0 ? (
+             {(!shop.products || shop.products.length === 0) ? (
                <div className="py-20 text-center border-2 border-dashed border-gray-50 rounded-3xl">
                   <div className="h-14 w-14 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-300 mx-auto mb-4">
                     <Package size={28} />
@@ -241,7 +242,7 @@ export default function MyShopPage() {
                        </div>
                     </div>
                  ))}
-                 {shop.products.length > 4 && (
+                 {shop.products?.length > 4 && (
                    <Link href="/dashboard/products" className="sm:col-span-2 py-3 text-center text-xs font-black uppercase tracking-widest text-gray-300 hover:text-[#8484F6] transition-colors">
                      View all {shop.products.length} products
                    </Link>
@@ -264,10 +265,10 @@ export default function MyShopPage() {
                    <span className="text-sm font-bold opacity-90">Shop Created</span>
                 </div>
                 <div className="flex items-center gap-4">
-                   <div className={`h-6 w-6 rounded-full flex items-center justify-center text-black ${shop.products?.length > 0 ? "bg-sokoline-accent" : "bg-white/10 text-white/40"}`}>
-                      {shop.products?.length > 0 ? <Check size={14} strokeWidth={3} /> : <span className="text-[10px] font-black">2</span>}
+                   <div className={`h-6 w-6 rounded-full flex items-center justify-center text-black ${(shop.products?.length ?? 0) > 0 ? "bg-sokoline-accent" : "bg-white/10 text-white/40"}`}>
+                      {(shop.products?.length ?? 0) > 0 ? <Check size={14} strokeWidth={3} /> : <span className="text-[10px] font-black">2</span>}
                    </div>
-                   <span className={`text-sm font-bold ${shop.products?.length > 0 ? "opacity-90" : "opacity-40"}`}>List first product</span>
+                   <span className={`text-sm font-bold ${(shop.products?.length ?? 0) > 0 ? "opacity-90" : "opacity-40"}`}>List first product</span>
                 </div>
                 <div className="flex items-center gap-4">
                    <div className="h-6 w-6 rounded-full bg-white/10 flex items-center justify-center text-white/40">

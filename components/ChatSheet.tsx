@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export default function ChatSheet() {
   const [isOpen, setIsOpen] = useState(false);
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat();
+  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat() as any;
 
   return (
     <>
@@ -55,7 +55,7 @@ export default function ChatSheet() {
                </div>
              )}
              
-             {messages.map((m) => (
+             {messages.map((m: any) => (
                <div key={m.id} className={`flex gap-3 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
                   <div className={`h-6 w-6 rounded flex items-center justify-center shrink-0 mt-1 ${
                     m.role === 'user' ? 'bg-zinc-200 text-zinc-600' : 'bg-zinc-900 text-white'
