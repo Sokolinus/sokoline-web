@@ -332,7 +332,7 @@ export default function CreateShopPage() {
                       <textarea
                         value={formData.description}
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                        className="w-full rounded-2xl border border-black/5 bg-gray-50 px-6 py-5 text-lg font-bold text-gray-900 outline-none transition-all focus:border-black focus:bg-white focus:ring-8 focus:ring-black/5 min-h-[120px] resize-none"
+                        className="w-full rounded-2xl border border-black/5 bg-gray-50 px-6 py-5 text-lg font-bold text-gray-900 outline-none transition-all focus:border-black focus:bg-white focus:ring-8 focus:ring-black/5 min-h-[140px] resize-none"
                         placeholder="Tell shoppers why they should buy from you..."
                         required
                       />

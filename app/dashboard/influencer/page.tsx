@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useAuth, useUser } from "@clerk/nextjs";
-import { apiRequest, getShops } from "@/lib/api";
+import { apiRequest, getShops, formatImageUrl } from "@/lib/api";
 import { 
   Users, 
   DollarSign, 
