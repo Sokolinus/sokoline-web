@@ -113,12 +113,13 @@ export default function ProductCard({ product, className = "" }: ProductCardProp
         }`}
       >
         {isAdding ? (
-          <Loader2 size={20} className="animate-spin sm:size-6" />
+          <Loader2 size={24} className="animate-spin" />
         ) : isDone ? (
           <>
-            <Check size={20} className="sm:size-6" />
+            <Check size={24} />
             Added!
           </>
+
         ) : (
           <>
             <Image 

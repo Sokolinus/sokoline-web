@@ -267,7 +267,7 @@ export default function CheckoutPage() {
                       </label>
                       <div className="relative">
                         <div className="absolute left-5 sm:left-6 top-1/2 -translate-y-1/2 text-gray-300">
-                          <Phone size={16} sm:size={18} />
+                          <Phone size={18} />
                         </div>
                         <input
                           id="phone"
