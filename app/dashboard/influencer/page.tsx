@@ -144,8 +144,8 @@ export default function InfluencerDashboard() {
                   <Check size={12} strokeWidth={4} />
                 </div>
                 <div>
-                  <h4 className="font-logo font-bold text-gray-900 uppercase text-xs tracking-widest">Digital Contracts</h4>
-                  <p className="text-sm text-gray-400 font-medium">Professional partnerships backed by safe, automated tracking and instant payouts.</p>
+                  <h4 className="font-logo font-bold text-gray-900 uppercase text-xs tracking-widest">Global Tracking</h4>
+                  <p className="text-sm text-gray-400 font-medium">Share one link. If they buy from ANY shop during that session, you get the credit.</p>
                 </div>
               </div>
               <div className="flex gap-4">
@@ -153,8 +153,8 @@ export default function InfluencerDashboard() {
                   <Check size={12} strokeWidth={4} />
                 </div>
                 <div>
-                  <h4 className="font-logo font-bold text-gray-900 uppercase text-xs tracking-widest">Campus-Wide Reach</h4>
-                  <p className="text-sm text-gray-400 font-medium">Join a network of student leaders shaping the future of university commerce.</p>
+                  <h4 className="font-logo font-bold text-gray-900 uppercase text-xs tracking-widest">Smart Commissions</h4>
+                  <p className="text-sm text-gray-400 font-medium">Our system automatically splits commissions across multiple shops in a single cart.</p>
                 </div>
               </div>
             </div>
@@ -221,7 +221,11 @@ export default function InfluencerDashboard() {
                   <p>Partners must not engage in spam, deceptive advertising, or represent products in a way that violates university policy. Payouts may be withheld for fraudulent traffic.</p>
                </div>
                <div className="space-y-4">
-                  <h3 className="text-black font-bold uppercase text-xs tracking-widest">4. Payment</h3>
+                  <h3 className="text-black font-bold uppercase text-xs tracking-widest">4. Session Tracking</h3>
+                  <p>When a student clicks your link, a 24-hour tracking cookie is placed. You receive commission for the entire cart, even if it contains products from multiple different shops.</p>
+               </div>
+               <div className="space-y-4">
+                  <h3 className="text-black font-bold uppercase text-xs tracking-widest">5. Payment</h3>
                   <p>Earnings will be settled directly to your registered M-Pesa number upon request, provided the balance exceeds KES 500.</p>
                </div>
             </div>
