@@ -270,8 +270,8 @@ export default function InfluencerDashboard() {
                           <div className="flex justify-between items-start">
                              <div className="h-12 w-12 rounded-xl bg-white border border-gray-100 flex items-center justify-center text-zinc-300">
                                 {shop.logo ? (
-                                  <img src={formatImageUrl(shop.logo)} className="h-full w-full object-cover rounded-xl" />
-                                ) : <Store size={24} />}
+                                  <img src={formatImageUrl(shop.logo)} className="h-full w-full object-cover object-top rounded-xl" />
+                                ) : (
                              </div>
                              <div className="text-right">
                                 <span className="text-[10px] font-black text-[#8484F6] uppercase tracking-widest">Rate</span>

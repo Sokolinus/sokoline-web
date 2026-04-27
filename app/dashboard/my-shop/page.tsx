@@ -341,7 +341,7 @@ export default function MyShopPage() {
                 >
                   {logoPreview ? (
                     <>
-                      <Image src={logoPreview} alt="Preview" fill className="object-cover" sizes="128px" />
+                      <Image src={logoPreview} alt="Preview" fill className="object-cover object-top" sizes="128px" />
                       <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                         <Upload size={20} className="text-white" />
                       </div>

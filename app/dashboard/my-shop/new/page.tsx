@@ -372,7 +372,7 @@ export default function CreateShopPage() {
                     >
                       {logoPreview ? (
                         <>
-                          <Image src={logoPreview} alt="Preview" fill className="object-cover" sizes="160px" />
+                          <Image src={logoPreview} alt="Preview" fill className="object-cover object-top" sizes="160px" />
                           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                             <button 
                               type="button"

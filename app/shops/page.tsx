@@ -18,13 +18,13 @@ export default async function ShopsPage() {
         {shops.map((shop: Shop) => (
           <div key={shop.id} className="group flex flex-col">
             <Link href={`/shops/${shop.slug}`} className="flex flex-1 flex-col overflow-hidden rounded-[28px] border border-black/5 bg-gray-50 transition-all hover:border-black/10 hover:bg-white hover:shadow-2xl hover:shadow-black/5 sm:rounded-[40px]">
-              <div className="relative aspect-video w-full overflow-hidden bg-white border-b border-black/5">
+              <div className="relative h-64 w-full overflow-hidden bg-white border-b border-black/5">
                 {shop.logo ? (
                   <Image 
                     src={formatImageUrl(shop.logo)} 
                     alt={shop.name} 
                     fill 
-                    className="object-cover transition-transform duration-700 group-hover:scale-105" 
+                    className="object-cover object-top transition-transform duration-700 group-hover:scale-105" 
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
                   />
                 ) : (
