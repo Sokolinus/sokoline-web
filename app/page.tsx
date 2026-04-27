@@ -90,7 +90,7 @@ export default async function Home() {
                     href="/dashboard/influencer"
                     className="group inline-flex items-center justify-center gap-3 px-10 py-5 bg-white text-black rounded-[1.5rem] font-black text-lg transition-all hover:scale-105 active:scale-95"
                 >
-                    Join the Squad
+                    Become a Social Partner
                     <ArrowUpRight size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 </Link>
               </div>
