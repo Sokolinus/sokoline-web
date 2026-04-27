@@ -19,9 +19,14 @@ import {
   ChevronRight,
   Info,
   MapPin,
-  Check
+  Check,
+  Upload,
+  X,
+  Image as ImageIcon
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+import { formatImageUrl } from "@/lib/api";
 
 export default function MyShopPage() {
   const [shop, setShop] = useState<Shop | null>(null);
@@ -29,6 +34,7 @@ export default function MyShopPage() {
   const [saving, setSaving] = useState(false);
   const { getToken, isLoaded, isSignedIn } = useAuth();
   const { toast } = useToast();
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -37,8 +43,10 @@ export default function MyShopPage() {
     payment_phone_number: "",
     paybill_number: "",
     pickup_point: "",
+    logo: null as File | null,
   });
 
+  const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [paymentType, setPaymentType] = useState<"phone" | "paybill">("phone");
 
   useEffect(() => {
@@ -56,7 +64,9 @@ export default function MyShopPage() {
               payment_phone_number: data.payment_phone_number || "",
               paybill_number: data.paybill_number || "",
               pickup_point: (data as any).pickup_point || "",
+              logo: null,
             });
+            setLogoPreview(data.logo ? formatImageUrl(data.logo) : null);
             if (data.paybill_number) setPaymentType("paybill");
           }
         }
@@ -72,6 +82,24 @@ export default function MyShopPage() {
     }
   }, [isLoaded, isSignedIn, getToken]);
 
+  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFormData({ ...formData, logo: file });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setLogoPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeLogo = () => {
+    setFormData({ ...formData, logo: null });
+    setLogoPreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!shop) return;
@@ -80,16 +108,31 @@ export default function MyShopPage() {
     try {
       const token = await getToken();
       if (token) {
-        // Clear the other field based on current selection
-        const submissionData = {
-          ...formData,
-          paybill_number: paymentType === "paybill" ? formData.paybill_number : null,
-          payment_phone_number: paymentType === "phone" ? formData.payment_phone_number : null,
-        };
+        const data = new FormData();
+        data.append("name", formData.name);
+        data.append("description", formData.description);
+        data.append("slug", formData.slug);
+        data.append("pickup_point", formData.pickup_point);
+        
+        if (paymentType === "paybill") {
+          data.append("paybill_number", formData.paybill_number);
+          data.append("payment_phone_number", ""); 
+        } else {
+          data.append("payment_phone_number", formData.payment_phone_number);
+          data.append("paybill_number", ""); 
+        }
 
-        const updated = await updateShop(token, shop.slug, submissionData);
+        if (formData.logo) {
+          data.append("logo", formData.logo);
+        }
+
+        const updated = await updateShop(token, shop.slug, data);
         if (updated) {
           setShop(updated);
+          // Update URL if slug changed
+          if (updated.slug !== shop.slug) {
+             window.history.replaceState(null, '', `/dashboard/my-shop`);
+          }
           toast("Shop settings saved.", "success");
         } else {
           toast("Failed to save settings.", "error");
@@ -286,6 +329,49 @@ export default function MyShopPage() {
         {/* Sidebar: Settings */}
         <div className="space-y-6">
           <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="rounded-[2rem] bg-white border border-gray-100 p-8 shadow-sm">
+              <h2 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-6 font-logo">Visual Identity</h2>
+              
+              <div className="space-y-4">
+                <div 
+                  onClick={() => fileInputRef.current?.click()}
+                  className={`relative h-32 w-32 mx-auto rounded-[32px] border-2 border-dashed transition-all flex flex-col items-center justify-center cursor-pointer overflow-hidden group ${
+                    logoPreview ? "border-black border-solid" : "border-black/10 hover:border-black/20 bg-gray-50"
+                  }`}
+                >
+                  {logoPreview ? (
+                    <>
+                      <Image src={logoPreview} alt="Preview" fill className="object-cover" sizes="128px" />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <Upload size={20} className="text-white" />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <ImageIcon size={24} className="text-black/20 mb-2" />
+                      <span className="text-[8px] font-black text-black/30 uppercase tracking-widest text-center px-4">Upload Logo</span>
+                    </>
+                  )}
+                </div>
+                <input 
+                  type="file" 
+                  ref={fileInputRef}
+                  onChange={handleLogoChange}
+                  accept="image/*"
+                  className="hidden"
+                />
+                {logoPreview && (
+                  <button 
+                    type="button"
+                    onClick={removeLogo}
+                    className="block mx-auto text-[9px] font-black uppercase tracking-widest text-red-400 hover:text-red-600 transition-colors"
+                  >
+                    Remove Logo
+                  </button>
+                )}
+              </div>
+            </div>
+
             <div className="rounded-[2rem] bg-white border border-gray-100 p-8 shadow-sm">
               <h2 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-6 font-logo">Shop Identity</h2>
               
