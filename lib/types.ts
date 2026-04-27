@@ -116,12 +116,13 @@ export interface Shop {
   name: string;
   slug: string;
   description: string;
-  category: string;
+  category: string | null;
   logo?: string;
   owner: string;
   products?: any[];
   payment_phone_number?: string;
   paybill_number?: string;
+  pickup_point?: string;
   affiliate_commission_rate: string;
   is_partner_program_active: boolean;
 }
