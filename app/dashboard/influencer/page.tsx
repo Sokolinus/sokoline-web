@@ -367,11 +367,7 @@ export default function InfluencerDashboard() {
          {/* Sidebar: Payouts */}
          <div className="space-y-6">
             <div className="rounded-[2.5rem] bg-gray-900 text-white p-10 shadow-2xl relative overflow-hidden">
-               <div className="absolute top-0 right-0 p-8 opacity-10">
-                  <Rocket size={120} />
-               </div>
-               <h2 className="text-xl font-black font-logo uppercase mb-6 relative z-10">Payout Hub</h2>
-               <div className="space-y-6 relative z-10">
+               <h2 className="text-xl font-black font-logo uppercase mb-6 relative z-10">Payout Hub</h2>               <div className="space-y-6 relative z-10">
                   <div className="p-6 rounded-3xl bg-white/5 border border-white/10">
                      <p className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-3">Available for M-Pesa</p>
                      <p className="text-4xl font-black tracking-tighter">KES {profile.total_earnings}</p>
