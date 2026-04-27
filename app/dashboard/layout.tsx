@@ -3,11 +3,12 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Store, Package, ArrowLeft, ShoppingCart, Plus, ChevronRight } from "lucide-react";
+import { LayoutDashboard, Store, Package, ArrowLeft, ShoppingCart, Plus, ChevronRight, Users } from "lucide-react";
 import { useShop } from "@/components/providers/ShopProvider";
 import { Loader2 } from "lucide-react";
 
 const CREATE_SHOP_PATH = "/dashboard/my-shop/new";
+const INFLUENCER_PATH = "/dashboard/influencer";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -18,6 +19,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { name: "My Shop", href: "/dashboard/my-shop", icon: Store },
     { name: "Inventory", href: "/dashboard/products", icon: Package },
     { name: "Orders", href: "/dashboard/orders", icon: ShoppingCart },
+    { name: "Social Partner", href: "/dashboard/influencer", icon: Users },
   ];
 
   // Show spinner while we determine shop status
@@ -29,7 +31,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     );
   }
 
-  // If user is on the create-shop page, render content without the full dashboard frame
+  // If user is on the create-shop page, render without the dashboard frame
   if (pathname === CREATE_SHOP_PATH) {
     return (
       <div className="min-h-screen bg-[#F9FAFB]">
@@ -38,8 +40,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     );
   }
 
-  // Gate: if no shop exists, show a friendly wall
-  if (!hasShop) {
+  // Gate: if no shop exists AND we aren't on the influencer path, show a friendly wall
+  if (!hasShop && pathname !== INFLUENCER_PATH) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-8 bg-[#F9FAFB] px-6 text-center">
         <div className="flex h-20 w-20 items-center justify-center rounded-[2rem] border border-sokoline-accent/5 bg-white text-sokoline-accent shadow-xl shadow-sokoline-accent/10">
@@ -50,15 +52,25 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <p className="max-w-sm text-lg text-gray-500 font-medium leading-relaxed">
             Ready to start your campus venture? Create your shop to start listing items.
           </p>
+          <p className="text-xs text-black/20 font-bold uppercase tracking-widest pt-2">— OR —</p>
+          <p className="max-w-sm text-sm text-black/40 font-medium">Want to earn by promoting others instead?</p>
         </div>
-        <Link
-          href={CREATE_SHOP_PATH}
-          className="group flex items-center gap-3 rounded-[1.5rem] bg-sokoline-accent px-10 py-5 text-lg font-bold text-white shadow-xl shadow-sokoline-accent/20 transition-all hover:opacity-90"
-        >
-          <Plus size={20} />
-          Create your shop
-          <ChevronRight size={18} className="transition-transform group-hover:translate-x-1" />
-        </Link>
+        <div className="flex flex-col sm:flex-row gap-4">
+            <Link
+            href={CREATE_SHOP_PATH}
+            className="group flex items-center gap-3 rounded-[1.5rem] bg-black px-10 py-5 text-lg font-bold text-white shadow-xl shadow-black/10 transition-all hover:bg-gray-800"
+            >
+            <Plus size={20} />
+            Create shop
+            </Link>
+            <Link
+            href={INFLUENCER_PATH}
+            className="group flex items-center gap-3 rounded-[1.5rem] bg-sokoline-accent px-10 py-5 text-lg font-bold text-white shadow-xl shadow-sokoline-accent/20 transition-all hover:opacity-90"
+            >
+            <Users size={20} />
+            Join Partner Program
+            </Link>
+        </div>
         <Link href="/" className="flex items-center gap-2 text-base font-bold text-gray-400 transition-colors hover:text-sokoline-accent">
           <ArrowLeft size={18} />
           Back to store
@@ -66,6 +78,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </div>
     );
   }
+
+  // Paths that bypass the gate (Influencer) will now fall through here and get the frame.
 
   return (
     <div className="flex min-h-screen bg-[#F9FAFB] text-gray-900 font-sans">
