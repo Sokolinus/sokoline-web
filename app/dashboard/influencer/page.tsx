@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/components/providers/ToastProvider";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Shop } from "@/lib/types";
 
@@ -300,10 +301,12 @@ export default function InfluencerDashboard() {
                     <div key={shop.id} className="p-6 rounded-2xl bg-gray-50 border border-gray-100 group hover:border-black/10 transition-all flex flex-col justify-between">
                        <div className="space-y-4">
                           <div className="flex justify-between items-start">
-                             <div className="h-12 w-12 rounded-xl bg-white border border-gray-100 flex items-center justify-center text-zinc-300">
+                             <div className="h-12 w-12 rounded-xl bg-white border border-gray-100 flex items-center justify-center text-zinc-300 overflow-hidden">
                                 {shop.logo ? (
-                                  <img src={formatImageUrl(shop.logo)} className="h-full w-full object-cover object-top rounded-xl" />
+                                  <img src={formatImageUrl(shop.logo)} className="h-full w-full object-cover object-top" />
                                 ) : (
+                                  <Store size={20} strokeWidth={1.5} />
+                                )}
                              </div>
                              <div className="text-right">
                                 <span className="text-[10px] font-black text-[#8484F6] uppercase tracking-widest">Rate</span>
