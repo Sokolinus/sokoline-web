@@ -1,7 +1,9 @@
 import HeroSection from "@/components/HeroSection";
 import Link from "next/link";
-import { getProducts, getCategories } from "@/lib/api";
+import Image from "next/image";
+import { getProducts, getCategories, formatImageUrl } from "@/lib/api";
 import ProductCard from "@/components/sokoline/ProductCard";
+import { ArrowUpRight } from "lucide-react";
 
 export default async function Home() {
   const [products, categories] = await Promise.all([
@@ -45,23 +47,78 @@ export default async function Home() {
           </div>
         </div>
 
+        {/* Marketplace Vision Section */}
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8">
+           <div className="p-10 rounded-[2.5rem] bg-gray-50 border border-black/5 flex flex-col justify-center">
+              <h3 className="text-sm font-black text-sokoline-accent uppercase tracking-widest mb-4">For Vendors</h3>
+              <h2 className="text-4xl font-black text-gray-900 tracking-tighter leading-[0.95] mb-6 font-logo">Launch in<br/>record time.</h2>
+              <p className="text-gray-500 font-medium text-lg leading-relaxed mb-8">
+                The campus-first dashboard for student CEOs. Manage your visual identity, inventory, and automated payouts with professional-grade tools.
+              </p>
+              <Link href="/dashboard/my-shop" className="text-sm font-black uppercase tracking-widest flex items-center gap-2 hover:translate-x-2 transition-transform">
+                Open your storefront <ArrowUpRight size={18} />
+              </Link>
+           </div>
+           <div className="p-10 rounded-[2.5rem] bg-[#BEFDB1]/10 border border-[#BEFDB1]/20 flex flex-col justify-center">
+              <h3 className="text-sm font-black text-emerald-600 uppercase tracking-widest mb-4">For Partners</h3>
+              <h2 className="text-4xl font-black text-gray-900 tracking-tighter leading-[0.95] mb-6 font-logo">Monetize your<br/>influence.</h2>
+              <p className="text-gray-500 font-medium text-lg leading-relaxed mb-8">
+                Join our Social Partner program. Earn up to 20% commission by promoting your favorite student ventures to your network.
+              </p>
+              <Link href="/dashboard/influencer" className="text-sm font-black uppercase tracking-widest flex items-center gap-2 hover:translate-x-2 transition-transform">
+                Browse campaigns <ArrowUpRight size={18} />
+              </Link>
+           </div>
+        </div>
+
         {/* Affiliate CTA Section */}
-        <div className="mt-8 relative overflow-hidden rounded-[2.5rem] bg-zinc-900 px-6 py-12 sm:mt-12 sm:px-12 sm:py-20 text-center flex flex-col items-center gap-6">
-           <div className="absolute top-0 right-0 w-64 h-64 bg-[#8484F6]/20 blur-[120px]" />
-           <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#BEFDB1]/20 blur-[120px]" />
-           
-           <h2 className="text-4xl sm:text-6xl font-black text-white tracking-tighter leading-none font-logo relative z-10">
-              Get Paid to <span className="text-sokoline-accent">Promote.</span>
-           </h2>
-           <p className="text-white/60 text-lg sm:text-xl font-medium max-w-lg mx-auto relative z-10 leading-relaxed">
-              Are you a campus influencer? Share links to your favorite student shops and earn <span className="text-white">5% commission</span> on every sale.
-           </p>
-           <Link 
-              href="/dashboard/influencer"
-              className="mt-4 px-10 py-5 bg-white text-black rounded-[1.5rem] font-black text-lg shadow-2xl hover:scale-105 active:scale-95 transition-all relative z-10"
-           >
-              Join the Squad
-           </Link>
+        <div className="mt-16 bg-[#121212] rounded-[3rem] overflow-hidden shadow-2xl shadow-black/5 grid grid-cols-1 lg:grid-cols-2">
+           {/* Left: Content */}
+           <div className="p-10 md:p-20 flex flex-col justify-center relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-sokoline-accent/20 blur-[100px]" />
+              
+              <div className="relative z-10 space-y-6">
+                <span className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-[10px] font-black text-white uppercase tracking-[0.3em] w-fit inline-block">Affiliate Marketing for Students</span>
+                <h2 className="text-5xl md:text-6xl font-black text-white tracking-tighter leading-none font-logo uppercase">
+                    The Viral <br /> <span className="text-sokoline-accent italic">Growth</span> Engine.
+                </h2>
+                <p className="text-white/40 text-lg font-medium leading-relaxed max-w-md">
+                    Monetize your campus network. Share one link, track every session, and earn real commissions across all student ventures.
+                </p>
+
+                <div className="grid grid-cols-1 gap-4 py-4">
+                   <div className="flex items-center gap-4">
+                      <div className="h-2 w-2 rounded-full bg-sokoline-accent" />
+                      <p className="text-xs font-bold text-white/60 uppercase tracking-widest">Global Session Tracking</p>
+                   </div>
+                   <div className="flex items-center gap-4">
+                      <div className="h-2 w-2 rounded-full bg-sokoline-tertiary" />
+                      <p className="text-xs font-bold text-white/60 uppercase tracking-widest">Smart Commission Splits</p>
+                   </div>
+                </div>
+
+                <Link 
+                    href="/dashboard/influencer"
+                    className="group inline-flex items-center justify-center gap-3 px-10 py-5 bg-sokoline-accent text-white rounded-[1.5rem] font-black text-lg transition-all hover:scale-105 active:scale-95"
+                >
+                    Become a Partner
+                    <ArrowUpRight size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                </Link>
+              </div>
+           </div>
+
+           {/* Right: Visual */}
+           <div className="relative hidden lg:block min-h-[500px]">
+              <Image 
+                  src="/social-media.jpg" 
+                  alt="Social Media Growth" 
+                  fill 
+                  className="object-cover"
+                  sizes="50vw"
+                  priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#121212] via-transparent to-transparent opacity-60" />
+           </div>
         </div>
 
         <footer className="mt-8 flex flex-col justify-between rounded-3xl bg-black px-5 py-8 text-white sm:mt-12 sm:px-8 sm:py-12 md:flex-row md:px-10">
