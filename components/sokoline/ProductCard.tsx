@@ -73,7 +73,7 @@ export default function ProductCard({ product, className = "" }: ProductCardProp
         </div>
 
         <div className="flex w-full flex-col items-center text-center">
-          <h3 className="w-full truncate font-logo text-2xl leading-tight text-black sm:text-[30px] lg:text-[32px]">
+          <h3 className="w-full truncate font-logo text-xl leading-tight text-black sm:text-[22px] lg:text-[24px]">
             {product.name}
           </h3>
           <p className="font-sans text-xs text-black opacity-60 sm:text-[14px]">

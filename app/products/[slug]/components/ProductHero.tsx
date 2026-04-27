@@ -108,7 +108,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
         {/* RIGHT: Product Info */}
         <div className="flex flex-col pt-6 lg:pt-[48px] lg:pl-[21px] lg:pr-[29px]">
           <div className="mb-8 space-y-4">
-            <h1 className="font-logo text-2xl sm:text-[32px] text-black leading-tight">
+            <h1 className="font-logo text-xl sm:text-[28px] text-black leading-tight">
               {product.name}
             </h1>
             

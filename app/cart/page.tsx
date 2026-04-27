@@ -70,7 +70,7 @@ export default function CartPage() {
                <div className="flex-1 flex flex-col min-w-0">
                  <div className="flex justify-between items-start">
                    <div>
-                     <h3 className="text-2xl font-black font-logo text-black tracking-tight line-clamp-1">{item.product_name}</h3>
+                     <h3 className="text-xl font-black font-logo text-black tracking-tight line-clamp-1">{item.product_name}</h3>
                      <p className="text-[10px] text-black/40 mt-1 font-black uppercase tracking-[0.15em]">KES {item.unit_price} / unit</p>
                    </div>
                    <button 

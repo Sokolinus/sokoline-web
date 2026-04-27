@@ -124,7 +124,7 @@ export default function OrdersPage() {
                                  <ShoppingBag size={24} />
                               </div>
                               <div>
-                                 <p className="font-bold text-gray-900 text-lg group-hover:text-teal-500 transition-colors">{item.product_name}</p>
+                                 <p className="font-bold text-gray-900 text-base group-hover:text-teal-500 transition-colors">{item.product_name}</p>
                                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-0.5">Qty: {item.quantity}</p>
                               </div>
                            </div>
