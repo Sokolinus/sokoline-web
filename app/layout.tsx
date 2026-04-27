@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   title: "Sokoline",
   description: "Your modern marketplace",
   icons: {
-    icon: "/favicon.svg",
+    icon: "/icon.svg",
   },
 };
 
