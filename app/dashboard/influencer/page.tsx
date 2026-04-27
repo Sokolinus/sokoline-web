@@ -52,7 +52,9 @@ export default function InfluencerDashboard() {
 
         // Fetch available shops for the marketplace
         const allShops = await getShops();
-        setShops(allShops);
+        // Filter: Only show shops that have opted-in to the partner program
+        const activeCampaigns = allShops.filter(s => s.is_partner_program_active !== false);
+        setShops(activeCampaigns);
       }
     } catch (error) {
       console.error("Failed to load influencer data:", error);
