@@ -55,7 +55,7 @@ export async function apiRequest(endpoint: string, options: RequestInit = {}, to
     console.log(`[API V3] Headers:`, headers);
   }
 
-  const res = await fetch(finalUrl, { ...options, headers });
+  const res = await fetch(finalUrl, { ...options, headers, cache: 'no-store' });
   
   if (typeof window !== "undefined") {
     console.log(`[API V3] Response: ${res.status} ${res.statusText}`);
