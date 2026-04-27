@@ -80,28 +80,17 @@ export default async function Home() {
               <div className="relative z-10 space-y-6">
                 <span className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-[10px] font-black text-white uppercase tracking-[0.3em] w-fit inline-block">Affiliate Marketing for Students</span>
                 <h2 className="text-5xl md:text-6xl font-black text-white tracking-tighter leading-none font-logo uppercase">
-                    The Viral <br /> <span className="text-sokoline-accent italic">Growth</span> Engine.
+                    Get Paid to <br /> <span className="text-sokoline-accent">Promote.</span>
                 </h2>
-                <p className="text-white/40 text-lg font-medium leading-relaxed max-w-md">
-                    Monetize your campus network. Share one link, track every session, and earn real commissions across all student ventures.
+                <p className="text-white/60 text-lg font-medium leading-relaxed max-w-md">
+                    Are you a campus influencer? Share links to your favorite student shops and earn <span className="text-white">5% commission</span> on every sale.
                 </p>
-
-                <div className="grid grid-cols-1 gap-4 py-4">
-                   <div className="flex items-center gap-4">
-                      <div className="h-2 w-2 rounded-full bg-sokoline-accent" />
-                      <p className="text-xs font-bold text-white/60 uppercase tracking-widest">Global Session Tracking</p>
-                   </div>
-                   <div className="flex items-center gap-4">
-                      <div className="h-2 w-2 rounded-full bg-sokoline-tertiary" />
-                      <p className="text-xs font-bold text-white/60 uppercase tracking-widest">Smart Commission Splits</p>
-                   </div>
-                </div>
 
                 <Link 
                     href="/dashboard/influencer"
-                    className="group inline-flex items-center justify-center gap-3 px-10 py-5 bg-sokoline-accent text-white rounded-[1.5rem] font-black text-lg transition-all hover:scale-105 active:scale-95"
+                    className="group inline-flex items-center justify-center gap-3 px-10 py-5 bg-white text-black rounded-[1.5rem] font-black text-lg transition-all hover:scale-105 active:scale-95"
                 >
-                    Become a Partner
+                    Join the Squad
                     <ArrowUpRight size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 </Link>
               </div>
