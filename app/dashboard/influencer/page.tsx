@@ -112,44 +112,76 @@ export default function InfluencerDashboard() {
     );
   }
 
-  // STEP 1: ONBOARDING / INTRO
+  // STEP 1: HIGH-IMPACT ONBOARDING
   if (!profile && !showContract) {
     return (
-      <div className="max-w-4xl mx-auto py-12 px-6">
-        <div className="text-center mb-16 space-y-4">
-          <div className="inline-flex h-20 w-20 items-center justify-center rounded-[2.5rem] bg-[#8484F6]/10 text-[#8484F6] mb-4">
-            <Sparkles size={40} strokeWidth={1.5} />
-          </div>
-          <h1 className="text-4xl font-black text-gray-900 tracking-tight font-logo leading-tight uppercase">Become a Campus<br/>Social Partner</h1>
-          <p className="text-lg text-gray-500 font-medium max-w-lg mx-auto leading-relaxed">
-            Monetize your campus influence. Choose a shop, sign the partnership contract, and earn real commission on every sale.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          {[
-            { title: "Select a Venture", desc: "Browse student shops looking for ambassadors.", icon: Store, color: "bg-blue-50 text-blue-600" },
-            { title: "Sign Contract", desc: "Accept the terms of the digital partnership.", icon: FileText, color: "bg-violet-50 text-violet-600" },
-            { title: "Earn 5%+", desc: "Get paid for every student who buys via your link.", icon: DollarSign, color: "bg-emerald-50 text-emerald-600" }
-          ].map((step, i) => (
-            <div key={i} className="p-8 rounded-[2rem] border border-gray-100 bg-white shadow-sm hover:shadow-xl transition-all">
-              <div className={`h-12 w-12 rounded-2xl ${step.color} flex items-center justify-center mb-6`}>
-                <step.icon size={24} />
-              </div>
-              <h3 className="font-logo font-bold text-gray-900 mb-2">{step.title}</h3>
-              <p className="text-sm text-gray-400 font-medium leading-relaxed">{step.desc}</p>
+      <div className="max-w-6xl mx-auto py-6 md:py-12">
+        <div className="bg-white rounded-[3rem] border border-black/5 overflow-hidden shadow-2xl shadow-black/5 grid grid-cols-1 lg:grid-cols-2">
+          
+          {/* Left: Content */}
+          <div className="p-10 md:p-20 flex flex-col justify-center">
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-sokoline-accent/10 text-sokoline-accent mb-8">
+              <Sparkles size={24} />
             </div>
-          ))}
+            
+            <h1 className="text-5xl md:text-6xl font-black text-gray-900 tracking-tighter font-logo leading-[0.9] uppercase mb-8">
+              Turn your<br />Influence<br />into Income.
+            </h1>
+            
+            <div className="space-y-6 mb-12">
+              <div className="flex gap-4">
+                <div className="h-6 w-6 rounded-full bg-[#BEFDB1] flex items-center justify-center shrink-0 mt-1">
+                  <Check size={12} strokeWidth={4} />
+                </div>
+                <div>
+                  <h4 className="font-logo font-bold text-gray-900 uppercase text-xs tracking-widest">Affiliate for Students</h4>
+                  <p className="text-sm text-gray-400 font-medium">Promote your friends' shops and earn a cut of every sale. No products needed.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="h-6 w-6 rounded-full bg-[#BEFDB1] flex items-center justify-center shrink-0 mt-1">
+                  <Check size={12} strokeWidth={4} />
+                </div>
+                <div>
+                  <h4 className="font-logo font-bold text-gray-900 uppercase text-xs tracking-widest">Digital Contracts</h4>
+                  <p className="text-sm text-gray-400 font-medium">Professional partnerships backed by safe, automated tracking and instant payouts.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="h-6 w-6 rounded-full bg-[#BEFDB1] flex items-center justify-center shrink-0 mt-1">
+                  <Check size={12} strokeWidth={4} />
+                </div>
+                <div>
+                  <h4 className="font-logo font-bold text-gray-900 uppercase text-xs tracking-widest">Campus-Wide Reach</h4>
+                  <p className="text-sm text-gray-400 font-medium">Join a network of student leaders shaping the future of university commerce.</p>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setShowContract(true)}
+              className="group w-full md:w-fit inline-flex items-center justify-center gap-3 rounded-[1.5rem] bg-black px-12 py-5 text-lg font-bold text-white shadow-2xl hover:bg-gray-800 transition-all active:scale-95"
+            >
+              Start Partnership
+              <ChevronRight size={20} className="transition-transform group-hover:translate-x-1" />
+            </button>
+          </div>
+
+          {/* Right: Visual */}
+          <div className="relative hidden lg:block bg-gray-50 min-h-[600px]">
+             <Image 
+                src="/social-media.jpg" 
+                alt="Social Media Growth" 
+                fill 
+                className="object-cover"
+                priority
+             />
+             <div className="absolute inset-0 bg-gradient-to-r from-white via-transparent to-transparent opacity-40" />
+          </div>
         </div>
 
-        <div className="flex flex-col items-center">
-          <button
-            onClick={() => setShowContract(true)}
-            className="group inline-flex items-center gap-3 rounded-[1.5rem] bg-black px-12 py-5 text-lg font-bold text-white shadow-2xl hover:bg-gray-800 transition-all active:scale-95"
-          >
-            Review Partnership Contract
-            <ChevronRight size={20} className="transition-transform group-hover:translate-x-1" />
-          </button>
+        <div className="mt-12 text-center text-[10px] font-black uppercase tracking-[0.3em] text-black/20">
+          Sokoline Social Partner Program &copy; 2026
         </div>
       </div>
     );
