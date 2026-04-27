@@ -68,7 +68,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
         {/* Discovery Section */}
         <div className="mt-12 mb-20">
-          <RelatedProducts currentProductId={product.id} categoryId={product.category?.id} />
+          <RelatedProducts productId={product.id} />
         </div>
       </div>
     </main>
