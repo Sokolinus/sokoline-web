@@ -1,6 +1,7 @@
 import React from 'react';
 import { notFound } from "next/navigation";
-import { getProduct } from "@/lib/api";
+import { Metadata } from 'next';
+import { getProduct, formatImageUrl } from "@/lib/api";
 import ProductHero from './components/ProductHero';
 import ProductInfoTabs from './components/ProductInfoTabs';
 import ReviewSection from './components/ReviewSection';
@@ -9,6 +10,32 @@ import RelatedProducts from './components/RelatedProducts';
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const product = await getProduct(slug);
+  
+  if (!product) return { title: 'Product Not Found' };
+
+  const image = product.images?.[0]?.image || '/logo.svg';
+
+  return {
+    title: `${product.name} | Sokoline`,
+    description: product.description.substring(0, 160),
+    openGraph: {
+      title: product.name,
+      description: product.description,
+      images: [formatImageUrl(image)],
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: product.name,
+      description: product.description,
+      images: [formatImageUrl(image)],
+    }
+  };
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
@@ -40,8 +67,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
 
         {/* Discovery Section */}
-        <RelatedProducts productId={product.id} />
-        
+        <div className="mt-12 mb-20">
+          <RelatedProducts currentProductId={product.id} categoryId={product.category?.id} />
+        </div>
       </div>
     </main>
   );

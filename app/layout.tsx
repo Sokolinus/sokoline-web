@@ -18,11 +18,27 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Sokoline",
-  description: "Your modern marketplace",
+  title: {
+    default: "Sokoline | Campus-First Commerce Hub",
+    template: "%s | Sokoline"
+  },
+  description: "The professional commerce infrastructure for student-led micro-ventures. Launch, scale, and monetize your campus brand.",
   icons: {
     icon: "/icon.svg",
   },
+  openGraph: {
+    title: "Sokoline",
+    description: "Modern campus commerce infrastructure for student entrepreneurs.",
+    url: "https://sokoline.app",
+    siteName: "Sokoline",
+    locale: "en_KE",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Sokoline",
+    description: "Modern campus commerce infrastructure for student entrepreneurs.",
+  }
 };
 
 export default function RootLayout({
