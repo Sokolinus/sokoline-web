@@ -12,13 +12,25 @@ import {
 } from "@clerk/nextjs";
 import { useCart } from "@/components/providers/CartProvider";
 import { useShop } from "@/components/providers/ShopProvider";
-import { Menu, X, Store, Sparkles } from "lucide-react";
+import { Menu, X, Store, Sparkles, Search } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
+  const router = useRouter();
   const pathname = usePathname();
   const isHome = pathname === "/";
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery("");
+      setMobileOpen(false);
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,7 +71,7 @@ const Navbar = () => {
               sizes="192px"
             />
           </Link>
-          <div className="hidden md:flex items-center gap-8 font-logo">
+          <div className="hidden lg:flex items-center gap-6 font-logo">
             <Link href="/" className={linkClasses}>
               Home
             </Link>
@@ -69,10 +81,30 @@ const Navbar = () => {
             <Link href="/products" className={linkClasses}>
               Explore
             </Link>
-            <Link href="/dashboard/influencer" className={linkClasses}>
-              Partners
-            </Link>
           </div>
+        </div>
+
+        {/* MIDDLE: Search Bar (Desktop) */}
+        <div className="hidden md:flex flex-1 max-w-md mx-8">
+           <form onSubmit={handleSearch} className="w-full relative group">
+              <input 
+                type="text"
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className={`w-full h-11 pl-12 pr-4 rounded-2xl text-sm font-medium transition-all border outline-none ${
+                  isHome && !scrolled 
+                    ? "bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:bg-white/20 focus:border-white/40" 
+                    : "bg-gray-50 border-gray-100 text-black placeholder:text-gray-400 focus:bg-white focus:border-[#8484F6]/30 focus:ring-4 focus:ring-[#8484F6]/5"
+                }`}
+              />
+              <Search 
+                size={18} 
+                className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${
+                  isHome && !scrolled ? "text-white/40 group-focus-within:text-white" : "text-gray-300 group-focus-within:text-[#8484F6]"
+                }`} 
+              />
+           </form>
         </div>
 
         {/* RIGHT: Actions */}
@@ -157,6 +189,18 @@ const Navbar = () => {
       {/* Mobile menu */}
       {mobileOpen && (
         <div className="border-t border-gray-100 bg-white/95 backdrop-blur px-4 pb-6 pt-4 md:hidden shadow-xl animate-in slide-in-from-top duration-300">
+          {/* Mobile Search */}
+          <form onSubmit={handleSearch} className="mb-6 relative">
+              <input 
+                type="text"
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full h-12 pl-12 pr-4 rounded-xl text-sm font-medium bg-gray-50 border border-gray-100 outline-none focus:bg-white focus:border-[#8484F6]/30"
+              />
+              <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+          </form>
+
           <div className="flex flex-col gap-1.5">
             <Link
               href="/"
