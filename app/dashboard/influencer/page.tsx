@@ -373,7 +373,7 @@ export default function InfluencerDashboard() {
                      <p className="text-4xl font-black tracking-tighter">KES {profile.total_earnings}</p>
                   </div>
                   
-                  <button className="w-full py-5 rounded-2xl bg-sokoline-accent text-black font-black text-xs uppercase tracking-widest hover:opacity-90 transition-all active:scale-95 shadow-xl">
+                  <button className="w-full py-5 rounded-2xl bg-[#BEFDB1] text-black font-black text-xs uppercase tracking-widest hover:opacity-90 transition-all active:scale-95 shadow-xl">
                      Withdraw Funds
                   </button>
                </div>
