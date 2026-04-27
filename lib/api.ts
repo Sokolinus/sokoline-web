@@ -22,8 +22,7 @@ export function formatImageUrl(url: string | null | undefined): string {
 }
 
 export async function apiRequest(endpoint: string, options: RequestInit = {}, token?: string | null) {
-  // FORCE absolute production URL to bypass local proxy issues
-  const baseUrl = "https://api.sokoline.app";
+  const baseUrl = getApiBaseUrl();
   
   let cleanEndpoint = endpoint.startsWith("/") ? endpoint.slice(1) : endpoint;
   if (!cleanEndpoint.startsWith("api/")) {

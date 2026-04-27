@@ -49,6 +49,24 @@ export function CartProvider({ children }: { children: ReactNode }) {
         }
         
         console.log("[Cart] Parsed cart object:", actualCart);
+        
+        // Failsafe: calculate totals if missing from API
+        if (actualCart && actualCart.items) {
+          let calculatedTotal = 0;
+          actualCart.items = actualCart.items.map((item: any) => {
+            if (!item.total_price) {
+              const price = parseFloat(item.unit_price || "0");
+              item.total_price = price * (item.quantity || 1);
+            }
+            calculatedTotal += item.total_price;
+            return item;
+          });
+          
+          if (!actualCart.total_price) {
+            actualCart.total_price = calculatedTotal;
+          }
+        }
+
         setCart(actualCart || null);
       }
     } catch (error) {

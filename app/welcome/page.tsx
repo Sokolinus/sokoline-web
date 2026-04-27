@@ -90,42 +90,51 @@ export default function WelcomePage() {
         </div>
 
         {/* Action Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Buyer Path */}
-          <Link href="/products" className="group block relative overflow-hidden rounded-[2rem] bg-black p-10 text-white transition-all">
+          <Link href="/products" className="group block relative overflow-hidden rounded-[2rem] bg-gray-50 p-8 text-black transition-all border border-gray-100 hover:border-black/10 hover:bg-white shadow-sm hover:shadow-xl">
             <div className="relative z-10">
-              <ShoppingBag className="mb-6 text-[#BEFDB1]" size={40} />
-              <h2 className="font-logo text-2xl font-bold mb-3">Browse Marketplace</h2>
-              <p className="text-white/60 mb-8 max-w-xs font-medium">
+              <div className="h-12 w-12 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center mb-6">
+                 <ShoppingBag className="text-black" size={24} />
+              </div>
+              <h2 className="font-logo text-xl font-bold mb-3">Browse Items</h2>
+              <p className="text-gray-500 mb-8 font-medium text-sm">
                 Find exactly what you need from fellow students.
               </p>
-              <div className="inline-flex items-center gap-2 text-[#BEFDB1] font-bold group-hover:gap-4 transition-all">
-                Explore Items <ArrowRight size={18} />
+              <div className="inline-flex items-center gap-2 text-black font-bold group-hover:gap-4 transition-all text-sm">
+                Explore Items <ArrowRight size={16} />
               </div>
             </div>
           </Link>
 
           {/* Seller Path */}
-          <Link href="/dashboard/my-shop/new" className="group block relative overflow-hidden rounded-[2rem] bg-[#8484F6] p-10 text-white transition-all">
-            {/* Background Video */}
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="absolute inset-0 h-full w-full object-cover opacity-10 mix-blend-overlay group-hover:opacity-25 transition-opacity"
-            >
-              <source src="/8628288-hd_1080_1920_25fps.mp4" type="video/mp4" />
-            </video>
-
+          <Link href="/dashboard/my-shop/new" className="group block relative overflow-hidden rounded-[2rem] bg-[#8484F6] p-8 text-white transition-all shadow-lg hover:shadow-2xl hover:scale-[1.02]">
             <div className="relative z-10">
-              <Store className="mb-6 text-white" size={40} />
-              <h2 className="font-logo text-2xl font-bold mb-3">Launch Your Shop</h2>
-              <p className="text-white/80 mb-8 max-w-xs font-medium">
+              <div className="h-12 w-12 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center mb-6">
+                 <Store className="text-white" size={24} />
+              </div>
+              <h2 className="font-logo text-xl font-bold mb-3">Launch Shop</h2>
+              <p className="text-white/80 mb-8 font-medium text-sm">
                 Professional tools to sell to the entire campus network.
               </p>
-              <div className="inline-flex items-center gap-2 bg-white text-[#8484F6] px-6 py-3 rounded-xl font-bold transition-all shadow-lg group-hover:bg-gray-50">
-                Get Started <ArrowRight size={18} />
+              <div className="inline-flex items-center gap-2 bg-white text-[#8484F6] px-5 py-2.5 rounded-xl font-bold transition-all shadow-sm text-sm group-hover:bg-gray-50">
+                Get Started <ArrowRight size={16} />
+              </div>
+            </div>
+          </Link>
+
+          {/* Partner Path */}
+          <Link href="/dashboard/influencer" className="group block relative overflow-hidden rounded-[2rem] bg-[#BEFDB1] p-8 text-black transition-all shadow-md hover:shadow-xl hover:scale-[1.02]">
+            <div className="relative z-10">
+              <div className="h-12 w-12 bg-black/5 rounded-xl flex items-center justify-center mb-6">
+                 <Sparkles className="text-black" size={24} />
+              </div>
+              <h2 className="font-logo text-xl font-bold mb-3">Become Partner</h2>
+              <p className="text-black/60 mb-8 font-medium text-sm">
+                Promote friends' shops and earn a cut of every sale.
+              </p>
+              <div className="inline-flex items-center gap-2 bg-black text-[#BEFDB1] px-5 py-2.5 rounded-xl font-bold transition-all shadow-sm text-sm group-hover:opacity-90">
+                Start Earning <ArrowRight size={16} />
               </div>
             </div>
           </Link>

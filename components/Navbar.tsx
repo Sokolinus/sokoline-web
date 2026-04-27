@@ -81,6 +81,9 @@ const Navbar = () => {
             <Link href="/products" className={linkClasses}>
               Explore
             </Link>
+            <Link href="/dashboard/influencer" className={linkClasses}>
+              Partners
+            </Link>
           </div>
         </div>
 
