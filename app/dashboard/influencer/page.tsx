@@ -161,7 +161,7 @@ export default function InfluencerDashboard() {
 
             <button
               onClick={() => setShowContract(true)}
-              className="group w-full md:w-fit inline-flex items-center justify-center gap-3 rounded-[1.5rem] bg-black px-12 py-5 text-lg font-bold text-white shadow-2xl hover:bg-gray-800 transition-all active:scale-95"
+              className="group w-full md:w-fit inline-flex items-center justify-center gap-3 rounded-[1.5rem] bg-[#BEFDB1] px-12 py-5 text-lg font-bold text-black shadow-2xl hover:opacity-90 transition-all active:scale-95"
             >
               Start Partnership
               <ChevronRight size={20} className="transition-transform group-hover:translate-x-1" />
@@ -240,7 +240,7 @@ export default function InfluencerDashboard() {
                <button
                   onClick={handleRegister}
                   disabled={registering}
-                  className="w-full py-5 rounded-[1.5rem] bg-black text-white font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-zinc-800 transition-all active:scale-95 disabled:opacity-50"
+                  className="w-full py-5 rounded-[1.5rem] bg-[#BEFDB1] text-black font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:opacity-90 transition-all active:scale-95 disabled:opacity-50"
                >
                   {registering ? <Loader2 size={20} className="animate-spin" /> : "Sign & Accept Contract"}
                </button>
@@ -271,7 +271,7 @@ export default function InfluencerDashboard() {
         </div>
         <button 
            onClick={() => copyRefLink()}
-           className="flex items-center gap-2 rounded-xl bg-black px-6 py-3 text-xs font-black uppercase tracking-[0.1em] text-white hover:bg-zinc-800 transition-all shadow-lg active:scale-95"
+           className="flex items-center gap-2 rounded-xl bg-[#BEFDB1] px-6 py-3 text-xs font-black uppercase tracking-[0.1em] text-black hover:opacity-90 transition-all shadow-lg active:scale-95"
         >
            <Copy size={16} />
            Global Invite Link
@@ -326,7 +326,7 @@ export default function InfluencerDashboard() {
                        <div className="mt-6 flex items-center gap-2">
                           <button 
                              onClick={() => copyRefLink(shop.slug)}
-                             className="flex-1 py-3 rounded-xl bg-black text-white text-[10px] font-black uppercase tracking-widest hover:bg-zinc-800 transition-all flex items-center justify-center gap-2"
+                             className="flex-1 py-3 rounded-xl bg-[#BEFDB1] text-black text-[10px] font-black uppercase tracking-widest hover:opacity-90 transition-all flex items-center justify-center gap-2"
                           >
                              <Copy size={12} /> Get Link
                           </button>
