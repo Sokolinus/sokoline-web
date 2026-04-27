@@ -44,6 +44,8 @@ export default function MyShopPage() {
     paybill_number: "",
     pickup_point: "",
     logo: null as File | null,
+    affiliate_commission_rate: "5.00",
+    is_partner_program_active: true,
   });
 
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
@@ -65,6 +67,8 @@ export default function MyShopPage() {
               paybill_number: data.paybill_number || "",
               pickup_point: (data as any).pickup_point || "",
               logo: null,
+              affiliate_commission_rate: data.affiliate_commission_rate || "5.00",
+              is_partner_program_active: data.is_partner_program_active ?? true,
             });
             setLogoPreview(data.logo ? formatImageUrl(data.logo) : null);
             if (data.paybill_number) setPaymentType("paybill");
@@ -113,6 +117,8 @@ export default function MyShopPage() {
         data.append("description", formData.description);
         data.append("slug", formData.slug);
         data.append("pickup_point", formData.pickup_point);
+        data.append("affiliate_commission_rate", formData.affiliate_commission_rate);
+        data.append("is_partner_program_active", String(formData.is_partner_program_active));
         
         if (paymentType === "paybill") {
           data.append("paybill_number", formData.paybill_number);
@@ -489,6 +495,47 @@ export default function MyShopPage() {
                   />
                 </div>
               )}
+            </div>
+
+            <div className="rounded-[2rem] bg-white border border-gray-100 p-8 shadow-sm">
+              <h2 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-6 font-logo text-[#8484F6]">Partner Program</h2>
+              
+              <div className="space-y-6">
+                <div className="flex items-center justify-between p-4 rounded-2xl bg-[#8484F6]/5 border border-[#8484F6]/10">
+                  <div className="space-y-0.5">
+                    <p className="text-xs font-black text-gray-900 uppercase tracking-tight">Accept Partners</p>
+                    <p className="text-[10px] text-gray-500 font-medium">Allow influencers to promote you</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, is_partner_program_active: !formData.is_partner_program_active })}
+                    className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${formData.is_partner_program_active ? 'bg-[#8484F6]' : 'bg-gray-200'}`}
+                  >
+                    <span
+                      className={`inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${formData.is_partner_program_active ? 'translate-x-5' : 'translate-x-0'}`}
+                    />
+                  </button>
+                </div>
+
+                <div className={`space-y-1.5 transition-all ${formData.is_partner_program_active ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}>
+                  <div className="flex items-center justify-between">
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400">Commission Rate (%)</label>
+                    <span className="text-[10px] font-black text-[#8484F6] bg-[#8484F6]/10 px-2 py-0.5 rounded-full">{formData.affiliate_commission_rate}%</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="1"
+                    max="20"
+                    step="0.5"
+                    value={formData.affiliate_commission_rate}
+                    onChange={(e) => setFormData({ ...formData, affiliate_commission_rate: e.target.value })}
+                    className="w-full h-2 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-[#8484F6]"
+                  />
+                  <p className="text-[9px] text-gray-400 font-medium leading-relaxed">
+                    Higher rates (10%+) attract more influencers to your products.
+                  </p>
+                </div>
+              </div>
             </div>
 
             <button

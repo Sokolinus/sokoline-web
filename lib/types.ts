@@ -118,8 +118,10 @@ export interface Shop {
   description: string;
   category: string;
   logo?: string;
-  owner: number;
+  owner: string;
   products?: any[];
   payment_phone_number?: string;
   paybill_number?: string;
+  affiliate_commission_rate: string;
+  is_partner_program_active: boolean;
 }
